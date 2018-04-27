@@ -39,6 +39,7 @@
         type="month"
         value-format="yyyyMM"
         placeholder="选择月"
+        :picker-options="{ disabledDate }"
         v-on:change="vaildDate">
       </el-date-picker>
     </div>
@@ -61,7 +62,7 @@ export default {
   name: 'appPortrayalPicker',
   data () {
     const nowDate = new Date();
-    const defDate = `${nowDate.getFullYear()}${nowDate.getMonth()}`;
+    const defDate = `${nowDate.getFullYear()}-${nowDate.getMonth()}`;
     return {
       options: [],
       option: '',
@@ -98,13 +99,18 @@ export default {
         if (v.id === this.option) return v.img || defaultChannelLogo;
       });
       return defaultChannelLogo;
-    }
+    },
   },
   methods: {
+    disabledDate(date) {
+      const start = this.dateRange.start;
+      const end = this.dateRange.end;
+      return !dateInRange(date, start, end);
+    },
     vaildDate(val) {
       const start = this.dateRange.start;
       const end = this.dateRange.end;
-      if (dateInRange(val, start, end)) {
+      if (!dateInRange(val, start, end)) {
         this.date = this.defDate;
         alert(`时间选择不能超出范围：${start}~${end}`);
         return false;
