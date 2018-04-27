@@ -36,15 +36,10 @@ export const getCookie = (name) => {
 
 export const apiRequest = async (apiFn, args=[]) => {
   let res = await apiFn.apply(null, args);
-  if(res.status === 200){
-    let { data: resData } = res;
-    if(resData.resCode === 200){
-      return { status: true, result: resData.data };
-    }else{
-      return { status: false, result: resData.resMsg };
-    }
+  if(res.resCode === 200){
+    return { status: true, result: res.data };
   }else{
-    return { status: false, result: '网络请求错误' };
+    return { status: false, result: res.resMsg };
   }
 }
 

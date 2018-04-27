@@ -49,7 +49,7 @@ const api = {
   // 卸载趋势接口
   unloadTable(params) {
     return fetch({
-      url: '/behavior/findUninstallAppList',
+      url: '/appQuality/findUninstallAppList',
       method: 'GET',
       params: params
     });

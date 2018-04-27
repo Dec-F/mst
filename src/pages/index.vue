@@ -125,6 +125,10 @@ export default {
                 {
                   title: '行为趋势',
                   link: '/appdownloadTrend'
+                },
+                 {
+                  title: '卸载趋势',
+                  link: '/unloadTrend'
                 }
               ]
 

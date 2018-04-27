@@ -3,7 +3,7 @@
     <img class="select__icon-cur" :src="icon">
     <el-select popper-class="search__select" v-model="id" filterable
         placeholder="当前渠道" default-first-option>
-      <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id">
+      <el-option v-for="item,idx in channels" :key="idx" :label="item.name" :value="item.id">
         <img class="option__icon fl" :src="item.icon">
         <span class="option__name fl">{{ item.name }}</span>
       </el-option>
