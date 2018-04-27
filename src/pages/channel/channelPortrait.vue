@@ -102,7 +102,7 @@ import chartXbar from './chartXbar';
 import chartBar from './chartBar';
 
 const channelApi = '/mst/portrait/getChannelPortrait';
-const appApi = '/appPortrait/getAppPortrait';
+const appApi = '/mst/appPortrait/getAppPortrait';
 
 export default {
   name: 'trend-chart',
@@ -115,8 +115,10 @@ export default {
     chartBar
   },
   data() {
+    const type = this.$route.meta.type === 'channel';
     return {
-      api: this.$route.meta.type === 'channel' ? channelApi : appApi,
+      type,
+      api: type ? channelApi : appApi,
       genderMRate: 0,
       genderFRate: 0,
       ageGroupData: [],
@@ -132,10 +134,16 @@ export default {
   },
   methods: {
     submit(data) {
-      this.loadData({
-        channelId: data.option,
+      const params = {
         dateTime: data.time
-      });
+      };
+      if (this.type === 'channel') {
+        params.channelId = data.option
+      }
+      if (this.type === 'app') {
+        params.appId = data.option
+      }
+      this.loadData(params);
     },
     load (params, attr) {
       return axios.get(this.api, {
