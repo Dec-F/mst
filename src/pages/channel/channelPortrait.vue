@@ -134,7 +134,7 @@ export default {
     submit(data) {
       this.loadData({
         channelId: data.option,
-        dateTime: data.time
+        dateTime: data.date
       });
     },
     load (params, attr) {
