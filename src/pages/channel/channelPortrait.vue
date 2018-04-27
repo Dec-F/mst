@@ -9,20 +9,20 @@
         <h3 class="photo-card-title">画像洞察</h3>
         <div class="photo-card-con photo-sections photo-section1">
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon icon="mars"/> 男女性别占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="mars"/> 男女性别占比</h4>
             <div class="photo-section-con">
               <div class="gender-wrap">
                 <div class="gender-section">
                   <div class="gender-side">
                     <img class="gender-img-m" src="../../assets/gender-m.jpg">
-                    <span>男 <font-awesome-icon icon="mars"/></span>
+                    <span>男 <font-awesome-icon class="gender-icon" icon="mars" style="color: #b2d233"/></span>
                   </div>
                   <chart-gender class="photo-chart" style="width: 130px; height: 100%" :data="genderMRate"></chart-gender>
                 </div>
                 <div class="gender-section">
                   <div class="gender-side">
                     <img class="gender-img-f" src="../../assets/gender-f.jpg">
-                    <span>女 <font-awesome-icon icon="venus"/></span>
+                    <span>女 <font-awesome-icon class="gender-icon" icon="venus" style="color: #1fc8f3"/></span>
                   </div>
                   <chart-gender class="photo-chart" style="width: 130px; height: 100%" type="female" :data="genderFRate"></chart-gender>
                 </div>
@@ -31,14 +31,14 @@
             <div class="photo-section-footer">男女性别占比</div>
           </div>
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon icon="chart-bar"/> 年代体系占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> 年代体系占比</h4>
             <div class="photo-section-con">
               <chart-radar class="photo-chart" style="height: 100%" :data="ageRangeData"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon icon="chart-bar"/> 年龄段占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> 年龄段占比</h4>
             <div class="photo-section-con">
               <chart-radar class="photo-chart" style="height: 100%" :data="ageGroupData"></chart-radar>
             </div>
@@ -49,13 +49,13 @@
       <div class="photo-card">
         <div class="photo-card-con photo-sections photo-section2">
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon icon="map-marker-alt"/> Top6省份占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="map-marker-alt"/> Top6省份占比</h4>
             <div class="photo-section-con">
-              <chart-map class="photo-chart" style="" :data="provinceData"></chart-map>
+              <chart-map class="photo-chart" :data="provinceData"></chart-map>
             </div>
           </div>
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon icon="chart-bar"/> Top6城市占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市占比</h4>
             <div class="photo-section-con">
               <chart-xbar class="photo-chart" :data="cityData"></chart-xbar>
             </div>
@@ -67,7 +67,7 @@
           <div class="photo-card">
             <div class="photo-card-con photo-sections photo-section3">
               <div class="photo-section">
-                <h4 class="photo-section-title"><font-awesome-icon icon="graduation-cap"/> 教育程度占比</h4>
+                <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="graduation-cap"/> 教育程度占比</h4>
                 <div class="photo-section-con">
                   <chart-bar class="photo-chart" style="" :data="educationData"></chart-bar>
                 </div>
@@ -79,7 +79,7 @@
           <div class="photo-card">
             <div class="photo-card-con photo-sections photo-section3">
               <div class="photo-section">
-                <h4 class="photo-section-title"><font-awesome-icon icon="dollar-sign"/> 收入水平占比</h4>
+                <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="dollar-sign"/> 收入水平占比</h4>
                 <div class="photo-section-con">
                   <chart-bar class="photo-chart" style="" :data="incomeData"></chart-bar>
                 </div>
@@ -115,10 +115,10 @@ export default {
     chartBar
   },
   data() {
-    const type = this.$route.meta.type === 'channel';
+    const type = this.$route.meta.type;
     return {
       type,
-      api: type ? channelApi : appApi,
+      api: type === 'channel' ? channelApi : appApi,
       genderMRate: 0,
       genderFRate: 0,
       ageGroupData: [],
@@ -129,13 +129,10 @@ export default {
       incomeData: []
     }
   },
-  create() {
-
-  },
   methods: {
     submit(data) {
       const params = {
-        dateTime: data.time
+        dateTime: data.date
       };
       if (this.type === 'channel') {
         params.channelId = data.option
@@ -252,6 +249,9 @@ export default {
   display: inline-block;
   height: 100%;
 }
+.photo-title-icon {
+  margin-right: 0.5em;
+}
 
 .gender-wrap {
   display: flex;
@@ -266,6 +266,17 @@ export default {
   height: 100%;
 }
 .gender-side {
+  text-align: center;
+}
+.gender-side img {
+  margin-bottom: 8px;
+}
+.gender-side span {
+  position: relative;
+}
+.gender-icon {
+  position: absolute;
+  right: -1em;
 }
 .gender-img-f {
   display: block;

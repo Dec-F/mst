@@ -41,20 +41,41 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: xAxis
+          data: xAxis,
+          axisLine: {
+            lineStyle: {
+              color: '#bbb',
+              width: 2
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#f5f5f5'
+            }
+          }
         },
         yAxis: {
           type: 'value',
+          axisLine: {
+            lineStyle: {
+              color: '#f5f5f5'
+            }
+          },
           axisLabel: {
             formatter: function (value) {
               return `${value * 100}%`;
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#f5f5f5'
             }
           }
         },
         series: [{
           data: data,
           type: 'bar',
-          barWidth: 30
+          barWidth: 16
         }]
       };
       return options;
