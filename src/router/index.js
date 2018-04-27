@@ -10,7 +10,7 @@ const faq = resolve => require(['@/pages/faq'], resolve);
 const behaviorIndex = resolve => require(['@/pages/behavior/index'], resolve);
 const behaviorStore = resolve => require(['@/pages/behavior/storeDetail'], resolve);
 const behaviorApp = resolve => require(['@/pages/behavior/appDetail'], resolve);
-const uninstall = resolve => require(['@/pages/behavior/uninstall'], resolve);
+
 //质量分析
 const qualityIndex = resolve => require(['@/pages/quality/index'], resolve);
 const qualityStore = resolve => require(['@/pages/quality/storeDetail'], resolve);
@@ -23,22 +23,7 @@ const flow = resolve => require(['@/pages/deep/index'], resolve);
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
 // app
 const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
-
-
-// const keep = resolve => require(['@/pages/keepTrend'], resolve);
-// const keepDetail = resolve => require(['@/pages/keepDetail'], resolve);
-// const funnel = resolve => require(['@/pages/funnelTrend'], resolve);
-// const funnelDetail = resolve => require(['@/pages/funnelDetail'], resolve);
-// const funnelAppDetail = resolve => require(['@/pages/funnelAppDetail'], resolve);
-// const flowTrend = resolve => require(['@/pages/flowTrend'], resolve);
-// const duration = resolve => require(['@/pages/durationTrend'], resolve);
-// const durationDetail = resolve => require(['@/pages/durationDetail'], resolve);
-// const durationAppDetail = resolve => require(['@/pages/durationAppDetail'], resolve);
-// const frequencyTrend = resolve => require(['@/pages/frequencyTrend'], resolve);
-// const frequencyDetail = resolve => require(['@/pages/frequencyDetail'], resolve);
-// const frequencyAppDetail = resolve => require(['@/pages/frequencyAppDetail'], resolve);
-
-
+const uninstall = resolve => require(['@/pages/appBehavior/uninstall'], resolve);
 // Vue.use(Router)
 // const $route = {};
 const routes = [{
