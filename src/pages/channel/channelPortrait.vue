@@ -132,7 +132,7 @@ export default {
   methods: {
     submit(data) {
       const params = {
-        dateTime: data.date
+        dateTime: data.date.replace('-', '')
       };
       if (this.type === 'channel') {
         params.channelId = data.option

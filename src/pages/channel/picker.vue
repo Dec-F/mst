@@ -2,7 +2,7 @@
   <div class="picker">
     <div class="picker-channel">
       <label class="picker-label" for="picker-select">当前{{ type === 'channel' ? '渠道' : 'APP' }}</label>
-      <img v-if="type === 'app'" class="picker-channel-logo" :src="channelLogo">
+      <img class="picker-channel-logo" :src="logoSrc">
       <el-select
         v-if="type === 'channel'"
         class="picker-select"
@@ -11,8 +11,8 @@
         placeholder="请选择">
         <el-option
           v-for="item in options"
-          :key="item.name"
-          :label="item.name + item.id"
+          :key="item.name + item.id"
+          :label="item.name"
           :value="item.id">
         </el-option>
       </el-select>
@@ -25,8 +25,8 @@
         placeholder="请选择">
         <el-option
           v-for="item in options"
-          :key="item.name"
-          :label="item.name + item.id"
+          :key="item.name + item.id"
+          :label="item.name"
           :value="item.id">
         </el-option>
       </el-select>
@@ -49,7 +49,7 @@
 
 <script>
 import axios from 'axios';
-const defaultChannelLogo = '/static/logo.png';
+const defaultLogo = '/static/logo.png';
 
 function dateInRange(val, start, end) {
   const valDateStamp = new Date(val).getTime();
@@ -62,7 +62,9 @@ export default {
   name: 'appPortrayalPicker',
   data () {
     const nowDate = new Date();
-    const defDate = `${nowDate.getFullYear()}-${nowDate.getMonth()}`;
+    const year = nowDate.getFullYear();
+    const month = nowDate.getMonth();
+    const defDate = `${year}-${month > 9 ? month : `0${month}`}`;
     return {
       options: [],
       option: '',
@@ -81,11 +83,11 @@ export default {
     this.updateData();
   },
   computed: {
-    channelLogo() {
+    logoSrc() {
       this.options.forEach(v => {
-        if (v.id === this.option) return v.img || defaultChannelLogo;
+        if (v.id === this.option) return v.img || defaultLogo;
       });
-      return defaultChannelLogo;
+      return defaultLogo;
     },
   },
   watch: {
