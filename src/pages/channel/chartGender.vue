@@ -42,26 +42,51 @@ export default {
           }
         },
         xAxis: {
-          show: false,
           type: 'category',
-          data: [isMale ? '男性' : '女性']
+          data: [isMale ? '男性' : '女性'],
+          splitLine: {
+            lineStyle: {
+              color: '#f5f5f5'
+            }
+          },
+          axisLabel: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#bbb',
+              width: 2
+            }
+          }
         },
         yAxis: {
           type: 'value',
           min: 0,
           max: 1,
+          axisLine: {
+            lineStyle: {
+              color: '#f5f5f5'
+            }
+          },
           axisLabel: {
             formatter: function (value) {
               return `${value * 100}%`;
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#f5f5f5'
             }
           }
         },
         series: [{
           itemStyle: {
-            color: isMale ? '#b2d233' : '#1fc8f3'
+            normal: {
+              color: isMale ? '#b2d233' : '#1fc8f3'
+            }
           },
           data: [this.data],
-          barWidth: 30,
+          barWidth: 16,
           type: 'bar'
         }]
       };

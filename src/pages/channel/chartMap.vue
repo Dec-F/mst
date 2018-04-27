@@ -29,58 +29,86 @@ export default {
   },
   computed: {
     'options': function () {
-      const data = this.data.map(item => {
+      const data = this.data.map((item, index) => {
         return {
           name: item.attrValue,
-          value: item.attrRatio
+          value: item.attrRatio,
+          itemStyle:{
+            normal: {
+              label: {
+                show:true
+              }
+            },
+            emphasis: {
+              label: {
+                show:true
+              },
+              areaColor: '#b2d233'
+            }
+          },
         };
       });
       const options = {
         tooltip: {
           trigger: 'item',
-          formatter: '{b}<br/>{c}'
+          formatter: params => `${params.name}${params.value ? '<br />' + params.value : ''}`
         },
         visualMap: {
           min: 0,
           max: 1,
+          itemWidth: 10,
+          itemHeight: 100,
           precision: 4,
           text:['高','低'],
           orient: 'horizontal',
           inRange: {
-            color: ['#b5d337','#d6fa96']
+            color: ['#d6fa96','#b5d337']
           }
         },
         series: [
           {
             type: 'map',
-            mapType: 'china', // 自定义扩展图表类型
+            mapType: 'china',
             selectedMode: 'multipul',
-            itemStyle:{
-              normal:{label:{show:true}},
-              emphasis:{label:{show:true}}
+            zoom: 1.2,
+            itemStyle: {
+              normal: {
+                label: {
+                  show:false
+                },
+                areaColor: '#e5e5e5',
+                borderColor: '#fff',
+                borderWidth: 1
+              },
+              emphasis:{
+                label:{show:false},
+                areaColor: '#e5e5e5',
+              }
             },
-            data: data,
-            // 自定义名称映射
-            // nameMap: {
-            //     'Central and Western': '中西区',
-            //     'Eastern': '东区',
-            //     'Islands': '离岛',
-            //     'Kowloon City': '九龙城',
-            //     'Kwai Tsing': '葵青',
-            //     'Kwun Tong': '观塘',
-            //     'North': '北区',
-            //     'Sai Kung': '西贡',
-            //     'Sha Tin': '沙田',
-            //     'Sham Shui Po': '深水埗',
-            //     'Southern': '南区',
-            //     'Tai Po': '大埔',
-            //     'Tsuen Wan': '荃湾',
-            //     'Tuen Mun': '屯门',
-            //     'Wan Chai': '湾仔',
-            //     'Wong Tai Sin': '黄大仙',
-            //     'Yau Tsim Mong': '油尖旺',
-            //     'Yuen Long': '元朗'
-            // }
+            label: {
+              normal: {
+                formatter: params => `{a|Top${params.dataIndex + 1}}{b|${params.name}}`,
+                borderColor: '#c0c4c7',
+                borderWidth: 1,
+                rich: {
+                  a: {
+                height: 20,
+                lineHeight: 20,
+                    color: '#fff',
+                    backgroundColor: 'rgba(0,0,0,.3)',
+                    padding: [0, 10]
+                  },
+                  b: {
+                height: 20,
+                lineHeight: 20,
+                    color: '#999',
+                    backgroundColor: 'rgba(255,255,255,.8)',
+                    padding: [0, 10]
+                  }
+                }
+              }
+            },
+            data,
           }
         ]
     };

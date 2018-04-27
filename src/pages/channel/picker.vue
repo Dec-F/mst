@@ -37,7 +37,7 @@
         v-model="date"
         default-time="defDate"
         type="month"
-        value-format="yyyyMM"
+        value-format="yyyy-MM"
         placeholder="选择月"
         :picker-options="{ disabledDate }"
         v-on:change="vaildDate">
@@ -78,20 +78,7 @@ export default {
     }
   },
   created() {
-    axios.get('/mst/dateTime/getDateTime').then(res => {
-      if (!res.data || !res.data.data) return;
-      this.dateRange = {
-        start: res.data.data.start,
-        end: res.data.data.end,
-      };
-    });
-    axios.get('/mst/findAppChannelCount').then(res => {
-      if (!res.data || !res.data.data) return;
-      const type = this.type;
-      const filterList = res.data.data.filter(v => v.type === type);
-      this.options = filterList;
-      this.option = this.options.length ? this.options[0].id : '';
-     });
+    this.updateData();
   },
   computed: {
     channelLogo() {
@@ -101,7 +88,37 @@ export default {
       return defaultChannelLogo;
     },
   },
+  watch: {
+    '$route': function () {
+      this.options = [];
+      this.option = '';
+      this.updateData();
+    }
+  },
   methods: {
+    updateData() {
+      const axiosGetDate = axios.get('/mst/dateTime/getDateTime').then(res => {
+        if (!res.data || !res.data.data) return;
+        this.dateRange = {
+          start: res.data.data.start,
+          end: res.data.data.end,
+        };
+      });
+      const axiosGetOption = axios.get('/mst/findAppChannelCount').then(res => {
+        if (!res.data || !res.data.data) return;
+        const type = this.type;
+        const filterList = res.data.data.filter(v => v.type === type);
+        this.options = filterList;
+        this.option = this.options.length ? this.options[0].id : '';
+       });
+      axios.all([axiosGetDate, axiosGetOption])
+        .then(_ => {
+          this.$emit('submit', {
+            date: this.date,
+            option: this.option
+          });
+        });
+    },
     disabledDate(date) {
       const start = this.dateRange.start;
       const end = this.dateRange.end;
