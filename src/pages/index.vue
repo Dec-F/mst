@@ -150,7 +150,7 @@ export default {
             // APP画像
             {
               title: 'APP画像',
-              link: '/app'
+              link: '/appPortrait'
 
             },
             // 深度分析
