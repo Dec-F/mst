@@ -33,7 +33,7 @@ const api = {
   // 行为分析—下载趋势二级页面
   findChannelAppTrend(params) {
     return fetch({
-      url: 'behavior/findChannelAppTrend',
+      url: '/behavior/listChannelTotalTrendsSub',
       method: 'GET',
       params: params
     });
@@ -68,7 +68,7 @@ const api = {
   //行为分析第一页下载趋势接口
   downloadTrend(params) {
     return fetch({
-      url: 'behavior/downloadTrend',
+      url: '/behavior/listChannelTotalTrends',
       method: 'GET',
       params: params
     });

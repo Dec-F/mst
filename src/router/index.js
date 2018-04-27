@@ -16,10 +16,13 @@ const qualityIndex = resolve => require(['@/pages/quality/index'], resolve);
 const qualityStore = resolve => require(['@/pages/quality/storeDetail'], resolve);
 const qualityApp = resolve => require(['@/pages/quality/appDetail'], resolve);
 const quality = resolve => require(['@/pages/quality/quality'], resolve);
+const qualityKeep = resolve => require(['@/pages/quality/keepTrend'], resolve);
 //质量分析
 const flow = resolve => require(['@/pages/deep/index'], resolve);
 //渠道画像
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
+// app
+const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
 
 
 // const keep = resolve => require(['@/pages/keepTrend'], resolve);
@@ -277,6 +280,19 @@ const routes = [{
           }
         }
       },
+      // 质量分析--留存
+      {
+        path: '/keepTrend',
+        name: 'keepTrend',
+        component: qualityKeep,
+        meta: {
+          type: 'keep',
+          bread: {
+            name: '留存趋势',
+            path: '/keepTrend'
+          }
+        }
+      },
       //渠道画像
       {
         path: '/channelPortrait',
@@ -364,7 +380,31 @@ const routes = [{
           }
         }
       },
-
+      {
+        path: '/appKeepTrend',
+        name: 'appKeepTrend',
+        component: appKeepTrend,
+        meta: {
+          type: 'keep',
+          bread: {
+            name: '留存趋势',
+            path: '/appkeepTrend'
+          }
+        }
+      },
+      //APP画像
+      {
+        path: '/appPortrait',
+        name: 'appPortrait',
+        component: portrait,
+        meta: {
+          type: 'app',
+          bread: {
+            name: '用户画像分析',
+            path: '/appPortrait'
+          }
+        }
+      },
       {
         path: '/flowTrend',
         name: 'flowTrend',
