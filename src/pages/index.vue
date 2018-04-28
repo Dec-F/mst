@@ -6,25 +6,25 @@
         <p>StoreTracker</p>
       </div>
       <el-menu mode="vertical" :default-active="splitUrl($route.path)" class="el-menu-vertical-demo" theme="dark" unique-opened>
-        <el-menu-item-group v-for="nav in navs" :key="nav.title">
+        <el-menu-item-group v-for="(group, groupIndex) in navs" :key="group.title">
           <template slot="title">
-            <i class="iconfont" :class="nav.class"></i>{{ nav.title }}
+            <i class="iconfont" :class="group.class"></i>
+            <span>{{ group.title }}</span>
           </template>
-          <!-- <router-link tag="span" :to="{path: sub.link}">{{ sub.title }}</router-link> -->
-          <el-submenu v-if="sub.children" :index="sub.title+nav.title" v-for="sub in nav.children" :key="sub.title+nav.title">
-            <template slot="title">
-              {{ sub.title }}
-            </template>
-            <el-menu-item :index="sub.title+subchild.link" v-for="subchild in sub.children" :key="subchild.title">
-              <router-link tag="span" :to="{path: subchild.link}">{{ subchild.title }}</router-link>
+          <template v-for="(nav, navIndex) in group.children">
+            <el-submenu v-if="nav.children" :index="`${groupIndex}-${navIndex}`" :key="`${groupIndex}-${navIndex}`">
+              <template slot="title">{{ nav.title }}</template>
+
+              <el-menu-item v-for="(sub, subIndex) in nav.children" :key="`${groupIndex}-${navIndex}-${subIndex}`" :index="`${groupIndex}-${navIndex}-${subIndex}`">
+                <router-link tag="span" :to="{path : sub.link}">{{ sub.title }}</router-link>
+              </el-menu-item>
+            </el-submenu>
+
+            <el-menu-item v-else :index="navIndex" :key="navIndex">
+              <router-link tag="span" :to="{path : nav.link}">{{ nav.title }}</router-link>
             </el-menu-item>
-          </el-submenu>
-          <el-menu-item v-if="!sub.children" style="color: rgb(136,149,168);" :index="sub.title+nav.title" v-for="sub in nav.children" :key="sub.title+nav.title">
-            <router-link tag="span" :to="{path: sub.link}">{{ sub.title }}</router-link>
-          </el-menu-item>
-
+          </template>
         </el-menu-item-group>
-
       </el-menu>
       <div class="footer">
         <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">
