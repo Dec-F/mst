@@ -10,20 +10,23 @@ const faq = resolve => require(['@/pages/faq'], resolve);
 const behaviorIndex = resolve => require(['@/pages/behavior/index'], resolve);
 const behaviorStore = resolve => require(['@/pages/behavior/storeDetail'], resolve);
 const behaviorApp = resolve => require(['@/pages/behavior/appDetail'], resolve);
-
 //质量分析
 const qualityIndex = resolve => require(['@/pages/quality/index'], resolve);
 const qualityStore = resolve => require(['@/pages/quality/storeDetail'], resolve);
 const qualityApp = resolve => require(['@/pages/quality/appDetail'], resolve);
 const quality = resolve => require(['@/pages/quality/quality'], resolve);
 const qualityKeep = resolve => require(['@/pages/quality/keepTrend'], resolve);
-//质量分析
-const flow = resolve => require(['@/pages/deep/index'], resolve);
 //渠道画像
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
 // app
 const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
 const uninstall = resolve => require(['@/pages/appBehavior/uninstall'], resolve);
+//深度分析
+//流向分析
+const flowTrend = resolve => require(['@/pages/deep/flowTrend'], resolve); 
+//同装分析
+const sameTrend = resolve => require(['@/pages/deep/sameTrend'], resolve); //同装分析
+
 // Vue.use(Router)
 // const $route = {};
 const routes = [{
@@ -79,18 +82,6 @@ const routes = [{
           }
         }
       },
-      // {
-      //   path: '/downloadTrend/appDetail/:appId/:appName',
-      //   name: 'downloadAppDetail',
-      //   component: behaviorApp,
-      //   meta: {
-      //     type: 'download',
-      //     bread: {
-      //       name: '行为趋势',
-      //       path: '/downloadTrend'
-      //     }
-      //   }
-      // },
       // 行为分析 --- 安装趋势
       {
         path: '/installTrend',
@@ -393,7 +384,7 @@ const routes = [{
       {
         path: '/flowTrend',
         name: 'flowTrend',
-        component: flow,
+        component: flowTrend,
         meta: {
           type: 'flow',
           bread: {
@@ -405,7 +396,7 @@ const routes = [{
       {
         path: '/sameTrend',
         name: 'sameTrend',
-        component: flow,
+        component: sameTrend,
         meta: {
           type: 'simul',
           bread: {
