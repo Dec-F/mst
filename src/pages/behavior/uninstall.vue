@@ -41,7 +41,7 @@
 <script>
 import api from "@/api/api";
 import trendChart from "@/components/trendChart";
-import trend from "@/components/trend";
+import trend from '@/components/radioTrend'
 import selectType from "@/components/appTypeMenu";
 import datePicker from "@/components/datePicker";
 import search from "@/components/search";

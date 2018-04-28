@@ -25,6 +25,9 @@ export default {
     series: Array,
     name: String,
   },
+  mounted() {
+    console.log(this.series);
+  },
   watch: {
     data(data) {
       this.option = {
@@ -58,7 +61,7 @@ export default {
         },
         legend: {
           x: 'bottom',
-          data:['下载趋势', '新装趋势', '活跃趋势']
+          data: ['下载趋势', '新装趋势', '活跃趋势']
         },
         series: this.series
       }

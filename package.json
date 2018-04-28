@@ -20,6 +20,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "mockjs": "^1.0.1-beta3",
+    "moment": "^2.22.1",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^2.0.0",
     "vue": "^2.5.2",

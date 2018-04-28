@@ -154,11 +154,11 @@
     </el-pagination>
     <el-dialog title="当前渠道" :visible.sync="dialogTableVisible">
       <!--<span class="chart-date">
-          <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-            <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-            </el-option>
-          </el-select>
-        </span>-->
+            <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+              <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+              </el-option>
+            </el-select>
+          </span>-->
       <div class="chart-con" v-loading.chart-con="chartloading">
         <bar-chart :data="chartData" :xAxis="chartXAxis" :legend="chartLegend" :series="chartSeries"></bar-chart>
       </div>
@@ -373,7 +373,9 @@ export default {
 <style lang='less'>
 .el-table tr:nth-child(2) {
   th {
-    background-color: #f5f7fa !important;
+    background-color: #E1F4D6 !important;
+    border-bottom: 1px solid #BDE6A2;
+    padding: 2px
   }
 }
 
