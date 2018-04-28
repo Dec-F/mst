@@ -95,6 +95,23 @@ const api = {
       method: 'GET',
       params: params
     });
+  },
+    // 深度分析
+    // 同装
+  flowTable(params) {
+    return fetch({
+      url: '/depth/findSimulTrend',
+      method: 'GET',
+      params: params
+    });
+  },
+  // 流向
+  findFlowTrend(params) {
+    return fetch({
+      url: '/depth/findFlowTrend',
+      method: 'GET',
+      params: params
+    });
   }
 
 }
