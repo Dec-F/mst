@@ -3,7 +3,7 @@
     <div class="content">
       <div class="navname">{{ $route.meta.bread.name }}</div>
       <div class="menu">
-        <date-picker v-model="dateVal" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
+        <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
           <span>
             <el-button type="success" @click="submitData">确定</el-button>
           </span>
@@ -14,17 +14,17 @@
           <el-collapse-transition>
             <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total"></trend>
+          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
           <div class="table-content-header">
-          <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
-            <i class="iconfont icon-download"></i>数据导出
-          </el-button>
-          <!-- <span>
+            <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
+              <i class="iconfont icon-download"></i>数据导出
+            </el-button>
+            <!-- <span>
             <span class="label">趋势图表：</span>
             <el-switch v-model="switchVal" on-text="" off-text="" on-color="#67C72B" off-color="#ccc">
             </el-switch>
           </span> -->
-        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -32,11 +32,11 @@
 </template>
 
 <script>
-import api from '@/api/api'
-import trend from '@/components/trend'
-import datePicker from '@/components/datePicker'
-import search from '@/components/search'
-import trendChart from '@/components/trendChart'
+import api from '@/api/api';
+import trend from '@/components/trend';
+import datePicker from '@/components/datePicker';
+import search from '@/components/search';
+import trendChart from '@/components/trendChart';
 
 export default {
   name: 'download',
@@ -55,8 +55,6 @@ export default {
       endDate: null,
       dataLimitVal: 4,
       dateVal: '',
-      weekDateVal: '',
-      monthDateVal: '',
       switchVal: false,
       currentPage: 1,
       pageSize: 10,
@@ -72,24 +70,29 @@ export default {
       searchType: null,
       searchLoading: false,
       count: false,
-    }
+      tabType: 'all',
+      orderBy: '',
+      sortbyDateTime: ''
+    };
   },
   created() {
-
     this.fetchDate();
-
   },
   computed: {
     filterData() {
-      const val = this.inputVal
+      const val = this.inputVal;
       if (val) {
         return this.mediaList.filter(function(data) {
           return Object.keys(data).some(function(key) {
-            return String(data[key]).toLowerCase().indexOf(val) > -1
-          })
-        })
+            return (
+              String(data[key])
+                .toLowerCase()
+                .indexOf(val) > -1
+            );
+          });
+        });
       }
-      return this.mediaList
+      return this.mediaList;
     }
   },
   watch: {
@@ -108,8 +111,6 @@ export default {
       this.pageSize = 10;
       this.orderType = 'descending';
       this.orderColumn = '';
-      this.weekDateVal = '';
-      this.monthDateVal = '';
       this.tableHeader = [];
       this.fetchDate();
     },
@@ -123,61 +124,82 @@ export default {
       this.dateVal = val;
     },
     changeWeekDate(val) {
-      this.weekDateVal = val;
+      this.dateVal = val;
     },
     changeMonthDate(val) {
-      this.monthDateVal = val;
+      this.dateVal = val;
     },
-
+    tabChange(name) {
+      this.tabType = name;
+      this.fetchTableData();
+    },
     // 获取日期数据
     fetchDate() {
       api.date().then(res => {
         this.dateVal = res.data.end;
-        this.startDate = res.data.start
-        this.endDate = res.data.end
-        this.fetchTableData();
-      })
+        this.startDate = res.data.start;
+        this.endDate = res.data.end;
+        if (this.tabType === 'all') {
+          this.fetchTableData();
+        } else {
+          this.getTableDataByTab();
+        }
+      });
     },
     // 获取表格数据
     fetchTableData() {
       this.loading = true;
+
+      const typeMap = {
+        download: 1,
+        xinzhuang: 2,
+        huoyue: 3
+      };
       // 请求参数
       const params = {
         // 发送请求
-        date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
-        dateType: this.dateTypeVal==="week" ? 1:2,
-        type: this.$route.meta.type,
+        date: this.dateVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        type: typeMap[this.tabType],
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn
+        orderColumn: this.orderColumn,
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
+      };
+      if (this.tabType === 'all') {
+        api.downloadTrend(params).then(res => {
+          this.loading = false;
+          this.count = true;
+
+          this.tableHeader = res.data.tableHeader || [];
+
+          this.tableData = res.data.tableSum.concat(res.data.tableData) || [];
+
+          this.chartXAxis = res.data.echarts.xAxis || [];
+
+          this.chartData = res.data.echarts.line || [];
+
+          this.total = res.data.tablePage.total;
+        });
+      } else {
+        api.eachTrend(params).then(res => {
+          this.loading = false;
+          this.count = true;
+
+          this.tableHeader = res.data.tableHeader || [];
+
+          this.tableData = res.data.tableData || [];
+
+          this.chartXAxis = res.data.echarts.xAxis || [];
+
+          this.chartData = res.data.echarts.line || [];
+
+          this.total = res.data.tablePage.total;
+        });
       }
-      api.downloadTrend(params).then(res => {
-        this.loading = false;
-        this.count = true;
-        if (res.data.tableHeader !== null) {
-          this.tableHeader = res.data.tableHeader;
-        } else {
-          this.tableHeader = []
-        }
-        if (res.data.tableData !== null) {
-          this.tableData = res.data.tableSum.concat(res.data.tableData);
-        } else {
-          this.tableData = []
-        }
-        if (res.data.echarts.xAxis.length) {
-          this.chartXAxis = res.data.echarts.xAxis;
-        } else {
-          this.chartXAxis = []
-        }
-        if (res.data.echarts.xAxis.length) {
-          this.chartData = res.data.echarts.line;
-        } else {
-          this.chartData = []
-        }
-        this.total = res.data.tablePage.total;
-      })
     },
     submitData() {
       this.count = false;
@@ -186,25 +208,37 @@ export default {
     },
     // 导出数据
     downloadData() {
-      var path = "http://113.200.91.81/mst/behavior/exportTrendExcel?";
-      var paras = "type=" + this.$route.meta.type + "&" +
-        "date=" + (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) + "&" +
-        "dateType=" + this.dateTypeVal + "&" +
-        "limit=" + this.dataLimitVal + "&" +
-        "pageNo=" + this.currentPage + "&" +
-        "pageSize=" + this.pageSize + "&" +
-        "orderType=" + this.orderType + "&" +
-        "orderColumn=" + this.orderColumn
+      var path = 'http://113.200.91.81/mst/behavior/exportTrendExcel?';
+      var paras =
+        'type=' +
+        this.$route.meta.type +
+        '&' +
+        'date=' +
+        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
+        '&' +
+        'dateType=' +
+        this.dateTypeVal +
+        '&' +
+        'limit=' +
+        this.dataLimitVal +
+        '&' +
+        'pageNo=' +
+        this.currentPage +
+        '&' +
+        'pageSize=' +
+        this.pageSize +
+        '&' +
+        'orderType=' +
+        this.orderType +
+        '&' +
+        'orderColumn=' +
+        this.orderColumn;
       window.location.href = path + paras;
-
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => {
-
-        })
+        this.searchData.filter(item => {});
       }
-     
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -217,29 +251,39 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.order = (sort.order ? sort.order : 'descending');
-      this.orderColumn = sort.prop;
+
+      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null 
+      if (!sort.order || !sort.prop) {
+        return;
+      }
+      sort.order = sort.order ? sort.order : 'descending';
       this.orderType = sort.order;
+      if (sort.prop.indexOf('--') > -1) {
+        let sortArr = sort.prop.split('--');
+        this.sortbyDateTime = sortArr[0];
+        this.orderColumn = sortArr[1];
+        this.orderBy = sortArr[1];
+      }
       this.fetchTableData();
     },
     linkDetail(row) {
-      console.log(row)
+      console.log(row);
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-   .el-radio-button__orig-radio:checked+.el-radio-button__inner{
-     background: #67c23a;
-   }
-   .el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
-    color: #67c23a;
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+  background: #67c23a;
 }
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active{
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
+  color: #67c23a;
+}
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #67c23a;
 }
 </style>

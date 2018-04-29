@@ -203,7 +203,9 @@ export default {
 <style lang='less'>
 .el-table tr:nth-child(2) {
   th {
-    background-color: #f5f7fa !important;
+    background-color: #E1F4D6 !important;
+    border-bottom: 1px solid #BDE6A2;
+    padding: 2px
   }
 }
 

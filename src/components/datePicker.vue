@@ -10,13 +10,13 @@
           </el-radio-button>
         </el-radio-group>
       </span>
-      <span>
-        <el-date-picker :clearable="false" :editable="false" v-show="dateTypeVal === 'month'" v-model="dateVal" type="month" placeholder="选择月" @change="changeMonth" :picker-options="monthOption">
+      <span v-if="dateTypeVal === 'month'">
+        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="month" placeholder="选择月" @change="changeMonth" :picker-options="monthOption">
         </el-date-picker>
-        <el-date-picker :clearable="false" :editable="false" v-show="dateTypeVal === 'week'" v-model="dateVal" type="week" format="yyyy第WW周" placeholder="选择周" :picker-options="weekOption" @change="changeWeek">
+      </span>
+      <span v-if="dateTypeVal === 'week'">
+        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="week" format="yyyy第WW周" placeholder="选择周" :picker-options="weekOption" @change="changeWeek">
         </el-date-picker>
-        <!--<el-date-picker v-model="value3" :clearable="false" :editable="false" v-show="dateTypeVal === 'week'" type="week" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="weekOption" @change="changeWeek">
-        </el-date-picker>-->
       </span>
       <span v-if="showLimit">
         <span>之前</span>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 export default {
   name: 'date-picker',
   props: {
@@ -69,6 +70,7 @@ export default {
       ],
       dataLimitVal: this.limit,
       dateVal: this.startDate,
+      dateValFormat: new Date(this.startDate),
       formatDateVal: '',
       weekOption: {},
       monthOption: {}
@@ -77,53 +79,33 @@ export default {
   computed: {
     filterLimit() {
       if (this.dateTypeVal === 'week') {
-        return 12
+        return 12;
       } else {
-        return 6
+        return 6;
       }
     }
   },
-  watch: {
-    limit(val) {
-      this.dataLimitVal = val;
-    },
-    type(val) {
-      this.loaderDate();
-      this.dateTypeVal = val;
-    },
-    dateTypeVal(val) {
-      this.dataLimitVal = 4;
-      this.loaderDate();
-      this.dateVal = this.endDate;
-      this.$emit('change-date-type', val);
-    },
-    dateVal(val) {
-      this.$emit('change-date', val)
-    },
-    startDate(val) {
-      this.dateVal = val;
-      this.loaderDate();
-    },
-    endDate(val) {
-      this.dateVal = val;
-      this.loaderDate();
-    }
+  mounted() {
+    console.log(this.startDate, this.endDate);
   },
   methods: {
     changeDateType(val) {
       this.dateTypeVal = val;
+      this.$emit('change-date-type', val);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
       this.$emit('change-date-limit', val);
     },
     changeMonth(val) {
-      this.formatDateVal = val.replace(/\-/g, '');
-      this.$emit('change-month-date', this.formatDateVal)
+      this.dateValFormat = new Date(val);
+      this.dateVal = moment(val).format('YYYYMMDD');
+      this.$emit('change-month-date', this.dateVal);
     },
     changeWeek(val) {
-      this.formatDateVal = val.replace(/\u5468|\u7b2c/g, '');
-      this.$emit('change-week-date', this.formatDateVal);
+      this.dateValFormat = new Date(val);
+      this.dateVal = moment(val).format('YYYYWW');
+      this.$emit('change-week-date', this.dateVal);
     },
     loaderDate() {
       this.loaderWeekDate();

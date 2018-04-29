@@ -15,7 +15,6 @@
         </el-col>
       </div>
       <div class="table-content">
-
         <div class="table-content-body" v-loading.table-content-body="loading">
           <el-collapse-transition>
             <div class="chart" v-show="switchVal">
@@ -274,22 +273,6 @@ export default {
     },
     // 导出数据
     downloadData() {
-      // const params = {
-      //   // 发送请求
-      //   type: this.$route.meta.type,
-      //   date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
-      //   dateType: this.dateTypeVal,
-      //   limit: this.dataLimitVal,
-      //   subCategoryId: this.checkedType,
-      //   categoryId: this.bigType === 0 ? null : this.bigType,
-      //   pageNo: this.currentPage,
-      //   pageSize: this.pageSize,
-      //   orderType: this.orderType,
-      //   orderColumn: this.orderColumn,
-      //   queryId: this.searchId,
-      //   queryType: this.searchType,
-      //   channelId: parseInt(this.$route.params.storeId)
-      // }
       var path =
         "http://113.200.91.81/mst/behavior/exportChannelAppTrendExcel?";
       var paras1 =
