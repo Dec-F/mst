@@ -7,7 +7,11 @@
       <div class="right">
         <div>
           <el-radio-group v-model="bigType">
-            <el-radio-button v-for="item in data" :label="item.categoryId" :value="item.categoryId" :key="item.categoryId">{{ item.label }}</el-radio-button>
+            <el-radio-button v-for="item in data"
+             :label="item.categoryId" :value="item.categoryId" 
+             :key="item.categoryId">
+             {{ item.label }}
+            </el-radio-button>
           </el-radio-group>
         </div>
       </div>
@@ -17,7 +21,10 @@
       </div>
       <div class="right">
         <div class="rightBox">
-          <el-checkbox-button v-model="checkAll" @change="selectAllType(checkAll)" style="float:left">全选</el-checkbox-button>
+          <el-checkbox-button v-model="checkAll"
+            @change="selectAllType(checkAll)" style="float:left">
+            全选
+           </el-checkbox-button>
           <el-checkbox-group v-model="checkedType" @change="selectType">
             <el-checkbox-button v-for="item in smallTypeList" :label="item.subCategoryId" :value="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
           </el-checkbox-group>

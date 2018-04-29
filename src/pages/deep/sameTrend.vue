@@ -22,9 +22,24 @@
               <el-radio-button label="1">周</el-radio-button>
               <el-radio-button label="2">月</el-radio-button>
             </el-radio-group>
-            <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy 第 WW 周" placeholder="选择周" @change="dateHandle">
+            <el-date-picker 
+            v-model="week" 
+            v-show="queryForm.dateType==1" 
+            type="week" 
+            format="yyyy-WW" 
+            placeholder="选择周"
+            :picker-options="{ disabledDate }"
+            @change="dateHandle">
             </el-date-picker>
-            <el-date-picker v-show="queryForm.dateType==2" v-model="queryForm.date" type="month" format="yyyy 第 MM 月" placeholder="选择月" @change="dateHandle" value-format="yyyyMM">
+
+            <el-date-picker 
+            v-show="queryForm.dateType==2" 
+            v-model="month" type="month" 
+            format="yyyy-MM" 
+            placeholder="选择月" 
+            :picker-options="{ disabledDate }"
+            @change="dateHandle" 
+            value-format="yyyyMM">
             </el-date-picker>
             <el-button type="success" @click="queryHandle" class="" size="small">确定</el-button>
           </el-form-item>
@@ -42,14 +57,16 @@
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
             <i class="iconfont icon-download"></i>数据导出</el-button>
-          <el-input
+          <el-autocomplete
             class="fr"
             size="small"
             style = "display:inline-block; width:180px;"
+            v-model="queryForm.appname"
+            :fetch-suggestions="querySearch"
             placeholder="请输入内容"
-            suffix-icon="el-icon-search"
-            @keyup.13.native="enterQueryHandle">
-          </el-input>
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          ></el-autocomplete>
         </div>
         <!-- v-loading.table-content-body="loading" -->
         <div class="table-con ">
@@ -66,7 +83,7 @@
                     <div>
                       <span class="logo"><img :src="scope.row.logo" alt=""></span>
                       <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
-                      <span style="margin-left:20px" @click="dialogHandle(item)" class="iconChart"></span>
+                      <span style="margin-left:20px" @click="dialogHandle(scope.row)" class="iconChart"></span>
                     </div>
                   </div>
                   <div v-else-if="index==2">
@@ -91,7 +108,10 @@
               </el-select>
             </span> -->
           <div class="chart-con">
-            <ECharts :options="chartOption" theme="irs"></ECharts>
+            <div style="text-align:center">
+              <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
+            </div>
+            <ECharts style="width:700px;" :options="chartOption" theme="irs"></ECharts>
           </div>
         </el-dialog>
       </div>
@@ -141,9 +161,10 @@ export default {
         pageNo: 1, //分页
         pageSize: 10, //条数
         orderType: 'descending', //排序类型
-        text:'' //文本搜索
+
       },
       week: '',
+      month:'',
       total: 0, //表格总条数
       // 表格数据
       tableData: [],
@@ -154,11 +175,12 @@ export default {
       chartData3: [],
       chartXAxis: [],
       chartOption: {},
-
+      chartTile:'',
       dialogTableVisible: false,
-
       startDate: null,
       endDate: null,
+      searchData:[]
+
 
     };
   },
@@ -170,8 +192,11 @@ export default {
 
   },
   watch: {
-    'queryForm.dateType': function() {
-      this.queryForm.date = ''
+    'queryForm.dateType': function(val) {
+      console.log(val)
+      if(val==2){
+        this.month = new Date(this.endDate)
+      }
     },
     $route(val) {
       this.init();
@@ -202,12 +227,23 @@ export default {
     // 查询按钮
     queryHandle() {
       this.queryForm.pageNo = 1
+      if(this.queryForm.dateType==2){
+         let date = new Date(this.month)
+         let year = date.getFullYear()
+         let month = date.getMonth()+1+''
+         if (month.length==1) {
+            month = 0+month
+         }
+         let yearMM = year+month
+          this.queryForm.date = yearMM
+        }
       this.fetchTableData()
     },
     // 查询按钮
     enterQueryHandle() {
       this.fetchTableData()
     },
+
     // app类别点击事件
     typeListHandle(item) {
       this.bigTypeItem = item.children
@@ -218,6 +254,7 @@ export default {
         this.typeSubList = item.children
       }
     },
+    
     // 分页
     handleCurrentChange(val) {
       this.queryForm.pageNo = val
@@ -226,17 +263,17 @@ export default {
     // 表格弹出
     dialogHandle(item) {
       this.dialogTableVisible = true
-      let params = {id:item}
-      api.findFlowTrend(params).then(res => {
+      this.queryForm.id = item.id
+      api.sambarecharts(this.queryForm).then(res => {
         console.log(res)
         if (res.resCode == 200) {
-          this.chartXAxis = ["迷你世界","贪吃蛇大作战","钢琴块2-别踩白块儿2","天天爱消除","天天爱连线"]  //res.XAxis
-          this.chartData1 = [3.278689,3.278689,1.639344,1.639344,1.639344] //res.data1
+          this.chartXAxis = res.data.xAxis
+          this.chartData1 = res.data.ratios
           this.chartData2 = [1.278689,3.178689,2.639344,4.639344,5.639344] //res.data2
           this.chartOption = {
-            legend: {
-              data: ['下载趋势', '新装趋势']
-            },
+            // legend: {
+            //   data: ['下载趋势',]
+            // },
             tooltip: {
               trigger: 'axis',
               // extraCssText: 'fds',
@@ -255,7 +292,7 @@ export default {
               containLabel: true,
             },
             xAxis: {
-              data: this.chartXAxis
+              data : ['总费用','房租','水电费','交通费','伙食费','日用品数']
             },
             yAxis: {
               type: 'value',
@@ -264,26 +301,64 @@ export default {
               }
             },
             series: [{
-              name: '下载趋势',
-              type: 'bar',
-              barGap: 0,
-              data: this.chartData1
-            }, {
-              name: '新装趋势',
-              type: 'bar',
-              data: this.chartData2
-            },]
+            name: '下载趋势',
+            type: 'bar',
+            barWidth: '40px',
+            data:this.chartData1
+        }]
           }
         }
         
       });
     },
+    disabledDate(date) {
+      const start = this.startDate
+      const end = this.endDate
+      return !this.dateInRange(date, start, end);
+    },
+    dateInRange(val, start, end) {
+      const valDateStamp = new Date(val).getTime();
+      const startDateStamp = new Date(start).getTime();
+      const endDateStamp = new Date(end).getTime();
+      return valDateStamp > startDateStamp && valDateStamp < endDateStamp;
+    },
+
     // 获取app类型数据
     fetchAppType() {
       api.appType().then(res => {
         res.data.typeList.unshift({ categoryId: 0, label: "全部" });
         this.typeList = res.data.typeList;
       });
+      api.findSearchAppChannel().then(res => {
+        if(res.resCode ==200){
+          this.searchData = res.data
+          this.searchData.forEach((item)=>{
+            item.value = item.name
+          })
+        }
+      });
+    },
+    querySearch(queryString, cb) {
+        var restaurants = this.searchData;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        if(!results.length){
+          results = [{value:"暂无数据"}]
+        }
+        cb(results);
+      },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    handleSelect(item){
+        if(item.id){
+          this.queryForm.appid = item.id
+          this.fetchTableData()
+        }
+        this.queryForm.appid =''
+        this.queryForm.appname =''
     },
     // 获取当前时间周方法
     getWeekNumber(src) {
@@ -295,6 +370,10 @@ export default {
       var week1 = new Date(date.getFullYear(), 0, 4);
       let year = date.getFullYear() + ''
       let week = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7)
+      week = week+''
+      if(week.length ==1){
+        week = 0+''+week
+      }
       return year + week
     },
 
@@ -304,6 +383,10 @@ export default {
         this.dateVal = res.data.end;
         this.startDate = res.data.start;
         this.endDate = res.data.end;
+        this.week = new Date(this.endDate)
+        if(this.queryForm.dateType==1){
+          this.queryForm.date = this.getWeekNumber(this.week)
+        }
         this.fetchTableData();
       });
     },
@@ -314,7 +397,6 @@ export default {
       api.findFlowTrend(this.queryForm).then(res => {
         this.queryForm.pageNo = res.data.tablePage.pageNo
         this.total = res.data.tablePage.total
-        // console.log(res)
         this.loading = true;
         this.count = true;
         if (res.data.tableHeader !== null) {
@@ -332,6 +414,22 @@ export default {
 
     // 导出数据
     downloadData() {
+      // const params = {
+      //   // 发送请求
+      //   type: this.$route.meta.type,
+      //   date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
+      //   dateType: this.dateTypeVal,
+      //   limit: this.dataLimitVal,
+      //   subCategoryId: this.checkedType,
+      //   categoryId: this.bigType === 0 ? null : this.bigType,
+      //   pageNo: this.currentPage,
+      //   pageSize: this.pageSize,
+      //   orderType: this.orderType,
+      //   orderColumn: this.orderColumn,
+      //   queryId: this.searchId,
+      //   queryType: this.searchType
+      // }
+
       var path = "http://113.200.91.81/mst/deep/exportAppDeepsExcel?";
       var paras1 =
         "type=" +
@@ -366,6 +464,10 @@ export default {
         "&" +
         "orderColumn=" +
         this.orderColumn;
+      // "queryId=" + this.searchId + "&" +
+      // "queryType=" + this.searchType;
+      // window.location.href = path + paras1 + paras2 + paras3;
+
       if (this.bigType == 0) {
         window.location.href = path + paras1 + paras3;
       } else {
@@ -389,9 +491,6 @@ export default {
   overflow: hidden
 }
 
-.margintop {
-  margin: 40px 0 40px 0;
-}
 .content {
   .table-con .el-table .cell {
     padding-left: 0;
@@ -422,7 +521,6 @@ export default {
   .table-con .is-group tr:nth-of-type(2) th {
     padding: 0;
     background: #e1f4d7;
-      border-bottom: none;
   }
 
   .table-con .is-group.has-gutter tr:nth-of-type(2) th .cell:before {
@@ -512,10 +610,5 @@ export default {
   background: url(../../assets/iconChart.png) no-repeat;
   vertical-align: middle;
   margin: 0 5px;
-}
-
-.el-button--small,
-.el-button--small.is-round {
-  padding: 9px 40px;
 }
 </style>
