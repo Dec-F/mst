@@ -70,7 +70,9 @@ export default {
       searchType: null,
       searchLoading: false,
       count: false,
-      tabType: 'all'
+      tabType: 'all',
+      orderBy: '',
+      sortbyDateTime: ''
     };
   },
   created() {
@@ -163,7 +165,9 @@ export default {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn
+        orderColumn: this.orderColumn,
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
       };
       if (this.tabType === 'all') {
         api.downloadTrend(params).then(res => {
@@ -185,7 +189,7 @@ export default {
           this.loading = false;
           this.count = true;
 
-          // this.tableHeader = res.data.tableHeader || [];
+          this.tableHeader = res.data.tableHeader || [];
 
           this.tableData = res.data.tableData || [];
 
@@ -248,8 +252,14 @@ export default {
     },
     changeSort(sort) {
       sort.order = sort.order ? sort.order : 'descending';
-      this.orderColumn = sort.prop;
+
       this.orderType = sort.order;
+      if (sort.prop.indexOf('--') > -1) {
+        let sortArr = sort.prop.split('--');
+        this.sortbyDateTime = sortArr[0];
+        this.orderColumn = sortArr[1];
+        this.orderBy = sortArr[1];
+      }
       this.fetchTableData();
     },
     linkDetail(row) {

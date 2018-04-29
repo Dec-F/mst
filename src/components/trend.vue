@@ -1,7 +1,7 @@
 <template>
   <div class="trend">
-    <el-tabs type="border-card" @tab-click='tabClick' :value='tabs[0].name'>
-      <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index" >
+    <el-tabs type="border-card" @tab-click='tabClick' :value='actTab'>
+      <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
         <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
             <el-table-column width="80" fixed v-if="th.column === 'index'" :label="th.columnName" :key="index">
@@ -22,7 +22,7 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column v-if="th.column === 'name'">
+            <el-table-column v-if="th.column === 'name'&&actTab==='all'">
               <el-table-column :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
                 <template slot-scope="scope">
                   <div>
@@ -32,7 +32,7 @@
               </el-table-column>
             </el-table-column>
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-              <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
+              <el-table-column :sortable="true" align="right" :prop="`${th.columnName}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
                   {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
@@ -84,7 +84,7 @@ export default {
     },
     tabs: {
       type: Array,
-      default: ()=>[
+      default: () => [
         {
           index: 0,
           name: 'all',
@@ -130,7 +130,8 @@ export default {
       count: false,
       dateList: [],
       dateListVal: null,
-      chartData: []
+      chartData: [],
+      actTab: this.tabs[0].name
     };
   },
   created() {
@@ -164,8 +165,9 @@ export default {
     }
   },
   methods: {
-    tabClick(tab,event){
-      this.$emit('tab-change',tab.name)
+    tabClick(tab, event) {
+      this.actTab = tab.name;
+      this.$emit('tab-change', tab.name);
     },
     renderHeader(createElement, { column }) {
       return createElement('div', [
@@ -177,18 +179,21 @@ export default {
         })
       ]);
     },
-    renderHeader1(createElement, { column }) {
-      return createElement('div', [
-        createElement('span', [column.label]),
-        createElement('img', {
-          attrs: {
-            src: require('../../dist/static/img/sort.png')
-          }
-        })
-      ]);
-    },
+    // renderHeader1(createElement, { column }) {
+    //   return createElement('div', [
+    //     createElement('span', [column.label]),
+    //     createElement('img', {
+    //       attrs: {
+    //         src: require('../../dist/static/img/sort.png')
+    //       }
+    //     })
+    //   ]);
+    // },
     // 单元格合并
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (this.actTab !== 'all') {
+        return;
+      }
       if (columnIndex <= 1) {
         if (rowIndex % 3 === 0) {
           return {
@@ -243,20 +248,10 @@ export default {
     },
 
     changeSort(sort) {
-      const sortData = {
-        order: null,
-        prop: null
-      };
-      if (sort.column) {
-        sortData.order = sort.order;
-        this.tableHeader.map(item => {
-          if (item.columnName === sort.column.label) {
-            sortData.prop = item.children[0].column;
-          }
-        });
-      }
-      console.log(sortData);
-      this.$emit('change-sort', sortData);
+      const { order, prop } = sort;
+
+      console.log(order,prop);
+      this.$emit('change-sort', {order,prop});
     },
     linkDetail(item) {
       this.$emit('link-page', item);
