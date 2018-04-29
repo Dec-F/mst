@@ -2,7 +2,7 @@
   "name": "mst",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Hank <hank@iresearch.com.cn>",
+  "author": "xingyue<xingyue@iresearch.com.cn>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
