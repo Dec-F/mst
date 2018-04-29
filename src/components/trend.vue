@@ -1,7 +1,7 @@
 <template>
   <div class="trend">
-    <el-tabs type="border-card">
-      <el-tab-pane :label="item.label" v-for="item in tab" :key="item.index">
+    <el-tabs type="border-card" @tab-click='tabClick' :value='tabs[0].name'>
+      <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index" >
         <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
             <el-table-column width="80" fixed v-if="th.column === 'index'" :label="th.columnName" :key="index">
@@ -17,7 +17,7 @@
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
-                    <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+                    <span @click.stop="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
                   </div>
                 </template>
               </el-table-column>
@@ -81,6 +81,33 @@ export default {
     type: {
       type: String,
       default: 'week'
+    },
+    tabs: {
+      type: Array,
+      default: ()=>[
+        {
+          index: 0,
+          name: 'all',
+          label: '全部趋势'
+        },
+        {
+          index: 1,
+          name: 'xinzhuang',
+          label: '新装趋势'
+        },
+
+        {
+          index: 2,
+          name: 'download',
+          label: '下载趋势'
+        },
+
+        {
+          index: 3,
+          name: 'huoyue',
+          label: '活跃趋势'
+        }
+      ]
     }
   },
   data() {
@@ -103,28 +130,6 @@ export default {
       count: false,
       dateList: [],
       dateListVal: null,
-      // tab 栏目
-      tab: [
-        {
-          index: 0,
-          label: '全部趋势'
-        },
-
-        {
-          index: 1,
-          label: '新装趋势'
-        },
-
-        {
-          index: 2,
-          label: '下载趋势'
-        },
-
-        {
-          index: 3,
-          label: '活跃趋势'
-        }
-      ],
       chartData: []
     };
   },
@@ -159,6 +164,9 @@ export default {
     }
   },
   methods: {
+    tabClick(tab,event){
+      this.$emit('tab-change',tab.name)
+    },
     renderHeader(createElement, { column }) {
       return createElement('div', [
         createElement('span', [column.label]),

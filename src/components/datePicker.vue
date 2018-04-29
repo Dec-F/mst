@@ -91,6 +91,7 @@ export default {
   methods: {
     changeDateType(val) {
       this.dateTypeVal = val;
+      this.$emit('change-date-type', val);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -103,7 +104,7 @@ export default {
     },
     changeWeek(val) {
       this.dateValFormat = new Date(val);
-      this.dateVal = moment(val).format('YYYYMMDD');
+      this.dateVal = moment(val).format('YYYYWW');
       this.$emit('change-week-date', this.dateVal);
     },
     loaderDate() {
