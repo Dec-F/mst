@@ -2,151 +2,45 @@
   <div class="trend">
     <el-tabs type="border-card">
       <el-tab-pane :label="item.label" v-for="item in tab" :key="item.index">
-        <el-table :data="tableData" :span-method="arraySpanMethod" v-if="flag && item.label === '全部趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort">
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
-            <el-table-column width="80">
-              <template slot-scope="scope">
-                <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 2" class="top2">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 3" class="top3">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index !== 1&& scope.row.index !==2 && scope.row.index !==3" class="topNormal">{{ scope.row.index }}</span>
-              </template>
+        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
+          <template v-for="(th, index) in tableHeader">
+            <el-table-column width="80" fixed v-if="th.column === 'index'" :label="th.columnName" :key="index">
+              <el-table-column width="80">
+                <template slot-scope="scope">
+                  <span :class="`top${scope.row.index<=3?scope.row.index:'Normal'}`">{{ scope.row.index }}</span>
+                </template>
+              </el-table-column>
             </el-table-column>
-          </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-            <el-table-column min-width="180">
-              <template slot-scope="scope">
-                <div class="link">
-                  <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                  <span @click="linkDetail(scope.row)">{{ scope.row.name }}</span>
-                  <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
-                </div>
-              </template>
+            <el-table-column v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
+              <el-table-column min-width="180">
+                <template slot-scope="scope">
+                  <div @click="linkDetail(scope.row)" class="link">
+                    <span class="logo"><img :src="scope.row.logo" alt=""></span>
+                    <span>{{ scope.row.name }}</span>
+                    <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+                  </div>
+                </template>
+              </el-table-column>
             </el-table-column>
-
-          </el-table-column>
-          <el-table-column fixed>
-            <el-table-column>
-              <template slot-scope="scope">
-                <div>
-                  <span>{{scope.row.typename}}</span>
-                </div>
-
-              </template>
+            <el-table-column v-if="th.column === 'name'">
+              <el-table-column :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
+                <template slot-scope="scope">
+                  <div>
+                    <span>{{scope.row.typename}}</span>
+                  </div>
+                </template>
+              </el-table-column>
             </el-table-column>
-          </el-table-column>
-          <el-table-column :render-header="renderHeader" :sortable="false" align="center" min-width="100" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-            <el-table-column align="right" :render-header="renderHeader1" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
-              <template slot-scope="scope">
-                {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
-              </template>
+            <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
+              <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
+                <template slot-scope="scope">
+                  {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
+                </template>
+              </el-table-column>
             </el-table-column>
-          </el-table-column>
+          </template>
         </el-table>
-        <!--全部趋势end-->
-        <!--下载-->
-        <el-table :data="tableData" v-if="flag && item.label == '下载趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
-            <el-table-column width="80">
-              <template slot-scope="scope">
-                <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 2" class="top2">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 3" class="top3">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index !== 1&& scope.row.index !==2 && scope.row.index !==3" class="topNormal">{{ scope.row.index }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-            <el-table-column min-width="180">
-              <template slot-scope="scope">
-                <div @click="linkDetail(scope.row)" class="link">
-                  <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                  <span>{{ scope.row.name }}</span>
-                  <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table-column>
-
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-            <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
-              <template slot-scope="scope">
-                {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
-        <!--新装-->
-        <el-table :data="tableData" v-if="flag && item.label == '新装趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
-            <el-table-column width="80">
-              <template slot-scope="scope">
-                <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 2" class="top2">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 3" class="top3">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index !== 1&& scope.row.index !==2 && scope.row.index !==3" class="topNormal">{{ scope.row.index }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-            <el-table-column min-width="180">
-              <template slot-scope="scope">
-                <div @click="linkDetail(scope.row)" class="link">
-                  <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                  <span>{{ scope.row.name }}</span>
-                  <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table-column>
-
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-            <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
-              <template slot-scope="scope">
-                {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
-        <!--活跃-->
-        <el-table :data="tableData" v-if="flag && item.label == '活跃趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
-            <el-table-column width="80">
-              <template slot-scope="scope">
-                <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 2" class="top2">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index === 3" class="top3">{{ scope.row.index }}</span>
-                <span v-if="scope.row.index !== 1&& scope.row.index !==2 && scope.row.index !==3" class="topNormal">{{ scope.row.index }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-            <el-table-column min-width="180">
-              <template slot-scope="scope">
-                <div @click="linkDetail(scope.row)" class="link">
-                  <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                  <span>{{ scope.row.name }}</span>
-                  <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table-column>
-
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-            <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
-              <template slot-scope="scope">
-                {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
-
-        </keep-alive>
-
       </el-tab-pane>
     </el-tabs>
 
@@ -167,12 +61,12 @@
 </template>
 
 <script>
-import api from '@/api/api'
-import { getOSAv } from "@/browser/browser";
-import barChart from "@/components/barChart";
-import { getOSAndBrowser } from "@/browser/browser";
+import api from '@/api/api';
+import { getOSAv } from '@/browser/browser';
+import barChart from '@/components/barChart';
+import { getOSAndBrowser } from '@/browser/browser';
 export default {
-  name: "trend-com",
+  name: 'trend-com',
   components: {
     barChart
   },
@@ -186,7 +80,7 @@ export default {
     },
     type: {
       type: String,
-      default: "week"
+      default: 'week'
     }
   },
   data() {
@@ -196,7 +90,7 @@ export default {
       pageSize: 10,
       currentPage: this.current,
       dialogTableVisible: false,
-      appId: "",
+      appId: '',
       dateTypeVal: 1,
       startDate: null,
       endDate: null,
@@ -213,32 +107,32 @@ export default {
       tab: [
         {
           index: 0,
-          label: "全部趋势"
+          label: '全部趋势'
         },
 
         {
           index: 1,
-          label: "新装趋势"
+          label: '新装趋势'
         },
 
         {
           index: 2,
-          label: "下载趋势"
+          label: '下载趋势'
         },
 
         {
           index: 3,
-          label: "活跃趋势"
+          label: '活跃趋势'
         }
       ],
-      chartData:[]
+      chartData: []
     };
   },
   created() {
     this.fetchDate();
     const info = getOSAndBrowser();
     // console.log(info)
-    if (info.browser === "Safari") {
+    if (info.browser === 'Safari') {
       this.flag = false;
     } else {
       this.flag = true;
@@ -266,9 +160,9 @@ export default {
   },
   methods: {
     renderHeader(createElement, { column }) {
-      return createElement("div", [
-        createElement("span", [column.label]),
-        createElement("img", {
+      return createElement('div', [
+        createElement('span', [column.label]),
+        createElement('img', {
           attrs: {
             src: require('../../dist/static/img/tabletop.png')
           }
@@ -276,9 +170,9 @@ export default {
       ]);
     },
     renderHeader1(createElement, { column }) {
-      return createElement("div", [
-        createElement("span", [column.label]),
-        createElement("img", {
+      return createElement('div', [
+        createElement('span', [column.label]),
+        createElement('img', {
           attrs: {
             src: require('../../dist/static/img/sort.png')
           }
@@ -337,7 +231,6 @@ export default {
         this.chartTitle = res.data.fromAppName;
         this.chartLegend = res.data.legend;
         this.chartSeries = res.data.series;
-
       });
     },
 
@@ -355,18 +248,18 @@ export default {
         });
       }
       console.log(sortData);
-      this.$emit("change-sort", sortData);
+      this.$emit('change-sort', sortData);
     },
     linkDetail(item) {
-      this.$emit("link-page", item);
+      this.$emit('link-page', item);
     },
     handleSizeChange(val) {
       this.pageSize = val;
-      this.$emit("change-size", val);
+      this.$emit('change-size', val);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.$emit("change-current", val);
+      this.$emit('change-current', val);
     }
   }
 };
@@ -375,9 +268,9 @@ export default {
 <style lang='less'>
 .el-table tr:nth-child(2) {
   th {
-    background-color: #E1F4D6 !important;
-    border-bottom: 1px solid #BDE6A2;
-    padding: 2px
+    background-color: #e1f4d6 !important;
+    border-bottom: 1px solid #bde6a2;
+    padding: 2px;
   }
 }
 
@@ -414,7 +307,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-left: 20px;
   width: 10px;
@@ -422,7 +315,7 @@ export default {
   vertical-align: top;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
