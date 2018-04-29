@@ -1,6 +1,6 @@
 <template>
   <div class="trend">
-    <el-table :data="tableData" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
+    <el-table :data="tableData" style="width: 100%;border-left:none" border @sort-change="changeSort" @header-click="dialog2TableHead" stripe>
       <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
         <el-table-column width="80">
           <template slot-scope="scope">
@@ -136,7 +136,6 @@ export default {
 
     //打开图表框
     dialog2Table(appId) {
-      const chartApi = 'flowCharts';
       const data = {
         date: this.dateListVal,
         appId,
@@ -145,7 +144,28 @@ export default {
         subCategoryId: this.checkedType,
         categoryId: this.bigType === 0 ? null : this.bigType
       };
-      this.dialogParams = { api: chartApi, data };
+      this.dialogParams = {
+        api: 'flowCharts',
+        formater: 'app',
+        data
+      };
+      this.dialogVisible = true;
+    },
+
+    dialog2TableHead(params) {
+      if (!/^\d{6}$/.test(params.label)) return;
+      const data = {
+        date: this.dateListVal,
+        dateType: this.dateTypeVal,
+        type: this.$route.meta.type,
+        subCategoryId: this.checkedType,
+        categoryId: this.bigType === 0 ? null : this.bigType
+      };
+      this.dialogParams = {
+        api: 'flowCharts',
+        formater: 'date',
+        data
+      };
       this.dialogVisible = true;
     },
 

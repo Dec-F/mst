@@ -1,7 +1,13 @@
 <template>
-  <el-dialog title="图表" :visible.sync="show">
+  <el-dialog title="图表" :visible.sync="show" width="1120px">
+    <div>
+      <el-radio-group v-model="chartType" size="mini">
+        <el-radio-button label="line">折线图</el-radio-button>
+        <el-radio-button label="bar">柱状图</el-radio-button>
+      </el-radio-group>
+    </div>
     <div class="chart-con" v-loading.chart-con="loading">
-      <ECharts :options="options" theme="irs" style="width: 1200px; height: 400px"></ECharts>
+      <ECharts :options="options" theme="irs" style="width: 1080px; height: 400px"></ECharts>
     </div>
   </el-dialog>
 </template>
@@ -14,7 +20,24 @@ ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
 
-const maxValue = 1;
+const apiConf = {
+  'date': 'flowchart'
+};
+const formaterConf = {
+  'date': function (chartData) {
+    return {
+      xAxis: chartData.xAxis,
+      series: chartData.line.map(line => line.data[0].value),
+      title: chartData.fromAppName
+    };
+  },
+  'app': function (chartData) {
+    return {
+      xAxis: chartData.xAxis,
+      series: chartData.line[0].data.map(data => data.value)
+    };
+  }
+};
 
 export default {
   name: 'radioTrendDialog',
@@ -24,6 +47,7 @@ export default {
   data () {
     return {
       loading: true,
+      chartType: 'bar',
       chartData: {
         series: []
       }
@@ -45,7 +69,7 @@ export default {
     'params': function (newParams) {
       if (!newParams.api) return;
       this.loading = true;
-      this.fetchData(newParams.api, newParams.data).then(_ => {
+      this.fetchData(newParams.api, newParams.formater, newParams.data).then(_ => {
         this.loading = false;
       });
     },
@@ -72,6 +96,9 @@ export default {
               width: 2
             }
           },
+          axisLabel: {
+            interval: 0
+          },
           splitLine: {
             lineStyle: {
               color: '#f5f5f5'
@@ -85,43 +112,26 @@ export default {
               color: '#f5f5f5'
             }
           },
-          // axisLabel: {
-          //   formatter: function (value) {
-          //     return `${value * 100}%`;
-          //   }
-          // },
           splitLine: {
             lineStyle: {
               color: '#f5f5f5'
             }
           }
         },
-        series: this.chartData.series.map(item => {
-          return {
-            data: item,
-            type: 'bar',
-            barWidth: 16
-          }
-        })
+        series: {
+          data: this.chartData.series,
+          type: this.chartType,
+          barWidth: 16
+        }
       };
       return options;
     }
   },
   methods: {
-    fetchData(apiName, data) {
+    fetchData(apiName, formater, data) {
       return api[apiName](data).then(res => {
-        const chartData = res.data.echarts;
-        const series = [[], [], []];
-        chartData.line.forEach(line => {
-          line.data.forEach((item, index) => {
-            series[index].push(item.value);
-          });
-        });
-        this.chartData = {
-          xAxis: chartData.xAxis,
-          series,
-          title: chartData.fromAppName
-        }
+        const formatData = formaterConf[formater](res.data.echarts);
+        this.chartData = formatData;
       });
     },
   }
