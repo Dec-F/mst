@@ -3,7 +3,7 @@
     <el-tabs type="border-card">
       <el-tab-pane :label="item.label" v-for="item in tab" :key="item.index">
         <el-table :data="tableData" :span-method="arraySpanMethod" v-if="flag && item.label === '全部趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort">
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
+          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
             <el-table-column width="80">
               <template slot-scope="scope">
                 <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
@@ -13,7 +13,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="th.limit" min-width="180">
+          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
             <el-table-column min-width="180">
               <template slot-scope="scope">
                 <div class="link">
@@ -35,7 +35,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column :render-header="renderHeader" :sortable="false" align="center" min-width="100" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="th.limit">
+          <el-table-column :render-header="renderHeader" :sortable="false" align="center" min-width="100" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
             <el-table-column align="right" :render-header="renderHeader1" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
               <template slot-scope="scope">
                 {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
@@ -47,7 +47,7 @@
         <!--全部趋势end-->
         <!--下载-->
         <el-table :data="tableData" v-if="flag && item.label == '下载趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
+          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
             <el-table-column width="80">
               <template slot-scope="scope">
                 <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
@@ -57,7 +57,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="th.limit" min-width="180">
+          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
             <el-table-column min-width="180">
               <template slot-scope="scope">
                 <div @click="linkDetail(scope.row)" class="link">
@@ -69,7 +69,7 @@
             </el-table-column>
           </el-table-column>
 
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="th.limit">
+          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
             <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
               <template slot-scope="scope">
                 {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
@@ -80,7 +80,7 @@
         </el-table>
         <!--新装-->
         <el-table :data="tableData" v-if="flag && item.label == '新装趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
+          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
             <el-table-column width="80">
               <template slot-scope="scope">
                 <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
@@ -90,7 +90,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="th.limit" min-width="180">
+          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
             <el-table-column min-width="180">
               <template slot-scope="scope">
                 <div @click="linkDetail(scope.row)" class="link">
@@ -102,7 +102,7 @@
             </el-table-column>
           </el-table-column>
 
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="th.limit">
+          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
             <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
               <template slot-scope="scope">
                 {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
@@ -113,7 +113,7 @@
         </el-table>
         <!--活跃-->
         <el-table :data="tableData" v-if="flag && item.label == '活跃趋势'" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
-          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
+          <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="index">
             <el-table-column width="80">
               <template slot-scope="scope">
                 <span v-if="scope.row.index === 1" class="top1">{{ scope.row.index }}</span>
@@ -123,7 +123,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="th.limit" min-width="180">
+          <el-table-column fixed v-for="(th, index) in tableHeader" v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
             <el-table-column min-width="180">
               <template slot-scope="scope">
                 <div @click="linkDetail(scope.row)" class="link">
@@ -135,7 +135,7 @@
             </el-table-column>
           </el-table-column>
 
-          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="th.limit">
+          <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-for="(th, index) in tableHeader" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
             <el-table-column :sortable="true" align="right" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
               <template slot-scope="scope">
                 {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
@@ -170,6 +170,7 @@
 import api from '@/api/api'
 import { getOSAv } from "@/browser/browser";
 import barChart from "@/components/barChart";
+import { getOSAndBrowser } from "@/browser/browser";
 export default {
   name: "trend-com",
   components: {
@@ -229,7 +230,8 @@ export default {
           index: 3,
           label: "活跃趋势"
         }
-      ]
+      ],
+      chartData:[]
     };
   },
   created() {
@@ -304,7 +306,7 @@ export default {
         this.dateVal = res.data.end;
         this.startDate = res.data.start;
         this.endDate = res.data.end;
-        this.fetchTableData();
+        // this.fetchTableData();
       });
     },
 
