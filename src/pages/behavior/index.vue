@@ -251,8 +251,12 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.order = sort.order ? sort.order : 'descending';
 
+      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null 
+      if (!sort.order || !sort.prop) {
+        return;
+      }
+      sort.order = sort.order ? sort.order : 'descending';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');

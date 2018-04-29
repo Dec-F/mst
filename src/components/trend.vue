@@ -2,9 +2,9 @@
   <div class="trend">
     <el-tabs type="border-card" @tab-click='tabClick' :value='actTab'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
-        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
+        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort" >
           <template v-for="(th, index) in tableHeader">
-            <el-table-column width="80" fixed v-if="th.column === 'index'" :label="th.columnName" :key="index">
+            <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
               <el-table-column width="80">
                 <template slot-scope="scope">
                   <span :class="`top${scope.row.index<=3?scope.row.index:'Normal'}`">{{ scope.row.index }}</span>
@@ -12,7 +12,7 @@
               </el-table-column>
             </el-table-column>
             <el-table-column v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-              <el-table-column min-width="180">
+              <el-table-column min-width="180" class-name='box-sd'>
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
@@ -32,7 +32,7 @@
               </el-table-column>
             </el-table-column>
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-              <el-table-column :sortable="true" align="right" :prop="`${th.columnName}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
+              <el-table-column sortable="custom" align="right"  :prop="`${th.columnName}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
                   {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
@@ -249,9 +249,7 @@ export default {
 
     changeSort(sort) {
       const { order, prop } = sort;
-
-      console.log(order,prop);
-      this.$emit('change-sort', {order,prop});
+      this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
       this.$emit('link-page', item);
@@ -269,6 +267,20 @@ export default {
 </script>
 
 <style lang='less'>
+.box-sd {
+  position: relative;
+}
+.box-sd::after {
+  content: '';
+  display: inline-block;
+  height: 144px;
+  width: 1px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, .2);  
+}
 .el-table tr:nth-child(2) {
   th {
     background-color: #e1f4d6 !important;
