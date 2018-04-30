@@ -1,6 +1,6 @@
 <template>
   <div class="trend">
-    <el-tabs type="border-card" @tab-click='tabClick' :value='actTab'>
+    <el-tabs type="border-card" @tab-click='tabClick' :value='actTab.name'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
         <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
@@ -22,7 +22,7 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column v-if="th.column === 'name'&&actTab==='all'">
+            <el-table-column v-if="th.column === 'name'&&actTab.mergeCells">
               <el-table-column :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
                 <template slot-scope="scope">
                   <div>
@@ -88,26 +88,34 @@ export default {
         {
           index: 0,
           name: 'all',
-          label: '全部趋势'
+          label: '全部趋势',
+          mergeCells:true
         },
         {
           index: 1,
           name: 'xinzhuang',
-          label: '新装趋势'
+          label: '新装趋势',
+          mergeCells:false
         },
 
         {
           index: 2,
           name: 'download',
-          label: '下载趋势'
+          label: '下载趋势',
+          mergeCells:false
         },
 
         {
           index: 3,
           name: 'huoyue',
-          label: '活跃趋势'
+          label: '活跃趋势',
+          labelContent:false
         }
       ]
+    },
+    mergeCells: {
+      type: Boolean,
+      default:true
     }
   },
   data() {
@@ -131,13 +139,12 @@ export default {
       dateList: [],
       dateListVal: null,
       chartData: [],
-      actTab: this.tabs[0].name
+      actTab: this.tabs[0]
     };
   },
   created() {
     this.fetchDate();
     const info = getOSAndBrowser();
-    // console.log(info)
     if (info.browser === 'Safari') {
       this.flag = false;
     } else {
@@ -166,7 +173,7 @@ export default {
   },
   methods: {
     tabClick(tab, event) {
-      this.actTab = tab.name;
+      this.actTab =this.tabs[tab.index];
       this.$emit('tab-change', tab.name);
     },
     renderHeader(createElement, { column }) {
@@ -179,7 +186,7 @@ export default {
           on: {
             click: () => {
               console.log(column);
-              this.dialog2Table()
+              this.dialog2Table();
             }
           }
         },
@@ -205,7 +212,7 @@ export default {
     // },
     // 单元格合并
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (this.actTab !== 'all') {
+      if (!this.actTab.mergeCells) {
         return;
       }
       if (columnIndex <= 1) {

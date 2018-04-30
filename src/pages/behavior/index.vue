@@ -14,7 +14,7 @@
           <el-collapse-transition>
             <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :mergeCells="mergeCells" :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -51,6 +51,28 @@ export default {
     datePicker,
     search,
     trendChart
+  },
+  props: {
+    fetchApi: {
+      type: Object,
+      default() {
+        return {
+          all: api.downloadTrend,
+          classify: api.eachTrend,
+          allDownload:
+            'http://113.200.91.81/mst/behavior/exportChannelTotalTrends',
+          classifyDownload:
+            'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+        };
+      }
+    },
+    mergeCells: {
+      type: Boolean,
+      default: true
+    },
+    tabs:{
+      type:Array
+    }
   },
   data() {
     return {
@@ -170,13 +192,13 @@ export default {
         sortbyDateTime: this.sortbyDateTime
       };
       if (this.tabType === 'all') {
-        api.downloadTrend(params).then(res => {
+        this.fetchApi.all(params).then(res => {
           this.loading = false;
           this.count = true;
 
           this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData = res.data.tableSum.concat(res.data.tableData) || [];
+          this.tableData = (res.data.tableSum|| []).concat(res.data.tableData) || [];
 
           this.chartXAxis = res.data.echarts.xAxis || [];
 
@@ -185,7 +207,7 @@ export default {
           this.total = res.data.tablePage.total;
         });
       } else {
-        api.eachTrend(params).then(res => {
+        this.fetchApi.classify(params).then(res => {
           this.loading = false;
           this.count = true;
 
@@ -211,19 +233,19 @@ export default {
       let url = '';
       let params = {};
       if (this.tabType === 'all') {
-        path = 'http://113.200.91.81/mst/behavior/exportChannelTotalTrends';
+        url = fetchApi.allDownload;
         params = {
           dateTime: this.dateVal,
           dateType: this.dateTypeVal,
           limit: this.dataLimitVal,
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          sort: this.orderType==='descending'?'desc':'',
-          sortby: this.orderColumn,
+          sort: this.orderType === 'descending' ? 'desc' : '',
+          sortby: this.orderBy,
           sortbyDateTime: this.sortbyDateTime
         };
       } else {
-        path = 'http://113.200.91.81/mst/behavior/exportEachChannelTrend';
+        url = fetchApi.classifyDownload;
         params = {
           type: typeMap[this.tabType],
           date: this.dateVal,
@@ -235,7 +257,7 @@ export default {
           orderColumn: this.orderColumn
         };
       }
-      window.location.href = formatUrl(path, params);
+      window.location.href = formatUrl(url, params);
     },
     handleSearch(val) {
       if (val.length) {
@@ -263,7 +285,8 @@ export default {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
-        this.orderBy = sortArr[1].indexOf('count')>-1?'download_volume':'ratio';
+        this.orderBy =
+          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
       }
       this.fetchTableData();
     },
