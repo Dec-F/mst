@@ -48,7 +48,7 @@
               </el-col>
             </div>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -75,6 +75,7 @@ import selectType from '@/components/appTypeMenu';
 import datePicker from '@/components/datePicker';
 import search from '@/components/search';
 import moment from 'moment';
+import { formatUrl } from 'utils';
 const typeMap = {
   download: 1,
   xinzhuang: 2,
@@ -88,6 +89,34 @@ export default {
     datePicker,
     search,
     trendChart
+  },
+  props: {
+    fetchApi: {
+      type: Object,
+      default() {
+        return {
+          all: api.findChannelAppTrend,
+          classify: api.findAppChannelTrends,
+          allDownload:
+            'http://113.200.91.81/mst/appBehavior/exportAppTotalTrendsSub',
+          classifyDownload:
+            'http://113.200.91.81/mst/appBehavior/exportAppChannelTrend'
+        };
+      }
+    },
+    mergeCells: {
+      type: Boolean,
+      default: true
+    },
+    tabs: {
+      type: Array
+    },
+    linkDetail:{
+      type:Function,
+      default(){
+        return ()=>{}
+      }
+    }
   },
   data() {
     return {
@@ -266,60 +295,43 @@ export default {
       };
       //      请求
       if (this.tabType === 'all') {
-        api.findChannelAppTrend(params).then(resHandler);
+        this.fetchApi.all(params).then(resHandler);
       } else {
-        api.findAppChannelTrends(params).then(resHandler);
+        this.fetchApi.classify(params).then(resHandler);
       }
     },
     // 导出数据
     downloadData() {
-      var path =
-        'http://113.200.91.81/mst/behavior/exportChannelAppTrendExcel?';
-      var paras1 =
-        'type=' +
-        this.$route.meta.type +
-        '&' +
-        'date=' +
-        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
-        '&' +
-        'dateType=' +
-        this.dateTypeVal +
-        '&' +
-        'limit=' +
-        this.dataLimitVal +
-        '&';
-      var paras2 =
-        'subCategoryId=' +
-        this.checkedType +
-        '&' +
-        'categoryId=' +
-        (this.bigType === 0 ? null : this.bigType) +
-        '&';
-
-      var paras3 =
-        'pageNo=' +
-        this.currentPage +
-        '&' +
-        'pageSize=' +
-        this.pageSize +
-        '&' +
-        'orderType=' +
-        this.orderType +
-        '&' +
-        'orderColumn=' +
-        this.orderColumn +
-        '&' +
-        'channelId=' +
-        parseInt(this.$route.params.storeId);
-      // "queryId=" + this.searchId + "&" +
-      // "queryType=" + this.searchType;
-      // window.location.href = path + paras1 + paras2 + paras3;
-
-      if (this.bigType == 0) {
-        window.location.href = path + paras1 + paras3;
+      let url = '';
+      let params = {};
+      if (this.tabType === 'all') {
+        url = fetchApi.allDownload;
+        params = {
+          dateTime: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          sort: this.orderType === 'descending' ? 'desc' : '',
+          sortby: this.orderBy,
+          sortbyDateTime: this.sortbyDateTime,
+          appId:this.$route.params.storeId
+        };
       } else {
-        window.location.href = path + paras1 + paras2 + paras3;
+        url = fetchApi.classifyDownload;
+        params = {
+          type: typeMap[this.tabType],
+          date: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          orderType: this.orderType,
+          orderColumn: this.orderColumn,
+          appId:this.$route.params.storeId
+        };
       }
+      window.location.href = formatUrl(url, params);
     },
     fetchTop() {
       const params = {
@@ -399,11 +411,6 @@ export default {
           sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
       }
       this.fetchTableData();
-    },
-    linkDetail(row) {
-      this.$router.push({
-        path: `${this.$route.meta.bread.path}/appDetail/${row.id}/${row.name}`
-      });
     }
   }
 };

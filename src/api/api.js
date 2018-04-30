@@ -96,6 +96,20 @@ const api = {
       params: params
     });
   },
+  findAppChannelUse(){
+    return fetch({
+      url: 'appQuality/findAppChannelUse',
+      method: 'GET',
+      params: params
+    });
+  },
+  findAppUse(params){
+    return fetch({
+      url: 'appQuality/findAppUse',
+      method: 'GET',
+      params: params
+    });
+  },
     // 深度分析
     // 同装
   flowTable(params) {
