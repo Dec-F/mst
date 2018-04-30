@@ -218,7 +218,7 @@ export default {
           limit: this.dataLimitVal,
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          sort: this.orderType,
+          sort: this.orderType==='descending'?'desc':'',
           sortby: this.orderColumn,
           sortbyDateTime: this.sortbyDateTime
         };
@@ -263,7 +263,7 @@ export default {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
-        this.orderBy = sortArr[1];
+        this.orderBy = sortArr[1].indexOf('count')>-1?'download_volume':'ratio';
       }
       this.fetchTableData();
     },
