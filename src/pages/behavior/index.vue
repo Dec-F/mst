@@ -252,7 +252,7 @@ export default {
     },
     changeSort(sort) {
 
-      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null 
+      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null
       if (!sort.order || !sort.prop) {
         return;
       }
@@ -278,12 +278,12 @@ export default {
 
 <style lang="less">
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-  background: #67c23a;
+  background: #69C72B;
 }
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
-  color: #67c23a;
+  color: #69C72B;
 }
 .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-  color: #67c23a;
+  color: #69C72B;
 }
 </style>

@@ -7,7 +7,7 @@
           <selectType :data="typeList" v-model="bigType" @change-big-type="changeBigType" @change-small-type="changeSmallType"></selectType>
         </el-col>
         <el-col :span="24">
-          <date-picker v-model="dateVal" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
+          <date-picker  v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
             <span>
               <el-button type="success" @click="submitData">确定</el-button>
             </span>
@@ -48,7 +48,7 @@
               </el-col>
             </div>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total"></trend>
+          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -68,14 +68,14 @@
 </template>
 
 <script>
-import api from "@/api/api";
-import trendChart from "@/components/trendChart";
-import trend from "@/components/trend";
-import selectType from "@/components/appTypeMenu";
-import datePicker from "@/components/datePicker";
-import search from "@/components/search";
+import api from '@/api/api';
+import trendChart from '@/components/trendChart';
+import trend from '@/components/trend';
+import selectType from '@/components/appTypeMenu';
+import datePicker from '@/components/datePicker';
+import search from '@/components/search';
 export default {
-  name: "detail",
+  name: 'detail',
   components: {
     trend,
     selectType,
@@ -86,8 +86,8 @@ export default {
   data() {
     return {
       // 搜索
-      searchValue: "",
-      searchId: "",
+      searchValue: '',
+      searchId: '',
       searchLoading: false,
       searchData: [],
       searchId: null,
@@ -95,9 +95,9 @@ export default {
       // 类别选择
       bigType: 0,
       typeList: [],
-      dateTypeVal: "week",
-      weekDateVal: "",
-      monthDateVal: "",
+      dateTypeVal: 'week',
+      weekDateVal: '',
+      monthDateVal: '',
       startDate: null,
       endDate: null,
       dataLimitVal: 4,
@@ -106,13 +106,13 @@ export default {
       loading: false,
       appTypeList: [],
       checkAll: false,
-      checkedType: "",
-      dateVal: "",
+      checkedType: '',
+      dateVal: '',
       switchVal: false,
       currentPage: 1,
       pageSize: 10,
-      orderColumn: "",
-      orderType: "descending",
+      orderColumn: '',
+      orderType: 'descending',
       total: null,
       tableData: [],
       tableHeader: [],
@@ -123,7 +123,8 @@ export default {
       channelData: {},
       rankTableData: {},
       rankLoading: false,
-      count: false
+      count: false,
+      tabType: 'all'
     };
   },
   created() {
@@ -140,7 +141,7 @@ export default {
   },
   methods: {
     querySearchAsync() {
-      if (this.searchValue !== "") {
+      if (this.searchValue !== '') {
         this.searchLoading = true;
         const params = {
           query: this.searchValue,
@@ -155,45 +156,43 @@ export default {
         this.searchData = [];
       }
     },
-//    获取app详细排名
+    tabChange(name) {
+      this.tabType = name;
+      this.fetchTableData();
+    },
+    //    获取app详细排名
     fetchDetail() {
       const params = {
         date:
-          this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal,
+          this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
         dateType: this.dateTypeVal,
         type: this.$route.meta.type,
         channelId: parseInt(this.$route.params.storeId),
         limit: 2
       };
-      api.getChannelTrend(params).then(res => {
-        if (res.data.tableData && res.data.tableData.length) {
-          this.channelData = res.data.tableData[0];
-        }
-      });
+      // api.getChannelTrend(params).then(res => {
+      //   if (res.data.tableData && res.data.tableData.length) {
+      //     this.channelData = res.data.tableData[0];
+      //   }
+      // });
     },
-//    获取app类型
+    //    获取app类型
     fetchAppType() {
       api.appType().then(res => {
-        res.data.typeList.unshift({ categoryId: 0, label: "全部" });
+        res.data.typeList.unshift({ categoryId: 0, label: '全部' });
         this.typeList = res.data.typeList;
       });
     },
-//    切换大类
+    //    切换大类
     changeBigType(val) {
       this.bigType = val;
     },
-//    切换小类
+    //    切换小类
     changeSmallType(data) {
       this.checkedType = data;
     },
     changeDateType(val) {
       this.dateTypeVal = val;
-    },
-    changeWeek(val) {
-      this.dateVal = val;
-    },
-    changeMonth(val) {
-      this.dateVal = val;
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -202,12 +201,12 @@ export default {
       this.dateVal = val;
     },
     changeWeekDate(val) {
-      this.weekDateVal = val;
+      this.dateVal = val;
     },
     changeMonthDate(val) {
       this.monthDateVal = val;
     },
-//    获取时间数据
+    //    获取时间数据
     fetchDate() {
       api.date().then(res => {
         this.dateVal = res.data.end;
@@ -216,15 +215,14 @@ export default {
         this.fetchTableData();
       });
     },
-//    获取表格数据
+    //    获取表格数据
     fetchTableData() {
       this.loading = true;
       // 发送请求
       const params = {
         // 发送请求
         type: this.$route.meta.type,
-        date:
-          this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal,
+        date:this.dateVal,
         dateType: this.dateTypeVal,
         limit: this.dataLimitVal,
         subCategoryId: this.checkedType,
@@ -237,30 +235,17 @@ export default {
         queryType: this.searchType,
         channelId: parseInt(this.$route.params.storeId)
       };
-//      请求
-      api.findChannelAppTrend(params).then(res => {
+      const resHandler = res => {
         this.loading = false;
         this.count = true;
-        if (res.data.tableHeader !== null) {
-          this.tableHeader = res.data.tableHeader;
-        } else {
-          this.tableHeader = [];
-        }
-        if (res.data.tableData !== null) {
-          this.tableData = res.data.tableData;
-        } else {
-          this.tableData = [];
-        }
-        if (res.data.echarts.xAxis.length) {
-          this.chartXAxis = res.data.echarts.xAxis;
-        } else {
-          this.chartXAxis = [];
-        }
-        if (res.data.echarts.xAxis.length) {
-          this.chartData = res.data.echarts.line;
-        } else {
-          this.chartData = [];
-        }
+        this.tableHeader = res.data.tableHeader || [];
+
+        this.tableData = res.data.tableData || [];
+
+        this.chartXAxis = res.data.echarts.xAxis || [];
+
+        this.chartData = res.data.echarts.line || [];
+
         if (res.data.dateTimes !== null) {
           this.dateList = res.data.dateTimes;
           this.dateListVal = res.data.dateTimes[0].id;
@@ -269,47 +254,53 @@ export default {
           this.dateListVal = [];
         }
         this.total = res.data.tablePage.total;
-      });
+      };
+      //      请求
+      if (this.tabType === 'all') {
+        api.findChannelAppTrend(params).then(resHandler);
+      } else {
+        api.findAppChannelTrends(params).then(resHandler);
+      }
     },
     // 导出数据
     downloadData() {
       var path =
-        "http://113.200.91.81/mst/behavior/exportChannelAppTrendExcel?";
+        'http://113.200.91.81/mst/behavior/exportChannelAppTrendExcel?';
       var paras1 =
-        "type=" +
+        'type=' +
         this.$route.meta.type +
-        "&" +
-        "date=" +
-        (this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal) +
-        "&" +
-        "dateType=" +
+        '&' +
+        'date=' +
+        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
+        '&' +
+        'dateType=' +
         this.dateTypeVal +
-        "&" +
-        "limit=" +
+        '&' +
+        'limit=' +
         this.dataLimitVal +
-        "&";
+        '&';
       var paras2 =
-        "subCategoryId=" +
+        'subCategoryId=' +
         this.checkedType +
-        "&" +
-        "categoryId=" +
+        '&' +
+        'categoryId=' +
         (this.bigType === 0 ? null : this.bigType) +
-        "&";
+        '&';
 
       var paras3 =
-        "pageNo=" +
+        'pageNo=' +
         this.currentPage +
-        "&" +
-        "pageSize=" +
+        '&' +
+        'pageSize=' +
         this.pageSize +
-        "&" +
-        "orderType=" +
+        '&' +
+        'orderType=' +
         this.orderType +
-        "&" +
-        "orderColumn=" +
+        '&' +
+        'orderColumn=' +
         this.orderColumn +
-        "&" +
-        "channelId=" +
+        '&' +
+        'channelId=' +
         parseInt(this.$route.params.storeId);
       // "queryId=" + this.searchId + "&" +
       // "queryType=" + this.searchType;
@@ -348,7 +339,7 @@ export default {
       const params = {
         query: val
       };
-      if (val !== "") {
+      if (val !== '') {
         this.searchLoading = true;
         api.findSearchAppChannel(params).then(res => {
           this.searchLoading = false;
@@ -364,11 +355,11 @@ export default {
       }
     },
     startSearch(item) {
-      let type = "";
-      if (item.type === "app") {
-        type = "appDetail";
+      let type = '';
+      if (item.type === 'app') {
+        type = 'appDetail';
       } else {
-        type = "storeDetail";
+        type = 'storeDetail';
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/${type}/${item.id}/${item.name}`
@@ -385,8 +376,8 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.prop = sort.column ? sort.column.label : "";
-      sort.order = sort.order ? sort.order : "descending";
+      sort.prop = sort.column ? sort.column.label : '';
+      sort.order = sort.order ? sort.order : 'descending';
       this.orderColumn = sort.prop;
       this.orderType = sort.order;
       this.fetchTableData();

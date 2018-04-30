@@ -112,8 +112,15 @@ const api = {
       method: 'GET',
       params: params
     });
+  },
+  // 同装echarts接口
+  sambarecharts(params) {
+    return fetch({
+      url: '/sambarecharts',
+      method: 'GET',
+      params: params
+    });
   }
-
 }
 
 export default api;
