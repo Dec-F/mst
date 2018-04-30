@@ -2,7 +2,7 @@
   <div class="trend">
     <el-tabs type="border-card" @tab-click='tabClick' :value='actTab'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
-        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort" >
+        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
             <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
               <el-table-column width="80">
@@ -32,7 +32,7 @@
               </el-table-column>
             </el-table-column>
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
-              <el-table-column sortable="custom" align="right"  :prop="`${th.columnName}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
+              <el-table-column sortable="custom" align="right" :prop="`${th.columnName}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
                   {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
@@ -170,14 +170,28 @@ export default {
       this.$emit('tab-change', tab.name);
     },
     renderHeader(createElement, { column }) {
-      return createElement('div', [
-        createElement('span', [column.label]),
-        createElement('img', {
-          attrs: {
-            src: require('../../dist/static/img/tabletop.png')
+      return createElement(
+        'div',
+        {
+          domProps: {
+            className: 'link'
+          },
+          on: {
+            click: () => {
+              console.log(column);
+              this.dialog2Table()
+            }
           }
-        })
-      ]);
+        },
+        [
+          createElement('span', [column.label]),
+          createElement('img', {
+            attrs: {
+              src: require('../../dist/static/img/tabletop.png')
+            }
+          })
+        ]
+      );
     },
     // renderHeader1(createElement, { column }) {
     //   return createElement('div', [
@@ -279,7 +293,7 @@ export default {
   top: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0);
-  box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, .2);  
+  box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
 .el-table tr:nth-child(2) {
   th {
