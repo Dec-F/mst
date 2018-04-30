@@ -7,7 +7,7 @@
           <selectType :data="typeList" v-model="bigType" @change-big-type="changeBigType" @change-small-type="changeSmallType"></selectType>
         </el-col>
         <el-col :span="24">
-          <date-picker  v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
+          <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
             <span>
               <el-button type="success" @click="submitData">确定</el-button>
             </span>
@@ -74,6 +74,12 @@ import trend from '@/components/trend';
 import selectType from '@/components/appTypeMenu';
 import datePicker from '@/components/datePicker';
 import search from '@/components/search';
+import moment from 'moment';
+const typeMap = {
+  download: 1,
+  xinzhuang: 2,
+  huoyue: 3
+};
 export default {
   name: 'detail',
   components: {
@@ -124,7 +130,9 @@ export default {
       rankTableData: {},
       rankLoading: false,
       count: false,
-      tabType: 'all'
+      tabType: 'all',
+      orderBy: '',
+      sortbyDateTime: ''
     };
   },
   created() {
@@ -163,8 +171,7 @@ export default {
     //    获取app详细排名
     fetchDetail() {
       const params = {
-        date:
-          this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
+        date: this.dateVal,
         dateType: this.dateTypeVal,
         type: this.$route.meta.type,
         channelId: parseInt(this.$route.params.storeId),
@@ -209,7 +216,7 @@ export default {
     //    获取时间数据
     fetchDate() {
       api.date().then(res => {
-        this.dateVal = res.data.end;
+        this.dateVal = moment(res.data.end).format('YYYYWW');
         this.startDate = res.data.start;
         this.endDate = res.data.end;
         this.fetchTableData();
@@ -221,8 +228,8 @@ export default {
       // 发送请求
       const params = {
         // 发送请求
-        type: this.$route.meta.type,
-        date:this.dateVal,
+        type: typeMap[this.tabType],
+        date: this.dateVal,
         dateType: this.dateTypeVal,
         limit: this.dataLimitVal,
         subCategoryId: this.checkedType,
@@ -233,7 +240,9 @@ export default {
         orderColumn: this.orderColumn,
         queryId: this.searchId,
         queryType: this.searchType,
-        channelId: parseInt(this.$route.params.storeId)
+        channelId: parseInt(this.$route.params.storeId),
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
       };
       const resHandler = res => {
         this.loading = false;
@@ -376,10 +385,19 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.prop = sort.column ? sort.column.label : '';
+      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null
+      if (!sort.order || !sort.prop) {
+        return;
+      }
       sort.order = sort.order ? sort.order : 'descending';
-      this.orderColumn = sort.prop;
       this.orderType = sort.order;
+      if (sort.prop.indexOf('--') > -1) {
+        let sortArr = sort.prop.split('--');
+        this.sortbyDateTime = sortArr[0];
+        this.orderColumn = sortArr[1];
+        this.orderBy =
+          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
+      }
       this.fetchTableData();
     },
     linkDetail(row) {
