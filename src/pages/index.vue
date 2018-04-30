@@ -5,26 +5,33 @@
         <h4>移动渠道市场监测</h4>
         <p>StoreTracker</p>
       </div>
-      <el-menu mode="vertical" :default-active="splitUrl($route.path)" class="el-menu-vertical-demo" theme="dark" unique-opened>
-        <el-menu-item-group v-for="nav in navs" :key="nav.title">
+      <el-menu
+        mode="vertical"
+        :default-active="splitUrl($route.path)"
+        class="el-menu-vertical-demo"
+        theme="dark"
+        text-color="#8996a9"
+        active-text-color="#fff"
+        unique-opened>
+        <el-menu-item-group v-for="(group, groupIndex) in navs" :key="group.title">
           <template slot="title">
-            <i class="iconfont" :class="nav.class"></i>{{ nav.title }}
+            <i class="iconfont" :class="group.class"></i>
+            <span>{{ group.title }}</span>
           </template>
-          <!-- <router-link tag="span" :to="{path: sub.link}">{{ sub.title }}</router-link> -->
-          <el-submenu v-if="sub.children" :index="sub.title+nav.title" v-for="sub in nav.children" :key="sub.title+nav.title">
-            <template slot="title">
-              {{ sub.title }}
-            </template>
-            <el-menu-item :index="sub.title+subchild.link" v-for="subchild in sub.children" :key="subchild.title">
-              <router-link tag="span" :to="{path: subchild.link}">{{ subchild.title }}</router-link>
+          <template v-for="(nav, navIndex) in group.children">
+            <el-submenu v-if="nav.children" :index="`${groupIndex}-${navIndex}`" :key="`${groupIndex}-${navIndex}`">
+              <template slot="title">{{ nav.title }}</template>
+
+              <el-menu-item v-for="(sub, subIndex) in nav.children" :key="`${groupIndex}-${navIndex}-${subIndex}`" :index="`${groupIndex}-${navIndex}-${subIndex}`">
+                <router-link tag="span" :to="{path : sub.link}">{{ sub.title }}</router-link>
+              </el-menu-item>
+            </el-submenu>
+
+            <el-menu-item v-else :index="`${groupIndex}-${navIndex}`" :key="navIndex">
+              <router-link tag="span" :to="{path : nav.link}">{{ nav.title }}</router-link>
             </el-menu-item>
-          </el-submenu>
-          <el-menu-item v-if="!sub.children" style="color: rgb(136,149,168);" :index="sub.title+nav.title" v-for="sub in nav.children" :key="sub.title+nav.title">
-            <router-link tag="span" :to="{path: sub.link}">{{ sub.title }}</router-link>
-          </el-menu-item>
-
+          </template>
         </el-menu-item-group>
-
       </el-menu>
       <div class="footer">
         <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">
@@ -285,14 +292,11 @@ export default {
         line-height: 45px;
         height: 45px;
         &:hover {
-          background: #445954;
-          border-left: 1px solid green;
+          background-color: #404c5a;
           color: #fff;
-          opacity: .8;
         }
         &:focus {
-          background: #445954;
-          border-left: 1px solid green;
+          background-color: #404c5a;
           color: #fff;
           ;
         }
@@ -300,19 +304,18 @@ export default {
           display: block;
           padding: 0px;
         }
-      }
-      .is-active {
-        color: #fff;
-        border-left: 1px solid#69c72b;
-
-        position: relative;
-        &:after {
-          content: "";
-          position: absolute;
-          height: 100%;
-          width: 3px;
-          right: 0;
-          top: 0;
+        &.is-active {
+          position: relative;
+          background-color: #404c5a;
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: #69c72b;
+          }
         }
       }
     }
@@ -330,6 +333,12 @@ export default {
     transition: border-color .3s, background-color .3s, color .3s;
     box-sizing: border-box;
     white-space: nowrap;
+  }
+  .el-submenu__title:hover {
+    background-color: #404c5a;
+  }
+  .el-submenu > .el-menu {
+    background-color: #404c5a;
   }
   >.content {
     margin-left: 220px;

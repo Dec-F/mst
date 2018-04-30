@@ -1,6 +1,6 @@
 <template>
   <div class="trend">
-    <el-table :data="tableData" style="width: 100%;border-left:none" border @sort-change="changeSort" stripe>
+    <el-table :data="tableData" style="width: 100%;border-left:none" border @sort-change="changeSort" @header-click="dialog2TableHead" stripe>
       <el-table-column width="80" fixed v-for="(th, index) in tableHeader" v-if="th.column === 'index'" :label="th.columnName" :key="th.limit">
         <el-table-column width="80">
           <template slot-scope="scope">
@@ -17,7 +17,7 @@
             <div @click="linkDetail(scope.row)" class="link">
               <span class="logo"><img :src="scope.row.logo" alt=""></span>
               <span>{{ scope.row.name }}</span>
-              <span @click="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+              <span @click.stop="dialog2Table(scope.row)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
             </div>
           </template>
         </el-table-column>
@@ -33,17 +33,7 @@
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
-    <el-dialog title="图表" :visible.sync="dialogTableVisible">
-      <!--<span class="chart-date">
-            <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-              <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-              </el-option>
-            </el-select>
-          </span>-->
-      <div class="chart-con" v-loading.chart-con="chartloading">
-        <bar-chart :data="chartData" :xAxis="chartXAxis" :name="chartTitle"></bar-chart>
-      </div>
-    </el-dialog>
+    <dialog-chart :show.sync="dialogVisible" :params="dialogParams"></dialog-chart>
   </div>
 </template>
 
@@ -51,10 +41,12 @@
 import api from '@/api/api'
 import { getOSAndBrowser } from "@/browser/browser";
 import barChart from "@/components/barChart";
+import dialogChart from './radioTrendDialog';
 export default {
   name: "trend-com",
   components: {
-    barChart
+    barChart,
+    dialogChart
   },
   props: {
     tableData: Array,
@@ -75,8 +67,8 @@ export default {
       tabledownImg: require('../../dist/static/img/table-in-down.png'),
       pageSize: 10,
       currentPage: this.current,
-      dialogTableVisible: false,
-      appId: "",
+      dialogVisible: false,
+      dialogParams: {},
       dateTypeVal: 'week',
       startDate: null,
       endDate: null,
@@ -143,30 +135,43 @@ export default {
     },
 
     //打开图表框
-    dialog2Table(val) {
-      this.appId = val; //发送ID
-      this.fetchChartsData();
-      this.dialogTableVisible = true;
-    },
-    fetchChartsData() {
-      this.chartloading = true;
-      // 发送请求
-      const params = {
-        // 发送请求
-        //date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
+    dialog2Table(item) {
+      const data = {
         date: this.dateListVal,
-        appId: this.appId,
+        appId: item.id,
         dateType: this.dateTypeVal,
         type: this.$route.meta.type,
         subCategoryId: this.checkedType,
         categoryId: this.bigType === 0 ? null : this.bigType
       };
-      api.flowCharts(params).then(res => {
-        this.chartloading = false;
-        this.chartXAxis = res.data.xAxis;
-        this.chartData = res.data.ratios;
-        this.chartTitle = res.data.fromAppName;
-      });
+      this.dialogParams = {
+        api: 'flowCharts',
+        formater: 'app',
+        type: 'app',
+        item: {
+          name: item.name,
+          logo: item.logo
+        },
+        data
+      };
+      this.dialogVisible = true;
+    },
+
+    dialog2TableHead(params) {
+      if (!/^\d{6}$/.test(params.label)) return;
+      const data = {
+        date: this.dateListVal,
+        dateType: this.dateTypeVal,
+        type: this.$route.meta.type,
+        subCategoryId: this.checkedType,
+        categoryId: this.bigType === 0 ? null : this.bigType
+      };
+      this.dialogParams = {
+        api: 'flowCharts',
+        formater: 'date',
+        data
+      };
+      this.dialogVisible = true;
     },
 
     changeSort(sort) {
