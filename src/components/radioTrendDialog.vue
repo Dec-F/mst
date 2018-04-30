@@ -1,6 +1,9 @@
 <template>
   <el-dialog title="图表" :visible.sync="show" width="1120px">
     <div>
+      {{params.name}}
+    </div>
+    <div>
       <el-radio-group v-model="chartType" size="mini">
         <el-radio-button label="line">折线图</el-radio-button>
         <el-radio-button label="bar">柱状图</el-radio-button>
@@ -27,14 +30,14 @@ const formaterConf = {
   'date': function (chartData) {
     return {
       xAxis: chartData.xAxis,
-      series: chartData.line.map(line => line.data[0].value),
+      series: [chartData.line.map(line => line.data[0].value)],
       title: chartData.fromAppName
     };
   },
   'app': function (chartData) {
     return {
       xAxis: chartData.xAxis,
-      series: chartData.line[0].data.map(data => data.value)
+      series: [chartData.line[0].data.map(data => data.value)]
     };
   }
 };
@@ -118,11 +121,14 @@ export default {
             }
           }
         },
-        series: {
-          data: this.chartData.series,
-          type: this.chartType,
-          barWidth: 16
-        }
+        series: this.chartData.series.map(item => {
+          return {
+            data: item,
+            type: this.chartType,
+            barWidth: 16
+          }
+        })
+
       };
       return options;
     }
