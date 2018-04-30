@@ -23,6 +23,7 @@ const appBehaviorIndex = resolve => require(['@/pages/appBehavior/index'], resol
 const appBehaviorStore = resolve => require(['@/pages/appBehavior/storeDetail'], resolve);
 const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
 const uninstall = resolve => require(['@/pages/appBehavior/uninstall'], resolve);
+const appQualityIndex = resolve => require(['@/pages/appQuality/index'], resolve);
 //深度分析 流向分析
 const flowTrend = resolve => require(['@/pages/deep/flowTrend'], resolve);
 //同装分析
@@ -278,12 +279,13 @@ const routes = [
       }, {
         path: '/appfunnelTrend',
         name: 'appfunnelTrend',
-        component: qualityStore,
+        component: appQualityIndex,
         meta: {
           type: 'flow',
           bread: {
             name: '新装人均次数',
-            path: '/appfunnelTrend'
+            path: '/appfunnelTrend',
+            type:1
           }
         }
       },
@@ -300,36 +302,15 @@ const routes = [
           }
         }
       }, {
-        path: '/appfunnelTrend/appDetail/:appId/:appName',
-        name: 'appfunnelTrend',
-        component: qualityIndex,
-        meta: {
-          type: 'flow',
-          bread: {
-            name: '新装人均次数',
-            path: '/appfunnelTrend'
-          }
-        }
-      }, {
         path: '/appdurationTrend',
         name: 'appdurationTrend',
-        component: qualityStore,
+        component: appQualityIndex,
         meta: {
           type: 'flow',
           bread: {
             name: '新装人均时长',
-            path: '/appdurationTrend'
-          }
-        }
-      }, {
-        path: '/appdurationTrend/appDetail/:appId/:appName',
-        name: 'appdurationTrend',
-        component: qualityIndex,
-        meta: {
-          type: 'flow',
-          bread: {
-            name: '新装人均时长',
-            path: '/appdurationTrend'
+            path: '/appdurationTrend',
+            type:2
           }
         }
       }, {

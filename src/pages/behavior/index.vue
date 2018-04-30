@@ -14,7 +14,7 @@
           <el-collapse-transition>
             <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
           </el-collapse-transition>
-          <trend :tabs='tabs' :mergeCells="mergeCells" :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -66,10 +66,7 @@ export default {
         };
       }
     },
-    mergeCells: {
-      type: Boolean,
-      default: true
-    },
+    
     tabs: {
       type: Array
     },

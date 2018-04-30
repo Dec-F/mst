@@ -1,5 +1,5 @@
 <template>
-  <behavior  :openLink='false' :mergeCells="false" :fetchApi="fetchApi"></behavior>
+  <behavior  :openLink='false' :mergeCells="false"  :fetchApi="fetchApi"></behavior>
 </template>
 
 <script>
