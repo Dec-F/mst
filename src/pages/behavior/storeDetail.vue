@@ -116,6 +116,15 @@ export default {
       default(){
         return ()=>{}
       }
+    },
+    coverParams: {
+      type: Object,
+      default() {
+        return {
+          all: {},
+          classify: {}
+        };
+      }
     }
   },
   data() {
@@ -295,9 +304,9 @@ export default {
       };
       //      请求
       if (this.tabType === 'all') {
-        this.fetchApi.all(params).then(resHandler);
+        this.fetchApi.all(Object.assign(params,this.coverParams.all)).then(resHandler);
       } else {
-        this.fetchApi.classify(params).then(resHandler);
+        this.fetchApi.classify(Object.assign(params,this.coverParams.all)).then(resHandler);
       }
     },
     // 导出数据

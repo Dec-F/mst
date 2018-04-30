@@ -70,8 +70,17 @@ export default {
       type: Boolean,
       default: true
     },
-    tabs:{
-      type:Array
+    tabs: {
+      type: Array
+    },
+    coverParams: {
+      type: Object,
+      default() {
+        return {
+          all: {},
+          classify: {}
+        };
+      }
     }
   },
   data() {
@@ -192,13 +201,14 @@ export default {
         sortbyDateTime: this.sortbyDateTime
       };
       if (this.tabType === 'all') {
-        this.fetchApi.all(params).then(res => {
+        this.fetchApi.all(Object.assign(params,this.coverParams.all)).then(res => {
           this.loading = false;
           this.count = true;
 
           this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData = (res.data.tableSum|| []).concat(res.data.tableData) || [];
+          this.tableData =
+            (res.data.tableSum || []).concat(res.data.tableData) || [];
 
           this.chartXAxis = res.data.echarts.xAxis || [];
 
@@ -207,7 +217,7 @@ export default {
           this.total = res.data.tablePage.total;
         });
       } else {
-        this.fetchApi.classify(params).then(res => {
+        this.fetchApi.classify(Object.assign(params,this.coverParams.classify)).then(res => {
           this.loading = false;
           this.count = true;
 

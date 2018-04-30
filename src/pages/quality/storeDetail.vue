@@ -1,5 +1,5 @@
 <template>
-  <behaviorDetail :linkDetail='linkDetail' :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  <behaviorDetail :linkDetail='linkDetail':coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
 </template>
 
 <script>
@@ -10,6 +10,7 @@ export default {
     behaviorDetail
   },
   data() {
+    console.log(1111);
     return {
       fetchApi: {
         all: api.findAppUse,
@@ -24,13 +25,24 @@ export default {
           index: 0,
           name: 'all',
           label: '全部趋势',
-          mergeCells:false
+          mergeCells: false
         }
       ],
-      linkDetail(row) {
-      
-    }
+      linkDetail(row) {},
+      coverParams: {
+        all: {
+          type: this.$route.meta.bread.type
+        }
+      }
     };
+  },
+  watch: {
+    $route() {
+      console.log(this.$route);
+      this.coverParams.all = {
+        type: this.$route.meta.bread.type
+      };
+    }
   }
 };
 </script>

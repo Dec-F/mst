@@ -1,5 +1,5 @@
 <template>
-  <behavior :tabs='tabs' :mergeCells="false" :fetchApi="fetchApi"></behavior>
+  <behavior :tabs='tabs' :coverParams="coverParams" :mergeCells="false" :fetchApi="fetchApi"></behavior>
 </template>
 
 <script>
@@ -26,8 +26,21 @@ export default {
           label: '全部趋势',
           mergeCells:false
         }
-      ]
+      ],
+      coverParams:{
+        all:{
+          type:this.$route.meta.bread.type
+        }
+      }
     };
+  },
+  
+  watch:{
+    '$route'(){
+      this.coverParams.all={
+        type:this.$route.meta.bread.type
+      }
+    }
   }
 };
 </script>
