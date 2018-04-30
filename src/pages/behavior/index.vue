@@ -37,7 +37,13 @@ import trend from '@/components/trend';
 import datePicker from '@/components/datePicker';
 import search from '@/components/search';
 import trendChart from '@/components/trendChart';
-
+import moment from 'moment';
+import { formatUrl } from 'utils';
+const typeMap = {
+  download: 1,
+  xinzhuang: 2,
+  huoyue: 3
+};
 export default {
   name: 'download',
   components: {
@@ -136,7 +142,7 @@ export default {
     // 获取日期数据
     fetchDate() {
       api.date().then(res => {
-        this.dateVal = res.data.end;
+        this.dateVal = moment(res.data.end).format('YYYYWW');
         this.startDate = res.data.start;
         this.endDate = res.data.end;
         if (this.tabType === 'all') {
@@ -149,12 +155,6 @@ export default {
     // 获取表格数据
     fetchTableData() {
       this.loading = true;
-
-      const typeMap = {
-        download: 1,
-        xinzhuang: 2,
-        huoyue: 3
-      };
       // 请求参数
       const params = {
         // 发送请求
@@ -208,32 +208,34 @@ export default {
     },
     // 导出数据
     downloadData() {
-      var path = 'http://113.200.91.81/mst/behavior/exportTrendExcel?';
-      var paras =
-        'type=' +
-        this.$route.meta.type +
-        '&' +
-        'date=' +
-        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
-        '&' +
-        'dateType=' +
-        this.dateTypeVal +
-        '&' +
-        'limit=' +
-        this.dataLimitVal +
-        '&' +
-        'pageNo=' +
-        this.currentPage +
-        '&' +
-        'pageSize=' +
-        this.pageSize +
-        '&' +
-        'orderType=' +
-        this.orderType +
-        '&' +
-        'orderColumn=' +
-        this.orderColumn;
-      window.location.href = path + paras;
+      let url = '';
+      let params = {};
+      if (this.tabType === 'all') {
+        path = 'http://113.200.91.81/mst/behavior/exportChannelTotalTrends';
+        params = {
+          dateTime: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          sort: this.orderType,
+          sortby: this.orderColumn,
+          sortbyDateTime: this.sortbyDateTime
+        };
+      } else {
+        path = 'http://113.200.91.81/mst/behavior/exportEachChannelTrend';
+        params = {
+          type: typeMap[this.tabType],
+          date: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          orderType: this.orderType,
+          orderColumn: this.orderColumn
+        };
+      }
+      window.location.href = formatUrl(path, params);
     },
     handleSearch(val) {
       if (val.length) {
@@ -251,7 +253,6 @@ export default {
       }
     },
     changeSort(sort) {
-
       ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null
       if (!sort.order || !sort.prop) {
         return;
@@ -278,12 +279,12 @@ export default {
 
 <style lang="less">
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-  background: #69C72B;
+  background: #69c72b;
 }
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
-  color: #69C72B;
+  color: #69c72b;
 }
 .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-  color: #69C72B;
+  color: #69c72b;
 }
 </style>

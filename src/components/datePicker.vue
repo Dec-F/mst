@@ -70,7 +70,7 @@ export default {
       ],
       dataLimitVal: this.limit,
       dateVal: this.startDate,
-      dateValFormat: new Date(this.startDate),
+      dateValFormat: new Date(this.endDate),
       formatDateVal: '',
       weekOption: {},
       monthOption: {}

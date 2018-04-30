@@ -1,6 +1,5 @@
-
-// 设置cookie
-// name=value; expires=expiration_time; path=domain_path; domain=domain_name; secure
+// 设置cookie name=value; expires=expiration_time; path=domain_path;
+// domain=domain_name; secure
 export const setCookie = (name, value, expires, domain, path, secure) => {
   var cookieText = "";
   cookieText += encodeURIComponent(name) + "=" + encodeURIComponent(value);
@@ -22,26 +21,48 @@ export const setCookie = (name, value, expires, domain, path, secure) => {
 // 获取cookie
 export const getCookie = (name) => {
   var cookieName = encodeURIComponent(name) + "=",
-  cookieStart = document.cookie.indexOf(cookieName),
-  cookieValue = "";
+    cookieStart = document
+      .cookie
+      .indexOf(cookieName),
+    cookieValue = "";
   if (cookieStart > -1) {
-    var cookieEnd = document.cookie.indexOf (";", cookieStart);
+    var cookieEnd = document
+      .cookie
+      .indexOf(";", cookieStart);
     if (cookieEnd == -1) {
       cookieEnd = document.cookie.length;
     }
     cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd));
   }
-  return cookieValue; 
+  return cookieValue;
 }
 
-export const apiRequest = async (apiFn, args=[]) => {
+export const apiRequest = async(apiFn, args = []) => {
   let res = await apiFn.apply(null, args);
-  if(res.resCode === 200){
-    return { status: true, result: res.data };
-  }else{
-    return { status: false, result: res.resMsg };
+  if (res.resCode === 200) {
+    return {status: true, result: res.data};
+  } else {
+    return {status: false, result: res.resMsg};
   }
 }
+/**
+ * 格式化url
+ *
+ * @param {string} url
+ * @param {object} params
+ * @returns {string}
+ */
+export const formatUrl = (url, params) => {
+  let keys = Object.keys(params)
+  let base = url.indexOf('?') > -1
+    ? `${url}`
+    : `${url}?`
+  return keys.reduce((acc, v, i) => {
+    if (i === 0) {
+      return acc += `${v}=${params[v]}`
+    } else {
+      return acc += `&${v}=${params[v]}`
+    }
+  }, base)
 
-
-
+}
