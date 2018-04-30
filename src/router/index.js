@@ -19,6 +19,8 @@ const qualityKeep = resolve => require(['@/pages/quality/keepTrend'], resolve);
 //渠道画像
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
 // app
+const appBehaviorIndex = resolve => require(['@/pages/appBehavior/index'], resolve);
+const appBehaviorStore = resolve => require(['@/pages/appBehavior/storeDetail'], resolve);
 const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
 const uninstall = resolve => require(['@/pages/appBehavior/uninstall'], resolve);
 //深度分析 流向分析
@@ -265,7 +267,7 @@ const routes = [
       {
         path: '/appdownloadTrend',
         name: 'appdownloadTrend',
-        component: behaviorStore,
+        component: appBehaviorIndex,
         meta: {
           type: 'download',
           bread: {
@@ -287,9 +289,9 @@ const routes = [
       },
       //二级页面
       {
-        path: '/appdownloadTrend/appDetail/:appId/:appName',
+        path: '/appdownloadTrend/storeDetail/:storeId/:storeName',
         name: 'appdownloadTrend',
-        component: behaviorIndex,
+        component: appBehaviorStore,
         meta: {
           type: 'download',
           bread: {

@@ -81,7 +81,12 @@ export default {
           classify: {}
         };
       }
+    },
+    openLink:{
+      type:Boolean,
+      default:false
     }
+    
   },
   data() {
     return {
@@ -301,7 +306,9 @@ export default {
       this.fetchTableData();
     },
     linkDetail(row) {
-      console.log(row);
+      if(!this.openLink){
+        return
+      }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
       });

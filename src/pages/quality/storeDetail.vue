@@ -1,5 +1,5 @@
 <template>
-  <behaviorDetail :linkDetail='linkDetail':coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  <behaviorDetail :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
 </template>
 
 <script>
@@ -10,7 +10,6 @@ export default {
     behaviorDetail
   },
   data() {
-    console.log(1111);
     return {
       fetchApi: {
         all: api.findAppUse,
@@ -28,7 +27,6 @@ export default {
           mergeCells: false
         }
       ],
-      linkDetail(row) {},
       coverParams: {
         all: {
           type: this.$route.meta.bread.type

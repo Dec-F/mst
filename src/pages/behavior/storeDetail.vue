@@ -111,12 +111,7 @@ export default {
     tabs: {
       type: Array
     },
-    linkDetail:{
-      type:Function,
-      default(){
-        return ()=>{}
-      }
-    },
+
     coverParams: {
       type: Object,
       default() {
@@ -125,6 +120,10 @@ export default {
           classify: {}
         };
       }
+    },
+    openLink: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -304,9 +303,13 @@ export default {
       };
       //      请求
       if (this.tabType === 'all') {
-        this.fetchApi.all(Object.assign(params,this.coverParams.all)).then(resHandler);
+        this.fetchApi
+          .all(Object.assign(params, this.coverParams.all))
+          .then(resHandler);
       } else {
-        this.fetchApi.classify(Object.assign(params,this.coverParams.all)).then(resHandler);
+        this.fetchApi
+          .classify(Object.assign(params, this.coverParams.all))
+          .then(resHandler);
       }
     },
     // 导出数据
@@ -324,7 +327,7 @@ export default {
           sort: this.orderType === 'descending' ? 'desc' : '',
           sortby: this.orderBy,
           sortbyDateTime: this.sortbyDateTime,
-          appId:this.$route.params.storeId
+          appId: this.$route.params.storeId
         };
       } else {
         url = fetchApi.classifyDownload;
@@ -337,7 +340,7 @@ export default {
           pageSize: this.pageSize,
           orderType: this.orderType,
           orderColumn: this.orderColumn,
-          appId:this.$route.params.storeId
+          appId: this.$route.params.storeId
         };
       }
       window.location.href = formatUrl(url, params);
@@ -420,6 +423,15 @@ export default {
           sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
       }
       this.fetchTableData();
+    },
+    linkDetail(row) {
+      console.log(this.openLink);
+      if (!this.openLink) {
+        return;
+      }
+      this.$router.push({
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
+      });
     }
   }
 };
