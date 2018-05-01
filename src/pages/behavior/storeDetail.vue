@@ -41,14 +41,9 @@
                   </el-col>
                 </el-row>
               </div>
-              <el-col :span="24">
-                <div style="position:relative;padding:20px 0;">
-                  <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
-                </div>
-              </el-col>
             </div>
           </el-collapse-transition>
-          <trend :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
+          <trend :chartData='chartData' :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -111,7 +106,6 @@ export default {
     tabs: {
       type: Array
     },
-
     coverParams: {
       type: Object,
       default() {
@@ -160,7 +154,7 @@ export default {
       tableData: [],
       tableHeader: [],
       chartXAxis: [],
-      chartData: [],
+      chartData: {},
       dateList: [],
       dateListVal: null,
       channelData: {},
@@ -203,7 +197,7 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
-      this.tableData=[]
+      this.tableData = [];
       this.fetchTableData();
     },
     //    获取app详细排名
@@ -286,13 +280,7 @@ export default {
         this.loading = false;
         this.count = true;
         this.tableHeader = res.data.tableHeader || [];
-
         this.tableData = res.data.tableData || [];
-
-        this.chartXAxis = res.data.echarts.xAxis || [];
-
-        this.chartData = res.data.echarts.line || [];
-
         if (res.data.dateTimes !== null) {
           this.dateList = res.data.dateTimes;
           this.dateListVal = res.data.dateTimes[0].id;
@@ -348,6 +336,7 @@ export default {
     },
     fetchChartsData(val) {
       this.chartloading = true;
+      // 发送请求
       const params = {
         // 发送请求
         date: this.dateVal,
@@ -361,13 +350,13 @@ export default {
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime
       };
-      api.flowCharts(params).then(res => {
-        this.echarts.chartloading = false;
-        this.echarts.chartXAxis = res.data.xAxis;
-        this.echarts.chartData = res.data.ratios;
-        this.echarts.chartTitle = res.data.fromAppName;
-        this.echarts.chartLegend = res.data.legend;
-        this.echarts.chartSeries = res.data.series;
+      api.getCharts(params).then(res => {
+        let data = res.data.echarts;
+        this.chartData = {
+          xAxis: data.xAxis,
+          data: data.line,
+          chartTitle: '应用趋势'
+        };
       });
     },
     fetchTop() {
