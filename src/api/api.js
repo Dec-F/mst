@@ -28,8 +28,8 @@ const api = {
     return fetch({url: '/appQuality/findUninstallAppList', method: 'GET', params: params});
   },
   // 图表接口
-  flowCharts(params) {
-    return fetch({url: '/flowcharts', method: 'GET', params: params});
+  getCharts(params) {
+    return fetch({url: '/getchart', method: 'GET', params: params});
   },
 
   //渠道 模拟接口 行为分析第一页下载趋势接口

@@ -46,15 +46,15 @@
 
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
-    <el-dialog :title="echarts.chartTitle" :visible.sync="dialogTableVisible">
+    <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
       <!--<span class="chart-date">
             <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
               <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
               </el-option>
             </el-select>
           </span>-->
-      <div class="chart-con" v-loading.chart-con="echarts.chartloading">
-        <bar-chart :data="echarts.chartData" :xAxis="echarts.chartXAxis" :legend="echarts.chartLegend" :series="echarts.chartSeries"></bar-chart>
+      <div class="chart-con" v-loading.chart-con="chartData.chartloading">
+        <bar-chart :chartData="chartData"></bar-chart>
       </div>
     </el-dialog>
   </div>
@@ -117,18 +117,8 @@ export default {
       type: Boolean,
       default: true
     },
-    echarts: {
-      type: Object,
-      default() {
-        return {
-          chartXAxis: [],
-          chartSeries: [],
-          chartTitle: '图表',
-          chartLegend: {},
-          chartloading: false,
-          chartData: []
-        };
-      }
+    chartData: {
+      type: Object
     }
   },
   data() {
@@ -192,7 +182,7 @@ export default {
           },
           on: {
             click: () => {
-              this.dialog2Table({type:1,payload:column});
+              this.dialog2Table({ type: 1, payload: column });
             }
           }
         },
@@ -246,10 +236,9 @@ export default {
 
     //打开图表框
     dialog2Table(val) {
-      this.$emit('open-chart',val)
+      this.$emit('open-chart', val);
       this.dialogTableVisible = true;
     },
-    
 
     changeSort(sort) {
       const { order, prop } = sort;

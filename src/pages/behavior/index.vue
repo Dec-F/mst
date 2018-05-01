@@ -11,10 +11,7 @@
       </div>
       <div class="table-content">
         <div class="table-content-body" v-loading.body="loading">
-          <el-collapse-transition>
-            <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
-          </el-collapse-transition>
-          <trend :echarts='echarts' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
+          <trend :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -36,7 +33,6 @@ import api from '@/api/api';
 import trend from '@/components/trend';
 import datePicker from '@/components/datePicker';
 import search from '@/components/search';
-import trendChart from '@/components/trendChart';
 import moment from 'moment';
 import { formatUrl } from 'utils';
 const typeMap = {
@@ -49,8 +45,7 @@ export default {
   components: {
     trend,
     datePicker,
-    search,
-    trendChart
+    search
   },
   props: {
     fetchApi: {
@@ -101,7 +96,6 @@ export default {
       total: null,
       tableData: [],
       tableHeader: [],
-      chartData: [],
       chartXAxis: [],
       searchData: [],
       searchId: null,
@@ -111,14 +105,7 @@ export default {
       tabType: 'all',
       orderBy: '',
       sortbyDateTime: '',
-      echarts:{
-        chartXAxis: [],
-          chartSeries: [],
-          chartTitle: '图表1',
-          chartLegend: {},
-          chartloading: false,
-          chartData: []
-      }
+      chartData: {}
     };
   },
   created() {
@@ -212,16 +199,9 @@ export default {
           .then(res => {
             this.loading = false;
             this.count = true;
-
             this.tableHeader = res.data.tableHeader || [];
-
             this.tableData =
               (res.data.tableSum || []).concat(res.data.tableData) || [];
-
-            this.chartXAxis = res.data.echarts.xAxis || [];
-
-            this.chartData = res.data.echarts.line || [];
-
             this.total = res.data.tablePage.total;
           });
       } else {
@@ -234,11 +214,6 @@ export default {
             this.tableHeader = res.data.tableHeader || [];
 
             this.tableData = res.data.tableData || [];
-
-            this.chartXAxis = res.data.echarts.xAxis || [];
-
-            this.chartData = res.data.echarts.line || [];
-
             this.total = res.data.tablePage.total;
           });
       }
@@ -283,11 +258,11 @@ export default {
     fetchChartsData(val) {
       this.chartloading = true;
       // 发送请求
-       const params = {
+      const params = {
         // 发送请求
         date: this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
-        type: typeMap[this.tabType]||1,
+        type: typeMap[this.tabType] || 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
@@ -296,13 +271,13 @@ export default {
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime
       };
-      api.flowCharts(params).then(res => {
-        this.echarts.chartloading = false;
-        this.echarts.chartXAxis = res.data.xAxis;
-        this.echarts.chartData = res.data.ratios;
-        this.echarts.chartTitle = res.data.fromAppName;
-        this.echarts.chartLegend = res.data.legend;
-        this.echarts.chartSeries = res.data.series;
+      api.getCharts(params).then(res => {
+        let data = res.data.echarts;
+        this.chartData={
+          xAxis:data.xAxis,
+          data:data.line,
+          chartTitle:'应用趋势'
+        }
       });
     },
     handleSearch(val) {
