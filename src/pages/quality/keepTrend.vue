@@ -166,6 +166,15 @@ export default {
 }
 
 .keepBox {
+  .el-table__body-wrapper.is-scrolling-left~.el-table__fixed,
+  .el-table__body-wrapper.is-scrolling-none~.el-table__fixed,
+  .el-table__body-wrapper.is-scrolling-none~.el-table__fixed-right,
+  .el-table__body-wrapper.is-scrolling-right~.el-table__fixed-right {
+    box-shadow: 4px 0 18px #e6e7e8;
+  }
+  .table__header th:nth-child(2) .cell{
+    border-right:none
+  }
   .el-range-editor--small .el-range-separator {
     padding: 2px 0px !important;
     width: 5%;

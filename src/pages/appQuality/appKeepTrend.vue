@@ -15,7 +15,7 @@
               <el-row>
                 <!-- app下拉菜单 -->
                 <el-col :span="9">
-                  <el-form-item label="当前app">
+                  <el-form-item label="当前APP">
                     <SearchSelect :channels="channels" @change="selectChange" v-if="!channelFetching"></SearchSelect>
                   </el-form-item>
                 </el-col>
@@ -49,7 +49,7 @@
         </el-main>
       </div>
       <el-footer>
-        <el-row type="flex" justify="space-between">
+        <el-row type="flex" justify="space-between" class="margintop">
           <el-button size="small" @click="exportKeep('channel')" v-if="keepData">
             <i class="iconfont icon-download" style="padding-left: 0;"></i>数据导出</el-button>
           <el-pagination background layout="total, prev, pager, next,jumper" :total="pageData.total" @current-change="pageChange" v-if="pageData"></el-pagination>
@@ -247,6 +247,10 @@ export default {
     box-shadow: 4px 0 18px #e6e7e8;
     overflow-x: hidden;
   }
+}
+
+.margintop {
+  margin-top: 40px;
 }
 
 .exportData {

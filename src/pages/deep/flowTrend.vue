@@ -1,110 +1,98 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}</div>
-      <div class="detail-content-menu ">
-        <el-form ref="form" class="app-type-content" :model="queryForm" label-width="80px" size="small">
-          <el-form-item label="APP类别">
-            <el-radio-group class="app-type" v-model="queryForm.categoryId">
-              <span v-for="item in typeList" :key="item.categoryId" @click="typeListHandle(item)">
-                <el-radio-button :label="item.categoryId" :value="item.categoryId">{{ item.label }}</el-radio-button>
-              </span>
-            </el-radio-group>
-            <div class="sub-type" v-show="queryForm.categoryId!=0">
-              <el-checkbox-button class="fl" @change="allSelHandle" v-model="allSel">全部</el-checkbox-button>
-              <el-checkbox-group class="fl" v-model="subIdArr">
-                <el-checkbox-button @change="subSelHandle" v-for="item in typeSubList" :label="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
-              </el-checkbox-group>
-            </div>
-          </el-form-item>
-          <el-form-item label="时间筛选">
-            <el-radio-group class="date-type" v-model="queryForm.dateType">
-              <el-radio-button label="1">周</el-radio-button>
-              <el-radio-button label="2">月</el-radio-button>
-            </el-radio-group>
-
-            <el-date-picker 
-            v-model="week" 
-            v-show="queryForm.dateType==1" 
-            type="week" 
-            format="yyyy 第 WW 周" 
-            placeholder="选择周"
-            :picker-options="{ disabledDate }"
-            @change="dateHandle">
-            </el-date-picker>
-
-            <el-date-picker 
-            v-show="queryForm.dateType==2" 
-            v-model="month" type="month"  
-            format="yyyy 第 MM 月" 
-            placeholder="选择月" 
-            :picker-options="{ disabledDate }"
-            @change="dateHandle" 
-            value-format="yyyyMM">
-            </el-date-picker>
-            <el-button type="success" @click="queryHandle" class="" size="small">确定</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="table-content flowTable">
-        <div class="table-content-header">
-          <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
-            <i class="iconfont icon-download"></i>数据导出
-          </el-button>
-          <el-autocomplete
-            class="fr"
-            size="small"
-            style = "display:inline-block; width:180px;"
-            v-model="queryForm.appid"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect"
-          ></el-autocomplete>
+      <div class="contentflow">
+        <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}
+          <el-tooltip class="item" effect="dark" content="Right Center 提示文字" placement="right">
+            <i class="el-icon-question"></i>
+          </el-tooltip>
         </div>
-        <!-- v-loading.table-content-body="loading" -->
-        <div class="table-con ">
-          <template>
-            <el-table :data="tableData" size="small" style="width: 100%">
-              <el-table-column v-for="item,index of tableHeader" :key="index" :prop="item.column" :label="item.columnName" :fixed="index==0||index==1||index==2?true:false" align="center" width="150">
-                <el-table-column align="center" width="150">
-                  <template slot-scope="scope">
-                    <div v-if="index==0">
-                      <div>{{scope.row[item.column]}}</div>
-                    </div>
-                    <div v-else-if="index==1">
-                      <div>
-                        <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                        <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
-                        <span style="margin-left:20px" @click="dialogHandle(item)" class="iconChart"></span>
-                      </div>
-                    </div>
-                    <div v-else-if="index==2">
-                      <div>{{scope.row[item.column]}}</div>
-                    </div>
-                    <div v-else>
-                      <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
-                      <div class="table-con-line">
-                        <span class="fl">{{scope.row[item.uninstall]}}%</span>
-                        <span class="fl">{{scope.row[item.activity]}}%</span>
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-              </el-table-column>
-            </el-table>
-          </template>
-          <el-pagination @current-change="handleCurrentChange" :current-page.sync="queryForm.pageNo" layout="total, prev, pager, next, jumper" :total="total">
-          </el-pagination>
+        <div class="detail-content-menu ">
+          <el-form ref="form" class="app-type-content" :model="queryForm" label-width="80px" size="small">
+            <el-form-item label="APP类别">
+              <el-radio-group class="app-type" v-model="queryForm.categoryId">
+                <span v-for="item in typeList" :key="item.categoryId" @click="typeListHandle(item)">
+                  <el-radio-button :label="item.categoryId" :value="item.categoryId">{{ item.label }}</el-radio-button>
+                </span>
+              </el-radio-group>
+              <div class="sub-type" v-show="queryForm.categoryId!=0">
+                <el-checkbox-button class="fl" @change="allSelHandle" v-model="allSel">全部</el-checkbox-button>
+                <el-checkbox-group class="fl" v-model="subIdArr">
+                  <el-checkbox-button @change="subSelHandle" v-for="item in typeSubList" :label="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
+                </el-checkbox-group>
+              </div>
+            </el-form-item>
+            <el-form-item label="时间筛选">
+              <el-radio-group class="date-type" v-model="queryForm.dateType">
+                <el-radio-button label="1">周</el-radio-button>
+                <el-radio-button label="2">月</el-radio-button>
+              </el-radio-group>
+
+              <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ disabledDate }" @change="dateHandle">
+              </el-date-picker>
+
+              <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy 第 MM 月" placeholder="选择月" :picker-options="{ disabledDate }" @change="dateHandle" value-format="yyyyMM">
+              </el-date-picker>
+              <el-button type="success" @click="queryHandle" class="" size="small">确定</el-button>
+            </el-form-item>
+          </el-form>
         </div>
-        <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
-          <div class="chart-con">
-            <div style="text-align:center">
-              <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
-            </div>
-            <ECharts  style="width:700px;" :options="chartOption" theme="irs"></ECharts>
+        <div class="table-content flowTable">
+          <div class="table-content-header">
+            <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appid" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
           </div>
-        </el-dialog>
+          <!-- v-loading.table-content-body="loading" -->
+          <div class="table-con ">
+            <template>
+              <el-table :data="tableData" size="small" style="width: 100%" stripe>
+                <el-table-column v-for="item,index of tableHeader" :key="index" :prop="item.column" :label="item.columnName" :fixed="index==0||index==1||index==2?true:false" align="center" width="200">
+                  <el-table-column align="center" width="200">
+                    <template slot-scope="scope">
+                      <div v-if="index==0">
+                        <div>{{scope.row[item.column]}}</div>
+                      </div>
+                      <div v-else-if="index==1">
+                        <div>
+                          <span class="logo"><img :src="scope.row.logo" alt=""></span>
+                          <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
+                          <span style="margin-left:20px" @click="dialogHandle(item)" class="iconChart"></span>
+                        </div>
+                      </div>
+                      <div v-else-if="index==2">
+                        <div>{{scope.row[item.column]}}</div>
+                      </div>
+                      <div v-else>
+                        <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
+                        <div class="table-con-line">
+                          <span class="fl">{{scope.row[item.uninstall]}}%</span>
+                          <span class="fl">{{scope.row[item.activity]}}%</span>
+                        </div>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </template>
+            <el-footer>
+              <el-row type="flex" justify="space-between" class="margintop">
+                <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
+                  <i class="iconfont icon-download"></i>数据导出
+                </el-button>
+                <el-pagination @current-change="handleCurrentChange" :current-page.sync="queryForm.pageNo" layout="total, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+              </el-row>
+            </el-footer>
+
+          </div>
+          <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
+            <div class="chart-con">
+              <div style="text-align:center">
+                <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
+              </div>
+              <ECharts style="width:700px;" :options="chartOption" theme="irs"></ECharts>
+            </div>
+          </el-dialog>
+        </div>
       </div>
     </div>
   </div>
@@ -152,7 +140,7 @@ export default {
 
       },
       week: '',
-      month:'',
+      month: '',
       total: 0, //表格总条数
       // 表格数据
       tableData: [],
@@ -163,11 +151,11 @@ export default {
       chartData3: [],
       chartXAxis: [],
       chartOption: {},
-      chartTile:'',
+      chartTile: '',
       dialogTableVisible: false,
       startDate: null,
       endDate: null,
-      searchData:[]
+      searchData: []
 
 
     };
@@ -182,7 +170,7 @@ export default {
   watch: {
     'queryForm.dateType': function(val) {
       console.log(val)
-      if(val==2){
+      if (val == 2) {
         this.month = new Date(this.endDate)
       }
     },
@@ -215,16 +203,16 @@ export default {
     // 查询按钮
     queryHandle() {
       this.queryForm.pageNo = 1
-      if(this.queryForm.dateType==2){
-         let date = new Date(this.month)
-         let year = date.getFullYear()
-         let month = date.getMonth()+1+''
-         if (month.length==1) {
-            month = 0+month
-         }
-         let yearMM = year+month
-          this.queryForm.date = yearMM
+      if (this.queryForm.dateType == 2) {
+        let date = new Date(this.month)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1 + ''
+        if (month.length == 1) {
+          month = 0 + month
         }
+        let yearMM = year + month
+        this.queryForm.date = yearMM
+      }
       this.fetchTableData()
     },
     // 查询按钮
@@ -242,7 +230,7 @@ export default {
         this.typeSubList = item.children
       }
     },
-    
+
     // 分页
     handleCurrentChange(val) {
       this.queryForm.pageNo = val
@@ -261,7 +249,7 @@ export default {
           this.chartTile = res.data.fromAppName
           this.chartOption = {
             legend: {
-              data: ['下载趋势','流向分析',]
+              data: ['下载趋势', '流向分析',]
             },
             tooltip: {
               trigger: 'axis',
@@ -303,7 +291,7 @@ export default {
             },]
           }
         }
-        
+
       });
     },
     disabledDate(date) {
@@ -325,35 +313,35 @@ export default {
         this.typeList = res.data.typeList;
       });
       api.findSearchAppChannel().then(res => {
-        if(res.resCode ==200){
+        if (res.resCode == 200) {
           this.searchData = res.data
-          this.searchData.forEach((item)=>{
+          this.searchData.forEach((item) => {
             item.value = item.name
           })
         }
       });
     },
     querySearch(queryString, cb) {
-        var restaurants = this.searchData;
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        if(!results.length){
-          results = [{value:"暂无数据"}]
-        }
-        cb(results);
-      },
+      var restaurants = this.searchData;
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      if (!results.length) {
+        results = [{ value: "暂无数据" }]
+      }
+      cb(results);
+    },
     createFilter(queryString) {
       return (restaurant) => {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    handleSelect(item){
-        if(item.id){
-          this.queryForm.appid = item.id
-          this.fetchTableData()
-        }
-        this.queryForm.appid =''
-        this.queryForm.appname =''
+    handleSelect(item) {
+      if (item.id) {
+        this.queryForm.appid = item.id
+        this.fetchTableData()
+      }
+      this.queryForm.appid = ''
+      this.queryForm.appname = ''
     },
     // 获取当前时间周方法
     getWeekNumber(src) {
@@ -365,9 +353,9 @@ export default {
       var week1 = new Date(date.getFullYear(), 0, 4);
       let year = date.getFullYear() + ''
       let week = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7)
-      week = week+''
-      if(week.length ==1){
-        week = 0+''+week
+      week = week + ''
+      if (week.length == 1) {
+        week = 0 + '' + week
       }
       return year + week
     },
@@ -379,7 +367,7 @@ export default {
         this.startDate = res.data.start;
         this.endDate = res.data.end;
         this.week = new Date(this.endDate)
-        if(this.queryForm.dateType==1){
+        if (this.queryForm.dateType == 1) {
           this.queryForm.date = this.getWeekNumber(this.week)
         }
         this.fetchTableData();
@@ -486,21 +474,18 @@ export default {
   overflow: hidden
 }
 
-.content {
-  .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed{
+.contentflow {
+  .el-table--border td,
+  .el-table--border th,
+  .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
     border-right: none;
   }
   .is-group .cell {
     border-right: 1px solid #ebeef5;
   }
-  .table-con .el-table .cell {
-    padding-left: 0;
-    padding-right: 0; // border-right:1px solid #ebeef5;
+  .is-group tr th:nth-child(3) .cell {
+    border-right: none;
   }
-  .table-con .el-table td {
-    // padding: 0
-  }
-
   .table-con-line span {
     position: relative;
     display: inline-block;
@@ -557,6 +542,7 @@ export default {
       .el-radio-button__inner {
         border: none;
         font-size: 14px;
+        height: 25px;
       }
       .el-radio-button__inner:hover {
         color: #69C72B
@@ -568,16 +554,30 @@ export default {
         color: #fff
       }
     }
+    .app-type span {
+      width: 86px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 5px;
+    }
     .sub-type {
       margin-top: 10px;
       overflow: hidden;
-      padding: 10px;
+      padding-top: 10px;
       background-color: #F9F9F9;
       border: 1px dashed #E3EAF4;
+      .el-checkbox-button {
+        min-width: 86px;
+        text-align: center;
+        display: inline-block;
+        margin-right: 20px;
+        margin-bottom: 10px;
+      }
       .el-checkbox-button__inner {
         border: 1px solid rgba(0, 0, 0, 0);
         background: none;
-        font-size: 13px;
+        font-size: 14px;
+        padding: 7px 15px;
       }
       .el-checkbox-button__inner:hover {
         color: #69C72B
@@ -587,7 +587,12 @@ export default {
         border: 1px solid #69c72b;
         box-shadow: 0px 0 0 0 #69C72B;
         border-radius: 3px;
-        color: #69C72B
+        color: #69C72B;
+        min-width: 86px;
+      }
+      .el-checkbox-group {
+        display: inline-block;
+        width: 810px !important;
       }
     }
     .date-type {
@@ -601,8 +606,62 @@ export default {
         color: #fff
       }
     }
+    .el-button--success {
+      width: 120px;
+      height: 30px;
+      line-height: 5px;
+      vertical-align: middle;
+      float: right;
+    }
+  }
+  .table-content-header {
+    overflow: hidden;
+  }
+  .table-con .el-table .cell {
+    padding-left: 0;
+    padding-right: 0; // border-right:1px solid #ebeef5;
+  }
+  .table-con .el-table td {
+    // padding: 0
+    .cell {
+      div {
+        div {
+          padding: 5px;
+        }
+      }
+    }
+  }
+  .el-table__row td {
+    padding: 0;
+  }
+
+  .table-con-line {
+    display: list-item;
+  }
+  .el-table__body-wrapper.is-scrolling-left~.el-table__fixed,
+  .el-table__body-wrapper.is-scrolling-none~.el-table__fixed,
+  .el-table__body-wrapper.is-scrolling-none~.el-table__fixed-right,
+  .el-table__body-wrapper.is-scrolling-right~.el-table__fixed-right {
+    box-shadow: 4px 0 18px #e6e7e8;
+  }
+  .search {
+    display: inline-block;
+    width: 300px;
+    .el-input__inner {
+      height: 32px;
+      line-height: 32px;
+      width: 300px;
+      border: none;
+      background: #f9f9f9;
+      border-bottom: 1px solid #ddd;
+    }
   }
 }
+
+.margintop {
+  margin-top: 40px
+}
+
 
 .iconChart {
   width: 24px;
