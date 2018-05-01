@@ -17,7 +17,7 @@
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
-                    <span @click.stop="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+                    <span @click.stop="dialog2Table(1,scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
                   </div>
                 </template>
               </el-table-column>
@@ -186,7 +186,7 @@ export default {
           on: {
             click: () => {
               console.log(column);
-              this.dialog2Table();
+              this.dialog2Table(2,column.label);
             }
           }
         },
@@ -239,7 +239,7 @@ export default {
     },
 
     //打开图表框
-    dialog2Table(val) {
+    dialog2Table(index,val) {
       this.appId = val; //发送ID
       this.fetchChartsData();
       this.dialogTableVisible = true;
