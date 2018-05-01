@@ -1,5 +1,5 @@
 <template>
-  <behavior :tabs='tabs' :coverParams="coverParams" :mergeCells="false" :fetchApi="fetchApi"></behavior>
+  <behavior :tabs='tabs' :openLink='false' :coverParams="coverParams" :mergeCells="false" :fetchApi="fetchApi"></behavior>
 </template>
 
 <script>
