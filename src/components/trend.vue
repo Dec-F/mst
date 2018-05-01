@@ -17,12 +17,12 @@
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
-                    <span @click.stop="dialog2Table(scope.row.id)" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+                    <span @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
                   </div>
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column  v-if="th.column === 'name'&&actTab.mergeCells">
+            <el-table-column v-if="th.column === 'name'&&actTab.mergeCells">
               <el-table-column fixed :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
                 <template slot-scope="scope">
                   <div>
@@ -46,15 +46,15 @@
 
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
-    <el-dialog title="当前渠道" :visible.sync="dialogTableVisible">
+    <el-dialog :title="echarts.chartTitle" :visible.sync="dialogTableVisible">
       <!--<span class="chart-date">
             <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
               <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
               </el-option>
             </el-select>
           </span>-->
-      <div class="chart-con" v-loading.chart-con="chartloading">
-        <bar-chart :data="chartData" :xAxis="chartXAxis" :legend="chartLegend" :series="chartSeries"></bar-chart>
+      <div class="chart-con" v-loading.chart-con="echarts.chartloading">
+        <bar-chart :data="echarts.chartData" :xAxis="echarts.chartXAxis" :legend="echarts.chartLegend" :series="echarts.chartSeries"></bar-chart>
       </div>
     </el-dialog>
   </div>
@@ -89,33 +89,46 @@ export default {
           index: 0,
           name: 'all',
           label: '全部趋势',
-          mergeCells:true
+          mergeCells: true
         },
         {
           index: 1,
           name: 'xinzhuang',
           label: '新装趋势',
-          mergeCells:false
+          mergeCells: false
         },
 
         {
           index: 2,
           name: 'download',
           label: '下载趋势',
-          mergeCells:false
+          mergeCells: false
         },
 
         {
           index: 3,
           name: 'huoyue',
           label: '活跃趋势',
-          labelContent:false
+          labelContent: false
         }
       ]
     },
     mergeCells: {
       type: Boolean,
-      default:true
+      default: true
+    },
+    echarts: {
+      type: Object,
+      default() {
+        return {
+          chartXAxis: [],
+          chartSeries: [],
+          chartTitle: '图表',
+          chartLegend: {},
+          chartloading: false,
+          chartData: []
+        };
+      }
     }
   },
   data() {
@@ -130,15 +143,9 @@ export default {
       startDate: null,
       endDate: null,
       flag: true,
-      chartXAxis: [],
-      chartSeries: [],
-      chartTitle: null,
-      chartLegend: {},
-      chartloading: false,
       count: false,
       dateList: [],
       dateListVal: null,
-      chartData: [],
       actTab: this.tabs[0]
     };
   },
@@ -173,7 +180,7 @@ export default {
   },
   methods: {
     tabClick(tab, event) {
-      this.actTab =this.tabs[tab.index];
+      this.actTab = this.tabs[tab.index];
       this.$emit('tab-change', tab.name);
     },
     renderHeader(createElement, { column }) {
@@ -185,8 +192,7 @@ export default {
           },
           on: {
             click: () => {
-              console.log(column);
-              this.dialog2Table();
+              this.dialog2Table({type:1,payload:column});
             }
           }
         },
@@ -240,33 +246,10 @@ export default {
 
     //打开图表框
     dialog2Table(val) {
-      this.appId = val; //发送ID
-      this.fetchChartsData();
+      this.$emit('open-chart',val)
       this.dialogTableVisible = true;
     },
-    //    获取图表数据
-    fetchChartsData() {
-      this.chartloading = true;
-      // 发送请求
-      const params = {
-        // 发送请求
-        //date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
-        date: this.dateListVal,
-        appId: this.appId,
-        dateType: this.dateTypeVal,
-        type: this.$route.meta.type,
-        subCategoryId: this.checkedType,
-        categoryId: this.bigType === 0 ? null : this.bigType
-      };
-      api.flowCharts(params).then(res => {
-        this.chartloading = false;
-        this.chartXAxis = res.data.xAxis;
-        this.chartData = res.data.ratios;
-        this.chartTitle = res.data.fromAppName;
-        this.chartLegend = res.data.legend;
-        this.chartSeries = res.data.series;
-      });
-    },
+    
 
     changeSort(sort) {
       const { order, prop } = sort;

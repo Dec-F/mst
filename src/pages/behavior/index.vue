@@ -14,7 +14,7 @@
           <el-collapse-transition>
             <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
           </el-collapse-transition>
-          <trend :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :echarts='echarts' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -82,7 +82,7 @@ export default {
     openLink: {
       type: Boolean,
       default: true
-    },
+    }
   },
   data() {
     return {
@@ -110,7 +110,15 @@ export default {
       count: false,
       tabType: 'all',
       orderBy: '',
-      sortbyDateTime: ''
+      sortbyDateTime: '',
+      echarts:{
+        chartXAxis: [],
+          chartSeries: [],
+          chartTitle: '图表1',
+          chartLegend: {},
+          chartloading: false,
+          chartData: []
+      }
     };
   },
   created() {
@@ -169,7 +177,7 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
-      this.tableData=[]
+      this.tableData = [];
       this.fetchTableData();
     },
     // 获取日期数据
@@ -270,6 +278,32 @@ export default {
         };
       }
       window.location.href = formatUrl(url, params);
+    },
+    //    获取图表数据
+    fetchChartsData(val) {
+      this.chartloading = true;
+      // 发送请求
+       const params = {
+        // 发送请求
+        date: this.dateVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        type: typeMap[this.tabType]||1,
+        limit: this.dataLimitVal,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        orderType: this.orderType,
+        orderColumn: this.orderColumn,
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
+      };
+      api.flowCharts(params).then(res => {
+        this.echarts.chartloading = false;
+        this.echarts.chartXAxis = res.data.xAxis;
+        this.echarts.chartData = res.data.ratios;
+        this.echarts.chartTitle = res.data.fromAppName;
+        this.echarts.chartLegend = res.data.legend;
+        this.echarts.chartSeries = res.data.series;
+      });
     },
     handleSearch(val) {
       if (val.length) {
