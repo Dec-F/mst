@@ -14,12 +14,9 @@ export default {
   data() {
     return {
       fetchApi: {
-        all: api.findAppUse,
-        classify: api.eachTrend,
+        all: api.findChannelUse,
         allDownload:
-          'http://113.200.91.81/mst/behavior/exportChannelTotalTrends1',
-        classifyDownload:
-          'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+          'http://113.200.91.81/mst/behavior/quality/exportChannelUse'
       },
       tabs: [
         {

@@ -1,5 +1,5 @@
 <template>
-  <behaviorDetail :openLink='true'  :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  <behaviorDetail :openLink='true' :mergeCells="true" :fetchApi="fetchApi"></behaviorDetail>
 </template>
 
 <script>
@@ -12,12 +12,12 @@ export default {
   data() {
     return {
       fetchApi: {
-        all: api.findAppUse,
-        classify: api.findAppChannelUse,
+        all: api.appTotalTrends,
+        classify: api.eachAppTrend,
         allDownload:
-          'http://113.200.91.81/mst/behavior/exportChannelTotalTrends1',
+          'http://113.200.91.81/mst/appBehavior/exportAppTotalTrends',
         classifyDownload:
-          'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+          'http://113.200.91.81/mst/appBehavior/exportEachAppTrend'
       },
     };
   }

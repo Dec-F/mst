@@ -76,7 +76,13 @@ const api = {
   },
   eachAppTrend(params) {
     return fetch({url: '/appBehavior/findEachAppTrend', method: 'GET', params: params});
-  }
+  },
+  appTotalTrendsSub(params){
+    return fetch({url: '/appBehavior/listAppTotalTrendsSub', method: 'GET', params: params});
+  },
+  eachAppTrendSub(params) {
+    return fetch({url: '/appBehavior/findAppChannelTrend', method: 'GET', params: params});
+  },
 }
 
 export default api;

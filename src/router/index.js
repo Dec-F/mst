@@ -175,7 +175,7 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/funnelTrend',
-            type: 1
+            type: 'freq'
           }
         }
       }, {
@@ -212,7 +212,7 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/frequencyTrend',
-            type: 2
+            type: 'time'
           }
         }
       }, {

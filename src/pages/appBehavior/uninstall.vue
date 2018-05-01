@@ -1,5 +1,7 @@
 <template>
-  <behaviorDetail :coverParams="coverParams" :tabs="tabs" :openLink='false' :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  <div class="hide-tabs">
+    <behaviorDetail :coverParams="coverParams" :tabs="tabs" :openLink='false' :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  </div>
 </template>
 
 <script>
@@ -14,7 +16,7 @@ export default {
       fetchApi: {
         all: api.unloadTable,
         allDownload:
-          'appQuality/exportUninstallAppList'
+          'http://113.200.91.81/mst/appQuality/exportUninstallAppList'
       },
       tabs: [
         {
