@@ -48,7 +48,7 @@
               </el-col>
             </div>
           </el-collapse-transition>
-          <trend :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -345,6 +345,30 @@ export default {
         };
       }
       window.location.href = formatUrl(url, params);
+    },
+    fetchChartsData(val) {
+      this.chartloading = true;
+      const params = {
+        // 发送请求
+        date: this.dateVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        type: typeMap[this.tabType] || 1,
+        limit: this.dataLimitVal,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        orderType: this.orderType,
+        orderColumn: this.orderColumn,
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
+      };
+      api.flowCharts(params).then(res => {
+        this.echarts.chartloading = false;
+        this.echarts.chartXAxis = res.data.xAxis;
+        this.echarts.chartData = res.data.ratios;
+        this.echarts.chartTitle = res.data.fromAppName;
+        this.echarts.chartLegend = res.data.legend;
+        this.echarts.chartSeries = res.data.series;
+      });
     },
     fetchTop() {
       const params = {
