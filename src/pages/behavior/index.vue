@@ -81,8 +81,8 @@ export default {
     },
     openLink: {
       type: Boolean,
-      default: false
-    }
+      default: true
+    },
   },
   data() {
     return {

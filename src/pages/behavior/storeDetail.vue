@@ -426,7 +426,6 @@ export default {
       this.fetchTableData();
     },
     linkDetail(row) {
-      console.log(this.openLink);
       if (!this.openLink) {
         return;
       }

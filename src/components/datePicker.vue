@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       dateTypeVal: this.type,
-      value3: "",
+      value3: '',
       date: [
         {
           label: '周',
@@ -74,7 +74,7 @@ export default {
       formatDateVal: '',
       weekOption: {},
       monthOption: {}
-    }
+    };
   },
   computed: {
     filterLimit() {
@@ -86,8 +86,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.startDate, this.endDate);
-    this.loaderDate()
+    this.loaderDate();
   },
   methods: {
     changeDateType(val) {
@@ -113,7 +112,7 @@ export default {
       this.loaderMonthDate();
     },
     loaderWeekDate() {
-      const startTimeNum = new Date(this.startDate) - (3600 * 1000 * 24 * 1);
+      const startTimeNum = new Date(this.startDate) - 3600 * 1000 * 24 * 1;
       const endTimeNum = new Date(this.endDate);
       const nowTimeNum = Date.now();
       this.weekOption = {
@@ -125,13 +124,13 @@ export default {
             return time.getTime() < startTimeNum;
           }
         }
-      }
+      };
     },
     loaderMonthDate() {
-      const startTimeNum = new Date(this.startDate) - (3600 * 1000 * 24 * 1);
+      const startTimeNum = new Date(this.startDate) - 3600 * 1000 * 24 * 1;
       const endTimeNum = new Date(this.endDate);
       const nowTimeNum = Date.now();
-      
+
       this.monthOption = {
         disabledDate(time) {
           if (time.getTime() >= endTimeNum) {
@@ -140,10 +139,10 @@ export default {
             return time.getTime() < startTimeNum;
           }
         }
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -158,8 +157,6 @@ export default {
 .el-radio-button__inner {
   border: 1px solid #c7d9bf;
 }
-
-
 
 .right {
   .el-radio-button__inner {

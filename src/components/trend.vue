@@ -11,7 +11,7 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
+            <el-table-column fixed v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
               <el-table-column min-width="180" class-name='box-sd'>
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" class="link">
@@ -22,8 +22,8 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column v-if="th.column === 'name'&&actTab.mergeCells">
-              <el-table-column :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
+            <el-table-column  v-if="th.column === 'name'&&actTab.mergeCells">
+              <el-table-column fixed :render-header="h=>h('div',{domProps:{className:'col-hidden'}})">
                 <template slot-scope="scope">
                   <div>
                     <span>{{scope.row.typename}}</span>
