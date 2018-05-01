@@ -14,7 +14,7 @@
           <el-collapse-transition>
             <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -51,6 +51,38 @@ export default {
     datePicker,
     search,
     trendChart
+  },
+  props: {
+    fetchApi: {
+      type: Object,
+      default() {
+        return {
+          all: api.downloadTrend,
+          classify: api.eachTrend,
+          allDownload:
+            'http://113.200.91.81/mst/behavior/exportChannelTotalTrends',
+          classifyDownload:
+            'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+        };
+      }
+    },
+
+    tabs: {
+      type: Array
+    },
+    coverParams: {
+      type: Object,
+      default() {
+        return {
+          all: {},
+          classify: {}
+        };
+      }
+    },
+    openLink: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
@@ -137,6 +169,7 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
+      this.tableData=[]
       this.fetchTableData();
     },
     // 获取日期数据
@@ -145,11 +178,7 @@ export default {
         this.dateVal = moment(res.data.end).format('YYYYWW');
         this.startDate = res.data.start;
         this.endDate = res.data.end;
-        if (this.tabType === 'all') {
-          this.fetchTableData();
-        } else {
-          this.getTableDataByTab();
-        }
+        this.fetchTableData();
       });
     },
     // 获取表格数据
@@ -170,35 +199,40 @@ export default {
         sortbyDateTime: this.sortbyDateTime
       };
       if (this.tabType === 'all') {
-        api.downloadTrend(params).then(res => {
-          this.loading = false;
-          this.count = true;
+        this.fetchApi
+          .all(Object.assign(params, this.coverParams.all))
+          .then(res => {
+            this.loading = false;
+            this.count = true;
 
-          this.tableHeader = res.data.tableHeader || [];
+            this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData = res.data.tableSum.concat(res.data.tableData) || [];
+            this.tableData =
+              (res.data.tableSum || []).concat(res.data.tableData) || [];
 
-          this.chartXAxis = res.data.echarts.xAxis || [];
+            this.chartXAxis = res.data.echarts.xAxis || [];
 
-          this.chartData = res.data.echarts.line || [];
+            this.chartData = res.data.echarts.line || [];
 
-          this.total = res.data.tablePage.total;
-        });
+            this.total = res.data.tablePage.total;
+          });
       } else {
-        api.eachTrend(params).then(res => {
-          this.loading = false;
-          this.count = true;
+        this.fetchApi
+          .classify(Object.assign(params, this.coverParams.classify))
+          .then(res => {
+            this.loading = false;
+            this.count = true;
 
-          this.tableHeader = res.data.tableHeader || [];
+            this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData = res.data.tableData || [];
+            this.tableData = res.data.tableData || [];
 
-          this.chartXAxis = res.data.echarts.xAxis || [];
+            this.chartXAxis = res.data.echarts.xAxis || [];
 
-          this.chartData = res.data.echarts.line || [];
+            this.chartData = res.data.echarts.line || [];
 
-          this.total = res.data.tablePage.total;
-        });
+            this.total = res.data.tablePage.total;
+          });
       }
     },
     submitData() {
@@ -211,19 +245,19 @@ export default {
       let url = '';
       let params = {};
       if (this.tabType === 'all') {
-        path = 'http://113.200.91.81/mst/behavior/exportChannelTotalTrends';
+        url = fetchApi.allDownload;
         params = {
           dateTime: this.dateVal,
           dateType: this.dateTypeVal,
           limit: this.dataLimitVal,
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          sort: this.orderType==='descending'?'desc':'',
-          sortby: this.orderColumn,
+          sort: this.orderType === 'descending' ? 'desc' : '',
+          sortby: this.orderBy,
           sortbyDateTime: this.sortbyDateTime
         };
       } else {
-        path = 'http://113.200.91.81/mst/behavior/exportEachChannelTrend';
+        url = fetchApi.classifyDownload;
         params = {
           type: typeMap[this.tabType],
           date: this.dateVal,
@@ -235,7 +269,7 @@ export default {
           orderColumn: this.orderColumn
         };
       }
-      window.location.href = formatUrl(path, params);
+      window.location.href = formatUrl(url, params);
     },
     handleSearch(val) {
       if (val.length) {
@@ -263,12 +297,15 @@ export default {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
-        this.orderBy = sortArr[1].indexOf('count')>-1?'download_volume':'ratio';
+        this.orderBy =
+          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
       }
       this.fetchTableData();
     },
     linkDetail(row) {
-      console.log(row);
+      if (!this.openLink) {
+        return;
+      }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
       });

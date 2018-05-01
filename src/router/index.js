@@ -19,29 +19,30 @@ const qualityKeep = resolve => require(['@/pages/quality/keepTrend'], resolve);
 //渠道画像
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
 // app
+const appBehaviorIndex = resolve => require(['@/pages/appBehavior/index'], resolve);
+const appBehaviorStore = resolve => require(['@/pages/appBehavior/storeDetail'], resolve);
 const appKeepTrend = resolve => require(['@/pages/appQuality/appKeepTrend'], resolve);
 const uninstall = resolve => require(['@/pages/appBehavior/uninstall'], resolve);
-//深度分析
-//流向分析
-const flowTrend = resolve => require(['@/pages/deep/flowTrend'], resolve); 
+const appQualityIndex = resolve => require(['@/pages/appQuality/index'], resolve);
+const appQualityStore = resolve => require(['@/pages/appQuality/storeDetail'], resolve);
+//深度分析 流向分析
+const flowTrend = resolve => require(['@/pages/deep/flowTrend'], resolve);
 //同装分析
 const sameTrend = resolve => require(['@/pages/deep/sameTrend'], resolve); //同装分析
 
-// Vue.use(Router)
-// const $route = {};
-const routes = [{
+// Vue.use(Router) const $route = {};
+const routes = [
+  {
     path: '/login',
     name: 'login',
     component: login
-  },
-
-  {
+  }, {
     path: '/',
     name: 'index',
     component: index,
     redirect: '/downloadTrend',
     meta: {
-      requireAuth: true,
+      requireAuth: true
     },
     children: [
       // faq
@@ -69,8 +70,7 @@ const routes = [{
             path: '/downloadTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/downloadTrend/storeDetail/:storeId/:storeName',
         name: 'downloadStoreDetail',
         component: behaviorStore,
@@ -94,8 +94,7 @@ const routes = [{
             path: '/installTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/installTrend/storeDetail/:storeId/:storeName',
         name: 'installStoreDetail',
         component: behaviorStore,
@@ -106,8 +105,7 @@ const routes = [{
             path: '/installTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/installTrend/appDetail/:appId/:appName',
         name: 'installAppDetail',
         component: behaviorApp,
@@ -131,8 +129,7 @@ const routes = [{
             path: '/activeTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/activeTrend/storeDetail/:storeId/:storeName',
         name: 'activeStoreDetail',
         component: behaviorStore,
@@ -143,8 +140,7 @@ const routes = [{
             path: '/activeTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/activeTrend/appDetail/:appId/:appName',
         name: 'activeAppDetail',
         component: behaviorApp,
@@ -178,11 +174,11 @@ const routes = [{
           type: 'funnel',
           bread: {
             name: '新装人均次数',
-            path: '/funnelTrend'
+            path: '/funnelTrend',
+            type: 1
           }
         }
-      },
-      {
+      }, {
         path: '/funnelTrend/storeDetail/:storeId/:storeName',
         name: 'funnelStoreDetail',
         component: qualityStore,
@@ -190,11 +186,11 @@ const routes = [{
           type: 'funnel',
           bread: {
             name: '新装人均次数',
-            path: '/funnelTrend'
+            path: '/funnelTrend',
+            type: 1
           }
         }
-      },
-      {
+      }, {
         path: '/funnelTrend/appDetail/:storeId/:appId/:appName',
         name: 'funnelAppDetail',
         component: qualityApp,
@@ -210,28 +206,28 @@ const routes = [{
       {
         path: '/frequencyTrend',
         name: 'frequency',
-        component: quality,
+        component: qualityIndex,
         meta: {
           type: 'freq',
           bread: {
             name: '新装人均时长',
-            path: '/frequencyTrend'
+            path: '/frequencyTrend',
+            type: 2
           }
         }
-      },
-      {
+      }, {
         path: '/frequencyTrend/storeDetail/:storeId/:storeName',
         name: 'frequencyStoreDetail',
         component: qualityStore,
         meta: {
           type: 'funnel',
           bread: {
-            name: '新装人均次数',
-            path: '/frequencyTrend'
+            name: '新装人均时长',
+            path: '/frequencyTrend',
+            type: 2
           }
         }
-      },
-      {
+      }, {
         path: '/frequencyTrend/appDetail/:storeId/:appId/:appName',
         name: 'funnelAppDetail',
         component: qualityApp,
@@ -243,20 +239,7 @@ const routes = [{
           }
         }
       },
-      // 质量分析 -- 时长趋势
-      {
-        path: '/durationTrend',
-        name: 'duration',
-        component: quality,
-        meta: {
-          type: 'time',
-          bread: {
-            name: '新装人均时长',
-            path: '/durationTrend'
-          }
-        }
-      },
-      // 质量分析--留存
+      // 质量分析 -- 时长趋势 质量分析--留存
       {
         path: '/keepTrend',
         name: 'keepTrend',
@@ -286,7 +269,7 @@ const routes = [{
       {
         path: '/appdownloadTrend',
         name: 'appdownloadTrend',
-        component: behaviorStore,
+        component: appBehaviorIndex,
         meta: {
           type: 'download',
           bread: {
@@ -294,24 +277,37 @@ const routes = [{
             path: '/appdownloadTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/appfunnelTrend',
         name: 'appfunnelTrend',
-        component: qualityStore,
+        component: appQualityStore,
         meta: {
           type: 'flow',
           bread: {
             name: '新装人均次数',
-            path: '/appfunnelTrend'
+            path: '/appfunnelTrend',
+            type:1
+          }
+        }
+      },
+      {
+        path: '/appfunnelTrend/storeDetail/:storeId/:storeName',
+        name: 'appfunnelTrend',
+        component: appQualityIndex,
+        meta: {
+          type: 'flow',
+          bread: {
+            name: '新装人均次数',
+            path: '/appfunnelTrend',
+            type:1
           }
         }
       },
       //二级页面
       {
-        path: '/appdownloadTrend/appDetail/:appId/:appName',
+        path: '/appdownloadTrend/storeDetail/:storeId/:storeName',
         name: 'appdownloadTrend',
-        component: behaviorIndex,
+        component: appBehaviorStore,
         meta: {
           type: 'download',
           bread: {
@@ -319,44 +315,31 @@ const routes = [{
             path: '/appdownloadTrend'
           }
         }
-      },
-      {
-        path: '/appfunnelTrend/appDetail/:appId/:appName',
-        name: 'appfunnelTrend',
-        component: qualityIndex,
-        meta: {
-          type: 'flow',
-          bread: {
-            name: '新装人均次数',
-            path: '/appfunnelTrend'
-          }
-        }
-      },
-      {
+      }, {
         path: '/appdurationTrend',
         name: 'appdurationTrend',
-        component: qualityStore,
+        component: appQualityStore,
         meta: {
           type: 'flow',
           bread: {
             name: '新装人均时长',
-            path: '/appdurationTrend'
+            path: '/appdurationTrend',
+            type:2
           }
         }
-      },
-      {
-        path: '/appdurationTrend/appDetail/:appId/:appName',
+      }, {
+        path: '/appdurationTrend/storeDetail/:storeId/:storeName',
         name: 'appdurationTrend',
-        component: qualityIndex,
+        component: appQualityIndex,
         meta: {
           type: 'flow',
           bread: {
             name: '新装人均时长',
-            path: '/appdurationTrend'
+            path: '/appdurationTrend',
+            type:2
           }
         }
-      },
-      {
+      },{
         path: '/appKeepTrend',
         name: 'appKeepTrend',
         component: appKeepTrend,
@@ -380,8 +363,7 @@ const routes = [{
             path: '/appPortrait'
           }
         }
-      },
-      {
+      }, {
         path: '/flowTrend',
         name: 'flowTrend',
         component: flowTrend,
@@ -392,8 +374,7 @@ const routes = [{
             path: '/flowTrend'
           }
         }
-      },
-      {
+      }, {
         path: '/sameTrend',
         name: 'sameTrend',
         component: sameTrend,
@@ -406,30 +387,21 @@ const routes = [{
         }
       }
     ]
-  },
+  }
 ]
 
-const router = new Router({
-  mode: 'history',
-  base: '/web/',
-  routes: routes
-});
+const router = new Router({mode: 'history', base: '/web/', routes: routes});
 
 //路由拦截
 router.beforeEach((to, from, next) => {
   NProgress.start();
   next();
 
-  // 路由拦截
-  // if (to.matched.some(r => r.meta.requireAuth)) {
-  //   if (localStorage.getItem('token')) {
-  //     next();
-  //   } else {
-  //     window.location.href = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'
-  //   }
-  // } else {
-  //   next();
-  // }
+  // 路由拦截 if (to.matched.some(r => r.meta.requireAuth)) {   if
+  // (localStorage.getItem('token')) {     next();   } else {
+  // window.location.href =
+  // 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'   } }
+  // else {   next(); }
 });
 
 router.afterEach(() => {

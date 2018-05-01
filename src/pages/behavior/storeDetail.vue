@@ -7,7 +7,7 @@
           <selectType :data="typeList" v-model="bigType" @change-big-type="changeBigType" @change-small-type="changeSmallType"></selectType>
         </el-col>
         <el-col :span="24">
-          <date-picker  v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
+          <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
             <span>
               <el-button type="success" @click="submitData">确定</el-button>
             </span>
@@ -48,7 +48,7 @@
               </el-col>
             </div>
           </el-collapse-transition>
-          <trend :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
+          <trend :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange"></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -74,6 +74,13 @@ import trend from '@/components/trend';
 import selectType from '@/components/appTypeMenu';
 import datePicker from '@/components/datePicker';
 import search from '@/components/search';
+import moment from 'moment';
+import { formatUrl } from 'utils';
+const typeMap = {
+  download: 1,
+  xinzhuang: 2,
+  huoyue: 3
+};
 export default {
   name: 'detail',
   components: {
@@ -82,6 +89,42 @@ export default {
     datePicker,
     search,
     trendChart
+  },
+  props: {
+    fetchApi: {
+      type: Object,
+      default() {
+        return {
+          all: api.findChannelAppTrend,
+          classify: api.findAppChannelTrends,
+          allDownload:
+            'http://113.200.91.81/mst/appBehavior/exportAppTotalTrendsSub',
+          classifyDownload:
+            'http://113.200.91.81/mst/appBehavior/exportAppChannelTrend'
+        };
+      }
+    },
+    mergeCells: {
+      type: Boolean,
+      default: true
+    },
+    tabs: {
+      type: Array
+    },
+
+    coverParams: {
+      type: Object,
+      default() {
+        return {
+          all: {},
+          classify: {}
+        };
+      }
+    },
+    openLink: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -124,7 +167,9 @@ export default {
       rankTableData: {},
       rankLoading: false,
       count: false,
-      tabType: 'all'
+      tabType: 'all',
+      orderBy: '',
+      sortbyDateTime: ''
     };
   },
   created() {
@@ -158,13 +203,13 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
+      this.tableData=[]
       this.fetchTableData();
     },
     //    获取app详细排名
     fetchDetail() {
       const params = {
-        date:
-          this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
+        date: this.dateVal,
         dateType: this.dateTypeVal,
         type: this.$route.meta.type,
         channelId: parseInt(this.$route.params.storeId),
@@ -209,7 +254,7 @@ export default {
     //    获取时间数据
     fetchDate() {
       api.date().then(res => {
-        this.dateVal = res.data.end;
+        this.dateVal = moment(res.data.end).format('YYYYWW');
         this.startDate = res.data.start;
         this.endDate = res.data.end;
         this.fetchTableData();
@@ -221,8 +266,8 @@ export default {
       // 发送请求
       const params = {
         // 发送请求
-        type: this.$route.meta.type,
-        date:this.dateVal,
+        type: typeMap[this.tabType],
+        date: this.dateVal,
         dateType: this.dateTypeVal,
         limit: this.dataLimitVal,
         subCategoryId: this.checkedType,
@@ -233,7 +278,9 @@ export default {
         orderColumn: this.orderColumn,
         queryId: this.searchId,
         queryType: this.searchType,
-        channelId: parseInt(this.$route.params.storeId)
+        channelId: parseInt(this.$route.params.storeId),
+        sortby: this.orderBy,
+        sortbyDateTime: this.sortbyDateTime
       };
       const resHandler = res => {
         this.loading = false;
@@ -257,60 +304,47 @@ export default {
       };
       //      请求
       if (this.tabType === 'all') {
-        api.findChannelAppTrend(params).then(resHandler);
+        this.fetchApi
+          .all(Object.assign(params, this.coverParams.all))
+          .then(resHandler);
       } else {
-        api.findAppChannelTrends(params).then(resHandler);
+        this.fetchApi
+          .classify(Object.assign(params, this.coverParams.all))
+          .then(resHandler);
       }
     },
     // 导出数据
     downloadData() {
-      var path =
-        'http://113.200.91.81/mst/behavior/exportChannelAppTrendExcel?';
-      var paras1 =
-        'type=' +
-        this.$route.meta.type +
-        '&' +
-        'date=' +
-        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
-        '&' +
-        'dateType=' +
-        this.dateTypeVal +
-        '&' +
-        'limit=' +
-        this.dataLimitVal +
-        '&';
-      var paras2 =
-        'subCategoryId=' +
-        this.checkedType +
-        '&' +
-        'categoryId=' +
-        (this.bigType === 0 ? null : this.bigType) +
-        '&';
-
-      var paras3 =
-        'pageNo=' +
-        this.currentPage +
-        '&' +
-        'pageSize=' +
-        this.pageSize +
-        '&' +
-        'orderType=' +
-        this.orderType +
-        '&' +
-        'orderColumn=' +
-        this.orderColumn +
-        '&' +
-        'channelId=' +
-        parseInt(this.$route.params.storeId);
-      // "queryId=" + this.searchId + "&" +
-      // "queryType=" + this.searchType;
-      // window.location.href = path + paras1 + paras2 + paras3;
-
-      if (this.bigType == 0) {
-        window.location.href = path + paras1 + paras3;
+      let url = '';
+      let params = {};
+      if (this.tabType === 'all') {
+        url = fetchApi.allDownload;
+        params = {
+          dateTime: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          sort: this.orderType === 'descending' ? 'desc' : '',
+          sortby: this.orderBy,
+          sortbyDateTime: this.sortbyDateTime,
+          appId: this.$route.params.storeId
+        };
       } else {
-        window.location.href = path + paras1 + paras2 + paras3;
+        url = fetchApi.classifyDownload;
+        params = {
+          type: typeMap[this.tabType],
+          date: this.dateVal,
+          dateType: this.dateTypeVal,
+          limit: this.dataLimitVal,
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          orderType: this.orderType,
+          orderColumn: this.orderColumn,
+          appId: this.$route.params.storeId
+        };
       }
+      window.location.href = formatUrl(url, params);
     },
     fetchTop() {
       const params = {
@@ -376,15 +410,27 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.prop = sort.column ? sort.column.label : '';
+      ///f:  hack.  elementUI切换排序连续点击进入默认状态是 会传入null
+      if (!sort.order || !sort.prop) {
+        return;
+      }
       sort.order = sort.order ? sort.order : 'descending';
-      this.orderColumn = sort.prop;
       this.orderType = sort.order;
+      if (sort.prop.indexOf('--') > -1) {
+        let sortArr = sort.prop.split('--');
+        this.sortbyDateTime = sortArr[0];
+        this.orderColumn = sortArr[1];
+        this.orderBy =
+          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
+      }
       this.fetchTableData();
     },
     linkDetail(row) {
+      if (!this.openLink) {
+        return;
+      }
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/appDetail/${row.id}/${row.name}`
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
       });
     }
   }
