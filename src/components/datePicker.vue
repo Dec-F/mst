@@ -87,6 +87,7 @@ export default {
   },
   mounted() {
     console.log(this.startDate, this.endDate);
+    this.loaderDate()
   },
   methods: {
     changeDateType(val) {
@@ -130,6 +131,7 @@ export default {
       const startTimeNum = new Date(this.startDate) - (3600 * 1000 * 24 * 1);
       const endTimeNum = new Date(this.endDate);
       const nowTimeNum = Date.now();
+      
       this.monthOption = {
         disabledDate(time) {
           if (time.getTime() >= endTimeNum) {

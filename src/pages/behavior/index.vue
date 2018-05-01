@@ -66,7 +66,7 @@ export default {
         };
       }
     },
-    
+
     tabs: {
       type: Array
     },
@@ -79,11 +79,10 @@ export default {
         };
       }
     },
-    openLink:{
-      type:Boolean,
-      default:false
+    openLink: {
+      type: Boolean,
+      default: false
     }
-    
   },
   data() {
     return {
@@ -170,6 +169,7 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
+      this.tableData=[]
       this.fetchTableData();
     },
     // 获取日期数据
@@ -178,11 +178,7 @@ export default {
         this.dateVal = moment(res.data.end).format('YYYYWW');
         this.startDate = res.data.start;
         this.endDate = res.data.end;
-        if (this.tabType === 'all') {
-          this.fetchTableData();
-        } else {
-          this.getTableDataByTab();
-        }
+        this.fetchTableData();
       });
     },
     // 获取表格数据
@@ -203,36 +199,40 @@ export default {
         sortbyDateTime: this.sortbyDateTime
       };
       if (this.tabType === 'all') {
-        this.fetchApi.all(Object.assign(params,this.coverParams.all)).then(res => {
-          this.loading = false;
-          this.count = true;
+        this.fetchApi
+          .all(Object.assign(params, this.coverParams.all))
+          .then(res => {
+            this.loading = false;
+            this.count = true;
 
-          this.tableHeader = res.data.tableHeader || [];
+            this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData =
-            (res.data.tableSum || []).concat(res.data.tableData) || [];
+            this.tableData =
+              (res.data.tableSum || []).concat(res.data.tableData) || [];
 
-          this.chartXAxis = res.data.echarts.xAxis || [];
+            this.chartXAxis = res.data.echarts.xAxis || [];
 
-          this.chartData = res.data.echarts.line || [];
+            this.chartData = res.data.echarts.line || [];
 
-          this.total = res.data.tablePage.total;
-        });
+            this.total = res.data.tablePage.total;
+          });
       } else {
-        this.fetchApi.classify(Object.assign(params,this.coverParams.classify)).then(res => {
-          this.loading = false;
-          this.count = true;
+        this.fetchApi
+          .classify(Object.assign(params, this.coverParams.classify))
+          .then(res => {
+            this.loading = false;
+            this.count = true;
 
-          this.tableHeader = res.data.tableHeader || [];
+            this.tableHeader = res.data.tableHeader || [];
 
-          this.tableData = res.data.tableData || [];
+            this.tableData = res.data.tableData || [];
 
-          this.chartXAxis = res.data.echarts.xAxis || [];
+            this.chartXAxis = res.data.echarts.xAxis || [];
 
-          this.chartData = res.data.echarts.line || [];
+            this.chartData = res.data.echarts.line || [];
 
-          this.total = res.data.tablePage.total;
-        });
+            this.total = res.data.tablePage.total;
+          });
       }
     },
     submitData() {
@@ -303,8 +303,8 @@ export default {
       this.fetchTableData();
     },
     linkDetail(row) {
-      if(!this.openLink){
-        return
+      if (!this.openLink) {
+        return;
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`

@@ -203,6 +203,7 @@ export default {
     },
     tabChange(name) {
       this.tabType = name;
+      this.tableData=[]
       this.fetchTableData();
     },
     //    获取app详细排名
