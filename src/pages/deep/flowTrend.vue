@@ -45,8 +45,8 @@
           <div class="table-con ">
             <template>
               <el-table :data="tableData" size="small" style="width: 100%" stripe>
-                <el-table-column v-for="item,index of tableHeader" :key="index" :prop="item.column" :label="item.columnName" :fixed="index==0||index==1||index==2?true:false" align="center" width="200">
-                  <el-table-column align="center" width="200">
+                <el-table-column v-for="item,index of tableHeader" :key="index" :prop="item.column" :label="item.columnName" :fixed="index==0||index==1||index==2?true:false" align="center" :width="tableHeaderWidth[index]?tableHeaderWidth[index]:200">
+                  <el-table-column align="center" :width="tableHeaderWidth[index]?tableHeaderWidth[index]:200">
                     <template slot-scope="scope">
                       <div v-if="index==0">
                         <div>{{scope.row[item.column]}}</div>
@@ -146,6 +146,11 @@ export default {
       tableData: [],
       // 表头数据
       tableHeader: [],
+      tableHeaderWidth: {
+        0: 80,
+        1: 160,
+        2: 80
+      },
       chartData1: [],
       chartData2: [],
       chartData3: [],

@@ -7,7 +7,7 @@
       </div>
       <el-menu
         mode="vertical"
-        :default-active="splitUrl($route.path)"
+        :default-active="initPath"
         class="el-menu-vertical-demo"
         theme="dark"
         text-color="#8996a9"
@@ -19,15 +19,15 @@
             <span>{{ group.title }}</span>
           </template>
           <template v-for="(nav, navIndex) in group.children">
-            <el-submenu v-if="nav.children" :index="`${groupIndex}-${navIndex}`" :key="`${groupIndex}-${navIndex}`">
+            <el-submenu v-if="nav.children" :index="`${groupIndex}-${navIndex}`" :key="navIndex">
               <template slot="title">{{ nav.title }}</template>
 
-              <el-menu-item v-for="(sub, subIndex) in nav.children" :key="`${groupIndex}-${navIndex}-${subIndex}`" :index="`${groupIndex}-${navIndex}-${subIndex}`">
+              <el-menu-item v-for="(sub, subIndex) in nav.children" :key="sub.link" :index="sub.link">
                 <router-link tag="span" :to="{path : sub.link}">{{ sub.title }}</router-link>
               </el-menu-item>
             </el-submenu>
 
-            <el-menu-item v-else :index="`${groupIndex}-${navIndex}`" :key="navIndex">
+            <el-menu-item v-else :index="nav.link" :key="navIndex">
               <router-link tag="span" :to="{path : nav.link}">{{ nav.title }}</router-link>
             </el-menu-item>
           </template>
@@ -73,9 +73,9 @@ export default {
   },
   data() {
     return {
+      initPath: this.$route.path,
       searchVal: '',
       searchData: [],
-      active: '',
       navs: [
 
         // 渠道
@@ -293,7 +293,7 @@ export default {
         height: 45px;
         &:hover {
           background-color: #404c5a;
-          color: #fff;
+          color: #fff !important;
         }
         &:focus {
           background-color: #404c5a;
@@ -306,7 +306,7 @@ export default {
         }
         &.is-active {
           position: relative;
-          background-color: #404c5a;
+          background-color: #445954;
           &:before {
             content: '';
             position: absolute;
@@ -335,9 +335,10 @@ export default {
     white-space: nowrap;
   }
   .el-submenu__title:hover {
-    background-color: #404c5a;
+    background-color: #323a45;
+    color: #fff !important;
   }
-  .el-submenu > .el-menu {
+  .el-submenu .el-menu-item {
     background-color: #404c5a;
   }
   >.content {
