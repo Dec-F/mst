@@ -1,5 +1,7 @@
 <template>
-  <behaviorDetail :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  <div class="hide-tabs">
+    <behaviorDetail :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+  </div>
 </template>
 
 <script>

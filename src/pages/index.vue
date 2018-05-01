@@ -383,4 +383,7 @@ export default {
 .right .el-tooltip__popper {
   padding: 8px 10px;
 }
+.hide-tabs .el-tabs__header {
+  display: none;
+}
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <behavior :tabs='tabs' :openLink='false' :coverParams="coverParams" :mergeCells="false" :fetchApi="fetchApi"></behavior>
+  <div class="hide-tabs">
+    <behavior :tabs='tabs' :openLink='false' :coverParams="coverParams" :mergeCells="false" :fetchApi="fetchApi"></behavior>
+  </div>
 </template>
 
 <script>
@@ -24,22 +26,22 @@ export default {
           index: 0,
           name: 'all',
           label: '全部趋势',
-          mergeCells:false
+          mergeCells: false
         }
       ],
-      coverParams:{
-        all:{
-          type:this.$route.meta.bread.type
+      coverParams: {
+        all: {
+          type: this.$route.meta.bread.type
         }
       }
     };
   },
-  
-  watch:{
-    '$route'(){
-      this.coverParams.all={
-        type:this.$route.meta.bread.type
-      }
+
+  watch: {
+    $route() {
+      this.coverParams.all = {
+        type: this.$route.meta.bread.type
+      };
     }
   }
 };
