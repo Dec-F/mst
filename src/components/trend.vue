@@ -310,7 +310,12 @@ export default {
     height: 20px;
   }
 }
-
+.el-table--border tr td:nth-child(n+1){
+  border-right:none;
+}
+.el-table--border th{
+  border-right:none;
+}
 .cell {
   text-align: center; // padding-left: 40px;
 }

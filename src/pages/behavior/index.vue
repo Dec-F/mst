@@ -11,16 +11,14 @@
       </div>
       <div class="table-content">
         <div class="table-content-body" v-loading.body="loading">
+          <el-collapse-transition>
+            <trend-chart :show="switchVal" :data="chartData" :xAxis="chartXAxis"></trend-chart>
+          </el-collapse-transition>
           <trend :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
             </el-button>
-            <!-- <span>
-            <span class="label">趋势图表：</span>
-            <el-switch v-model="switchVal" on-text="" off-text="" on-color="#67C72B" off-color="#ccc">
-            </el-switch>
-          </span> -->
           </div>
         </div>
       </div>

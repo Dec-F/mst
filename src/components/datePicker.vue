@@ -165,9 +165,17 @@ export default {
   }
 }
 
-.el-date-editor {
+.el-date-editor.el-input {
+  width: 180px;
   .el-icon-date {
     line-height: 30px;
   }
+}
+.el-input--suffix .el-input__inner{
+   height: 30px;
+}
+.el-date-editor .el-input__inner {
+  height: 30px;
+  width: 180px
 }
 </style>

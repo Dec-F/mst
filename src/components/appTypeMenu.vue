@@ -7,10 +7,8 @@
       <div class="right">
         <div>
           <el-radio-group v-model="bigType">
-            <el-radio-button v-for="item in data"
-             :label="item.categoryId" :value="item.categoryId" 
-             :key="item.categoryId">
-             {{ item.label }}
+            <el-radio-button v-for="item in data" :label="item.categoryId" :value="item.categoryId" :key="item.categoryId">
+              {{ item.label }}
             </el-radio-button>
           </el-radio-group>
         </div>
@@ -21,10 +19,9 @@
       </div>
       <div class="right">
         <div class="rightBox">
-          <el-checkbox-button v-model="checkAll"
-            @change="selectAllType(checkAll)" style="float:left">
+          <el-checkbox-button v-model="checkAll" @change="selectAllType(checkAll)" style="float:left">
             全选
-           </el-checkbox-button>
+          </el-checkbox-button>
           <el-checkbox-group v-model="checkedType" @change="selectType">
             <el-checkbox-button v-for="item in smallTypeList" :label="item.subCategoryId" :value="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
           </el-checkbox-group>
@@ -95,22 +92,29 @@ export default {
 
 <style lang='less'>
 .appname {
+  .right {
+    padding-top: 13px;
+    padding-left: 6px;
+    padding-bottom: 0px;
+  }
   .el-radio-button__inner {
     height: 30px;
-    line-height: 10px;
+    line-height: 7px;
     margin-right: 20px;
-    margin-bottom: 20px !important;
+    margin-bottom: 10px !important;
     padding: 12px 15px;
     border: none !important;
     border-radius: 4px !important;
   }
+  .el-radio-button,
+  .el-radio-button__inner {
+    display: inline-block;
+    position: relative;
+    outline: 0;
+    width: 86px;
+  }
 }
-.el-radio-button, .el-radio-button__inner {
-  display: inline-block;
-  position: relative;
-  outline: 0;
-  width: 86px;
-}
+
 .el-checkbox-button {
   position: relative;
   display: inline-block;
@@ -133,7 +137,7 @@ export default {
   background-color: #F9F7F8;
   border: 1px solid #69c72b !important; // box-shadow: -1px 0 0 0 #69c72b;
   border-radius: 4px !important;
-  box-shadow:none;
+  box-shadow: none;
 }
 
 .content .detail-content-menu .select-list.top {
@@ -142,11 +146,12 @@ export default {
 
 .content .detail-content-menu .select-list:nth-child(2) .right {
   overflow: hidden;
+  padding-top:0px;
   .rightBox {
     overflow: hidden;
-    padding: 20px;
+    padding: 10px;
     background-color: #F9F9F9;
-    border:1px dashed #E3EAF4;
+    border: 1px dashed #E3EAF4;
   }
 }
 </style>

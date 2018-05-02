@@ -3,7 +3,7 @@
     <div class="content">
       <div class="contentflow">
         <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}
-          <el-tooltip class="item" effect="dark" content="Right Center 提示文字" placement="right">
+          <el-tooltip class="item" effect="light" content="Right Center 提示文字" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </div>
@@ -526,6 +526,13 @@ export default {
     float: left;
     width: 50%;
   }
+  .el-table tr:nth-child(2) {
+    th {
+      background-color: #e1f4d6 !important;
+      // border-bottom: 1px solid #bde6a2;
+      padding: 2px;
+    }
+  }
   .table-con .is-group.has-gutter tr:nth-of-type(2) th:nth-of-type(1) .cell:before,
   .table-con .is-group.has-gutter tr:nth-of-type(2) th:nth-of-type(2) .cell:before,
   .table-con .is-group.has-gutter tr:nth-of-type(2) th:nth-of-type(3) .cell:before {
@@ -601,8 +608,9 @@ export default {
       }
     }
     .date-type {
+      margin-right:20px;
       .el-radio-button__inner:hover {
-        color: #69C72B
+        color: #69C72B;
       }
       .el-radio-button__orig-radio:checked+.el-radio-button__inner {
         background: #69C72B;
@@ -653,8 +661,8 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 32px;
-      line-height: 32px;
+      height: 30px;
+      line-height:30px;
       width: 300px;
       border: none;
       background: #f9f9f9;
@@ -666,7 +674,6 @@ export default {
 .margintop {
   margin-top: 40px
 }
-
 
 .iconChart {
   width: 24px;
