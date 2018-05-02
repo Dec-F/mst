@@ -91,6 +91,11 @@ export default {
   methods: {
     changeDateType(val) {
       this.dateTypeVal = val;
+      if (this.dateTypeVal === 'week') {
+        this.changeWeek();
+      } else {
+        this.changeMonth();
+      }
       this.$emit('change-date-type', val);
     },
     changeDateLimit(val) {
@@ -171,11 +176,11 @@ export default {
     line-height: 30px;
   }
 }
-.el-input--suffix .el-input__inner{
-   height: 30px;
+.el-input--suffix .el-input__inner {
+  height: 30px;
 }
 .el-date-editor .el-input__inner {
   height: 30px;
-  width: 180px
+  width: 180px;
 }
 </style>
