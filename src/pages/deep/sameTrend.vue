@@ -24,7 +24,7 @@
                 <el-radio-button label="1">周</el-radio-button>
                 <el-radio-button label="2">月</el-radio-button>
               </el-radio-group>
-              <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy-WW" placeholder="选择周" :picker-options="{ disabledDate }" @change="dateHandle">
+              <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy第WW周" placeholder="选择周" :picker-options="{ disabledDate }" @change="dateHandle">
               </el-date-picker>
 
               <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy-MM" placeholder="选择月" :picker-options="{ disabledDate }" @change="dateHandle" value-format="yyyyMM">
@@ -77,11 +77,11 @@
           </div>
           <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
             <!-- <span class="chart-date">
-                                        <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                                          <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                                          </el-option>
-                                        </el-select>
-                                      </span> -->
+                                          <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+                                            <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+                                            </el-option>
+                                          </el-select>
+                                        </span> -->
             <div class="chart-con">
               <div style="text-align:center">
                 <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
@@ -585,6 +585,7 @@ export default {
       }
     }
     .date-type {
+      margin-right: 20px;
       .el-radio-button__inner:hover {
         color: #69C72B
       }
@@ -637,8 +638,8 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 32px;
-      line-height: 32px;
+      height: 30px;
+      line-height: 30px;
       width: 300px;
       border: none;
       background: #f9f9f9;
