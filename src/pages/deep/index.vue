@@ -457,11 +457,7 @@ export default {
         > span {
           margin-right: 15px;
         }
-        .limit {
-          .el-select {
-            width: 70px;
-          }
-        }
+        
       }
       .left {
         width: 100px;

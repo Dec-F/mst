@@ -59,7 +59,7 @@
         </el-col>
         <!--<el-col :span="10">
             <div class="sub-btn">
-              
+
             </div>
           </el-col>-->
       </div>
@@ -87,13 +87,13 @@
 
 <script>
 // 引入组件
-import api from "@/api/api";
-import trendChart from "@/components/trendChart";
-import datePicker from "@/components/datePicker";
-import search from "@/components/search";
-import trend from "@/components/trend";
+import api from '@/api/api';
+import trendChart from '@/components/trendChart';
+import datePicker from '@/components/datePicker';
+import search from '@/components/search';
+import trend from '@/components/trend';
 export default {
-  name: "appDetail",
+  name: 'appDetail',
   components: {
     trend,
     datePicker,
@@ -103,28 +103,28 @@ export default {
   data() {
     return {
       loading: false,
-      dateTypeVal: "week",
+      dateTypeVal: 'week',
       dataLimitVal: 4,
       startDate: null,
       endDate: null,
-      searchValue: "",
-      weekDateVal: "",
-      monthDateVal: "",
+      searchValue: '',
+      weekDateVal: '',
+      monthDateVal: '',
       weekVal: null,
       monthVal: null,
-      dateVal: "",
+      dateVal: '',
       switchVal: false,
       currentPage: 1,
       pageSize: 10,
-      orderColumn: "",
-      orderType: "descending",
+      orderColumn: '',
+      orderType: 'descending',
       total: null,
       appData: {},
-      appName:'',
-      categoryName:'',
-      weekTotal:'',
-      monthTotal:'',
-      appTag:'',
+      appName: '',
+      categoryName: '',
+      weekTotal: '',
+      monthTotal: '',
+      appTag: '',
       tableData: [],
       tableHeader: [],
       chartXAxis: [],
@@ -240,7 +240,7 @@ export default {
       this.loading = true;
       const params = {
         date:
-        this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal,
+          this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
         dateType: this.dateTypeVal,
         type: this.$route.meta.type,
         limit: this.dataLimitVal,
@@ -296,33 +296,33 @@ export default {
       //   channelId: parseInt(this.$route.params.appId)
       // }
       var path =
-        "http://113.200.91.81/mst/behavior/exportAppChannelTrendExcel?";
+        'http://113.200.91.81/mst/behavior/exportAppChannelTrendExcel?';
       var paras =
-        "type=" +
+        'type=' +
         this.$route.meta.type +
-        "&" +
-        "date=" +
-        (this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal) +
-        "&" +
-        "dateType=" +
+        '&' +
+        'date=' +
+        (this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal) +
+        '&' +
+        'dateType=' +
         this.dateTypeVal +
-        "&" +
-        "limit=" +
+        '&' +
+        'limit=' +
         this.dataLimitVal +
-        "&" +
-        "pageNo=" +
+        '&' +
+        'pageNo=' +
         this.currentPage +
-        "&" +
-        "pageSize=" +
+        '&' +
+        'pageSize=' +
         this.pageSize +
-        "&" +
-        "orderType=" +
+        '&' +
+        'orderType=' +
         this.orderType +
-        "&" +
-        "orderColumn=" +
+        '&' +
+        'orderColumn=' +
         this.orderColumn +
-        "&" +
-        "appId=" +
+        '&' +
+        'appId=' +
         parseInt(this.$route.params.appId);
 
       window.location.href = path + paras;
@@ -331,7 +331,7 @@ export default {
       const params = {
         query: val
       };
-      if (val !== "") {
+      if (val !== '') {
         this.searchLoading = true;
         api.findSearchAppChannel(params).then(res => {
           this.searchLoading = false;
@@ -344,15 +344,14 @@ export default {
         });
       } else {
         this.searchData = [];
-      };
-      
+      }
     },
     startSearch(item) {
-      let type = "";
-      if (item.type === "app") {
-        type = "appDetail";
+      let type = '';
+      if (item.type === 'app') {
+        type = 'appDetail';
       } else {
-        type = "storeDetail";
+        type = 'storeDetail';
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/${type}/${item.id}/${item.name}`
@@ -369,8 +368,8 @@ export default {
       }
     },
     changeSort(sort) {
-      sort.prop = sort.column ? sort.column.label : "";
-      sort.order = sort.order ? sort.order : "descending";
+      sort.prop = sort.column ? sort.column.label : '';
+      sort.order = sort.order ? sort.order : 'descending';
       this.orderColumn = sort.prop;
       this.orderType = sort.order;
       this.fetchTableData();
@@ -433,13 +432,8 @@ export default {
       .right {
         padding: 15px 15px;
         margin: 5px 0;
-        >span {
+        > span {
           margin-right: 15px;
-        }
-        .limit {
-          .el-select {
-            width: 70px;
-          }
         }
       }
       .left {
@@ -451,7 +445,7 @@ export default {
         .el-checkbox {
           margin: 5px 15px 5px 0;
         }
-        .el-checkbox+.el-checkbox {
+        .el-checkbox + .el-checkbox {
           margin: 5px 15px 5px 0;
         }
         .el-checkbox-group {

@@ -59,7 +59,7 @@
         </el-col>
         <!--<el-col :span="10">
             <div class="sub-btn">
-              
+
             </div>
           </el-col>-->
       </div>
@@ -345,7 +345,7 @@ export default {
       } else {
         this.searchData = [];
       };
-      
+
     },
     startSearch(item) {
       let type = "";
@@ -436,11 +436,7 @@ export default {
         >span {
           margin-right: 15px;
         }
-        .limit {
-          .el-select {
-            width: 70px;
-          }
-        }
+        
       }
       .left {
         width: 100px;

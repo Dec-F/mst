@@ -19,14 +19,12 @@
         </el-date-picker>
       </span>
       <span v-if="showLimit">
-        <span>之前</span>
         <span class="limit">
-          <el-select v-model="dataLimitVal" placeholder="请选择" @change="changeDateLimit">
-            <el-option v-for="item in filterLimit" :key="item" :label="item" :value="item">
+          <el-select size="medium" v-model="dataLimitVal" placeholder="请选择" @change="changeDateLimit">
+            <el-option v-for="item in filterLimit" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </span>
-        <span>个{{ dateTypeVal === "week" ? '周' : '月' }}</span>
       </span>
 
       <slot></slot>
@@ -79,9 +77,9 @@ export default {
   computed: {
     filterLimit() {
       if (this.dateTypeVal === 'week') {
-        return 12;
+        return this.calcOptions(12, '周');
       } else {
-        return 6;
+        return this.calcOptions(6, '月');
       }
     }
   },
@@ -145,6 +143,14 @@ export default {
           }
         }
       };
+    },
+    calcOptions(num, str) {
+      return Array.from(new Array(num)).map((v, i) => {
+        return {
+          value: i + 1,
+          label: `之前${i + 1}${str}数据`
+        };
+      });
     }
   }
 };
