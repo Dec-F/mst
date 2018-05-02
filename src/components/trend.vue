@@ -11,8 +11,8 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column fixed v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-              <el-table-column min-width="180" class-name='box-sd'>
+            <el-table-column v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
+              <el-table-column min-width="180" fixed class-name='box-sd'>
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
