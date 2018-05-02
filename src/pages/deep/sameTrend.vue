@@ -130,7 +130,7 @@ export default {
       allSel: false,
       subIdArr: [],
       queryForm: {
-        categoryId: '0', //大类id
+        categoryId: '', //大类id
         subCategoryId: '',
         dateType: '1',  //1/2周或者月
         date: '',//时间
@@ -207,6 +207,7 @@ export default {
     },
     // 查询按钮
     queryHandle() {
+      this.queryForm.appid = ''
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
@@ -307,7 +308,7 @@ export default {
     // 获取app类型数据
     fetchAppType() {
       api.appType().then(res => {
-        res.data.typeList.unshift({ categoryId: 0, label: "全部" });
+        res.data.typeList.unshift({ categoryId: '', label: "全部" });
         this.typeList = res.data.typeList;
       });
       api.findSearchAppChannel().then(res => {
@@ -336,10 +337,10 @@ export default {
     handleSelect(item) {
       if (item.id) {
         this.queryForm.appid = item.id
+        this.queryForm.appname = item.name
         this.fetchTableData()
       }
-      this.queryForm.appid = ''
-      this.queryForm.appname = ''
+      
     },
     // 获取当前时间周方法
     getWeekNumber(src) {
@@ -390,6 +391,7 @@ export default {
         } else {
           this.tableData = [];
         }
+        this.queryForm.appname = ''
       });
     },
 

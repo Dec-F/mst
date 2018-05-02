@@ -39,7 +39,7 @@
         </div>
         <div class="table-content flowTable">
           <div class="table-content-header">
-            <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appid" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
+            <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appname" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
           </div>
           <!-- v-loading.table-content-body="loading" -->
           <div class="table-con ">
@@ -130,7 +130,7 @@ export default {
       allSel: false,
       subIdArr: [],
       queryForm: {
-        categoryId: '0', //大类id
+        categoryId: '', //大类id
         subCategoryId: '',
         dateType: '1',  //1/2周或者月
         date: '',//时间
@@ -207,6 +207,7 @@ export default {
     },
     // 查询按钮
     queryHandle() {
+      this.queryForm.appid = ''
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
@@ -229,7 +230,7 @@ export default {
     typeListHandle(item) {
       this.bigTypeItem = item.children
       let id = item.categoryId
-      if (id == 0) {
+      if (id =='') {
         this.typeSubList = []
       } else {
         this.typeSubList = item.children
@@ -314,7 +315,7 @@ export default {
     // 获取app类型数据
     fetchAppType() {
       api.appType().then(res => {
-        res.data.typeList.unshift({ categoryId: 0, label: "全部" });
+        res.data.typeList.unshift({ categoryId: '', label: "全部" });
         this.typeList = res.data.typeList;
       });
       api.findSearchAppChannel().then(res => {
@@ -343,10 +344,9 @@ export default {
     handleSelect(item) {
       if (item.id) {
         this.queryForm.appid = item.id
+        this.queryForm.appname = item.name
         this.fetchTableData()
       }
-      this.queryForm.appid = ''
-      this.queryForm.appname = ''
     },
     // 获取当前时间周方法
     getWeekNumber(src) {
@@ -397,6 +397,7 @@ export default {
         } else {
           this.tableData = [];
         }
+        this.queryForm.appname = ''
       });
     },
 

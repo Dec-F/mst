@@ -48,11 +48,11 @@
     </el-pagination>
     <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
       <!--<span class="chart-date">
-            <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-              <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-              </el-option>
-            </el-select>
-          </span>-->
+              <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+                <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+                </el-option>
+              </el-select>
+            </span>-->
       <div class="chart-con" v-loading.chart-con="chartData.chartloading">
         <bar-chart :chartData="chartData"></bar-chart>
       </div>
@@ -263,6 +263,7 @@ export default {
 .box-sd {
   position: relative;
 }
+
 .box-sd::after {
   content: '';
   display: inline-block;
@@ -274,6 +275,7 @@ export default {
   background-color: rgba(0, 0, 0, 0);
   box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
+
 .el-table tr:nth-child(2) {
   th {
     background-color: #e1f4d6 !important;
@@ -310,17 +312,20 @@ export default {
     height: 20px;
   }
 }
-.el-table--border tr td:nth-child(n+1){
-  border-right:none;
+
+.el-table--border tr td:nth-child(n+1) {
+  border-right: none;
 }
-.el-table--border th{
-  border-right:none;
+
+.el-table--border th {
+  border-right: none;
 }
+
 .cell {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
   margin-left: 20px;
   width: 10px;
@@ -328,9 +333,12 @@ export default {
   vertical-align: top;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
+  vertical-align: middle;
+  width: 80px;
+  height: 20px;
 }
 </style>

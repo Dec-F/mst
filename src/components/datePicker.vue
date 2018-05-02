@@ -102,7 +102,8 @@ export default {
     },
     changeMonth(val) {
       this.dateValFormat = new Date(val);
-      this.dateVal = moment(val).format('YYYYMMDD');
+      // this.dateVal = moment(val).format('YYYYMMDD');
+      this.dateVal = moment(val).format('YYYYMM');
       this.$emit('change-month-date', this.dateVal);
     },
     changeWeek(val) {

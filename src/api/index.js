@@ -12,17 +12,17 @@ const request = (obj, contentType) => {
 
 // 获取渠道
 const findAppChannelCount = type => request({
-  url: `https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae/mst_copy/findAppChannelCount?type=${type}`
+  url: `http://113.200.91.62:8080/mst/appchannel/findAppChannelCount?type=${type}`
 });
 
 // 获取可查询留存的合法时间段
 const findKeepDate = () => request({
-  url: 'https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae/mst_copy/findKeepDate'
+  url: 'http://113.200.91.62:8080/mst/quality/findKeepDate'
 });
 
 // 获取渠道留存数据
 const findChannelKeep = (channelId, startTime, endTime, pageNo, pageSize=10) => request({
-  url: 'https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae/mst_copy/quality/findChannelKeep',
+  url: 'http://113.200.91.62:8080/mst/quality/findChannelKeep',
   params: {
     channelId,
     startTime,
@@ -34,7 +34,7 @@ const findChannelKeep = (channelId, startTime, endTime, pageNo, pageSize=10) => 
 
 // 获取APP留存数据
 const findAppKeep = (appId, startTime, endTime, pageNo, pageSize=10) => request({
-  url: 'https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae/mst_copy/appQuality/findAppKeep',
+  url: 'http://113.200.91.62:8080/mst/appQuality/findAppKeep',
   params: {
     appId,
     startTime,
