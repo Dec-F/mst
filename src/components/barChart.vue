@@ -1,6 +1,6 @@
 <template>
   <div class="chart" style="padding: 20px">
-    <ECharts :options="option" theme="irs"></ECharts>
+    <ECharts :options="option" theme="irs" ></ECharts>
   </div>
 </template>
 
@@ -58,11 +58,15 @@ export default {
         return {
           name: val,
           type: 'line',
+          areaStyle:{
+            opacity:.1
+          },
           data: data.data.map(v => {
             return v.data[i].value;
           })
         };
       });
+      console.log(series);
       this.option = {
         tooltip: {
           trigger: 'axis'
