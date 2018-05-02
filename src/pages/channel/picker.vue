@@ -106,7 +106,7 @@ export default {
           end: res.data.data.end,
         };
       });
-      const axiosGetOption = axios.get('/mst/findAppChannelCount').then(res => {
+      const axiosGetOption = axios.get('/mst/appchannel/findAppChannelCount').then(res => {
         if (!res.data || !res.data.data) return;
         const type = this.type;
         const filterList = res.data.data.filter(v => v.type === type);
