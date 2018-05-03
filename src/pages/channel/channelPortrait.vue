@@ -155,26 +155,26 @@ export default {
     },
     loadData(params) {
       this.load(params, 'gender').then(data => {
-        this.genderMRate = parseFloat(data.M.attrRatio);
-        this.genderFRate = parseFloat(data.F.attrRatio);
+        this.genderMRate = parseFloat(data.M && data.M.attrRatio);
+        this.genderFRate = parseFloat(data.F && data.F.attrRatio);
       });
       this.load(params, 'age_group').then(data => {
-        this.ageGroupData = data.seriesPieData;
+        this.ageGroupData = data.seriesPieData || [];
       });
       this.load(params, 'age_range').then(data => {
-        this.ageRangeData = data.seriesPieData;
+        this.ageRangeData = data.seriesPieData || [];
       });
       this.load(params, 'province').then(data => {
-        this.provinceData = data.seriesPieData;
+        this.provinceData = data.seriesPieData || [];
       });
       this.load(params, 'city').then(data => {
-        this.cityData = data.seriesPieData;
+        this.cityData = data.seriesPieData || [];
       });
       this.load(params, 'education_grade').then(data => {
-        this.educationData = data.seriesPieData;
+        this.educationData = data.seriesPieData || [];
       });
       this.load(params, 'income_range').then(data => {
-        this.incomeData = data.seriesPieData;
+        this.incomeData = data.seriesPieData || [];
       });
     }
   }

@@ -21,6 +21,8 @@
         class="picker-select"
         id="picker-app-select"
         filterable
+        :filter-method="selectFilter"
+        default-first-option
         v-model="option"
         placeholder="请选择">
         <el-option
@@ -66,6 +68,7 @@ export default {
     const month = nowDate.getMonth();
     const defDate = `${year}-${month > 9 ? month : `0${month}`}`;
     return {
+      _options: [],
       options: [],
       option: '',
       defDate,
@@ -110,7 +113,12 @@ export default {
         if (!res.data || !res.data.data) return;
         const type = this.type;
         const filterList = res.data.data.filter(v => v.type === type);
-        this.options = filterList;
+        if (type === 'channel') {
+          this.options = filterList;
+        } else if (type === 'app') {
+          this.options = filterList.length ? filterList.slice(0, 30) : [];
+          this._options = filterList;
+        }
         this.option = this.options.length ? this.options[0].id : '';
        });
       axios.all([axiosGetDate, axiosGetOption])
@@ -125,6 +133,9 @@ export default {
       const start = this.dateRange.start;
       const end = this.dateRange.end;
       return !dateInRange(date, start, end);
+    },
+    selectFilter(val) {
+      this.options = this._options.filter(v => v.name.indexOf(val) >= 0 || v.id == val);
     },
     vaildDate(val) {
       const start = this.dateRange.start;
