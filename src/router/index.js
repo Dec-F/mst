@@ -161,7 +161,8 @@ const routes = [
           type: 'unload',
           bread: {
             name: '卸载趋势',
-            path: '/unloadTrend'
+            path: '/unloadTrend',
+            type:1
           }
         }
       },
