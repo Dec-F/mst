@@ -83,6 +83,11 @@ export default {
       }
     }
   },
+  watch:{
+    limit(val){
+      this.dataLimitVal=val
+    }
+  },
   mounted() {
     this.loaderDate();
   },
@@ -101,14 +106,18 @@ export default {
       this.$emit('change-date-limit', val);
     },
     changeMonth(val) {
-      this.dateValFormat = new Date(val);
-      // this.dateVal = moment(val).format('YYYYMMDD');
-      this.dateVal = moment(val).format('YYYYMM');
+      if (val) {
+        this.dateValFormat = new Date(val);
+        // this.dateVal = moment(val).format('YYYYMMDD');
+        this.dateVal = moment(val).format('YYYYMM');
+      }
       this.$emit('change-month-date', this.dateVal);
     },
     changeWeek(val) {
-      this.dateValFormat = new Date(val);
-      this.dateVal = moment(val).format('YYYYWW');
+      if (val) {
+        this.dateValFormat = new Date(val);
+        this.dateVal = moment(val).format('YYYYWW');
+      }
       this.$emit('change-week-date', this.dateVal);
     },
     loaderDate() {

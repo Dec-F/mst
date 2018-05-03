@@ -232,6 +232,7 @@ export default {
     },
     changeDateType(val) {
       this.dateTypeVal = val;
+      this.dataLimitVal = 4;
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -262,7 +263,7 @@ export default {
         // 发送请求
         type: typeMap[this.tabType],
         date: this.dateVal,
-        dateType: this.dateTypeVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         subCategoryId: this.checkedType,
         categoryId: this.bigType === 0 ? null : this.bigType,
@@ -472,7 +473,7 @@ export default {
         > span {
           margin-right: 15px;
         }
-        
+
       }
       .left {
         width: 100px;

@@ -144,6 +144,7 @@ export default {
     },
     changeDateType(val) {
       this.dateTypeVal = val;
+      this.dataLimitVal = 4;
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -268,11 +269,11 @@ export default {
       };
       api.getCharts(params).then(res => {
         let data = res.data.echarts;
-        this.chartData={
-          xAxis:data.xAxis,
-          data:data.line,
-          chartTitle:'应用趋势'
-        }
+        this.chartData = {
+          xAxis: data.xAxis,
+          data: data.line,
+          chartTitle: '应用趋势'
+        };
       });
     },
     handleSearch(val) {
