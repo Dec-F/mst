@@ -1,5 +1,8 @@
 <template>
-  <ECharts :options="options" theme="irs" style="width: 100%; height: 100%;"></ECharts>
+  <div>
+    <ECharts v-if="!empty" :options="options" theme="irs" style="width: 100%; height: 100%;"></ECharts>
+    <div v-else class="channel-chart-empty">暂无数据</div>
+  </div>
 </template>
 
 <script>
@@ -16,20 +19,27 @@ export default {
   },
   data () {
     return {
+      empty: true,
+      options: {}
     }
   },
   props: {
     data: {
       type: Number,
-      default: 0.4
     },
     type: {
       type: String,
       default: 'male'
     }
   },
-  computed: {
-    'options': function () {
+  watch: {
+    'data': function () {
+      if (isNaN(this.data)) {
+        this.empty = true;
+        return;
+      } else {
+        this.empty = false;
+      }
       const isMale = this.type === 'male';
       const options = {
         grid: {
@@ -85,12 +95,13 @@ export default {
               color: isMale ? '#b2d233' : '#1fc8f3'
             }
           },
-          data: [this.data],
+          // data: this.data,
+          data: [0.5],
           barWidth: 16,
           type: 'bar'
         }]
       };
-      return options;
+      this.options = options;
     }
   },
   methods: {

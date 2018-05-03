@@ -169,7 +169,7 @@ export default {
 
 </script>
 
-<style  >
+<style scoped>
 .picker {
   display: flex;
 }

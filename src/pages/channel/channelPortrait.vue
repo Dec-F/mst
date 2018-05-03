@@ -8,7 +8,7 @@
       <div class="photo-card">
         <h3 class="photo-card-title">画像洞察</h3>
         <div class="photo-card-con photo-sections photo-section1">
-          <div class="photo-section">
+          <div class="photo-section" style="flex: 2">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="mars"/> 男女性别占比</h4>
             <div class="photo-section-con">
               <div class="gender-wrap">
@@ -69,7 +69,7 @@
               <div class="photo-section">
                 <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="graduation-cap"/> 教育程度占比</h4>
                 <div class="photo-section-con">
-                  <chart-bar class="photo-chart" style="" :data="educationData"></chart-bar>
+                  <chart-bar class="photo-chart" :data="educationData"></chart-bar>
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
               <div class="photo-section">
                 <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="dollar-sign"/> 收入水平占比</h4>
                 <div class="photo-section-con">
-                  <chart-bar class="photo-chart" style="" :data="incomeData"></chart-bar>
+                  <chart-bar class="photo-chart" :data="incomeData"></chart-bar>
                 </div>
               </div>
             </div>
@@ -119,8 +119,8 @@ export default {
     return {
       type,
       api: type === 'channel' ? channelApi : appApi,
-      genderMRate: 0,
-      genderFRate: 0,
+      genderMRate: null,
+      genderFRate: null,
       ageGroupData: [],
       ageRangeData: [],
       provinceData: [],
@@ -220,7 +220,7 @@ export default {
   justify-content: justify;
 }
 .photo-section {
-  flex: auto;
+  flex: 1;
 }
 .photo-section-title {
   color: #525252;
@@ -246,7 +246,7 @@ export default {
   height: 430px;
 }
 .photo-chart {
-  display: inline-block;
+  width: 100%;
   height: 100%;
 }
 .photo-title-icon {
@@ -285,5 +285,15 @@ export default {
 .gender-img-m {
   display: block;
   width: 32px;
+}
+</style>
+
+<style>
+.channel-chart-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 </style>

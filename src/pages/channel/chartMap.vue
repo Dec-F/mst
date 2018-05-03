@@ -1,5 +1,8 @@
 <template>
-  <ECharts :options="options" theme="irs" style="width: 100%; height: 100%;"></ECharts>
+  <div>
+    <ECharts v-if="!empty" :options="options" theme="irs" style="width: 100%; height: 100%;"></ECharts>
+    <div v-else class="channel-chart-empty">暂无数据</div>
+  </div>
 </template>
 
 <script>
@@ -17,6 +20,8 @@ export default {
   },
   data () {
     return {
+      empty: true,
+      options: {}
     }
   },
   props: {
@@ -27,8 +32,14 @@ export default {
       }
     },
   },
-  computed: {
-    'options': function () {
+  watch: {
+    'data': function () {
+      if (this.data.length) {
+        this.empty = false;
+      } else {
+        this.empty = true;
+        return;
+      }
       const data = this.data.map((item, index) => {
         return {
           name: item.attrValue,
@@ -111,8 +122,8 @@ export default {
             data,
           }
         ]
-    };
-      return options;
+      };
+      this.options = options;
     }
   },
   methods: {
