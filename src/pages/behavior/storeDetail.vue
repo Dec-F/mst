@@ -43,7 +43,7 @@
               </div>
             </div>
           </el-collapse-transition>
-          <trend :chartData='chartData' :tabs='tabs' :mergeCells='mergeCells' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
+          <trend :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -98,10 +98,6 @@ export default {
             'http://113.200.91.81/mst/appBehavior/exportAppChannelTrend'
         };
       }
-    },
-    mergeCells: {
-      type: Boolean,
-      default: true
     },
     tabs: {
       type: Array
