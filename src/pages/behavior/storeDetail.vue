@@ -55,6 +55,7 @@
           </span>-->
 
         </div>
+        <searchSelect></searchSelect>
       </div>
     </div>
     <div :class="clicked ? 'blue-class':'red-class'" @click="clicked = !clicked"></div>
@@ -68,7 +69,7 @@ import trendChart from '@/components/trendChart';
 import trend from '@/components/trend';
 import selectType from '@/components/appTypeMenu';
 import datePicker from '@/components/datePicker';
-import search from '@/components/search';
+import searchSelect from '@/components/SearchSelect/index';
 import moment from 'moment';
 import { formatUrl } from 'utils';
 const typeMap = {
@@ -82,7 +83,7 @@ export default {
     trend,
     selectType,
     datePicker,
-    search,
+    searchSelect,
     trendChart
   },
   props: {
