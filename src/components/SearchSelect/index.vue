@@ -1,13 +1,8 @@
 <template>
   <div class="searchSelect">
     <img class="select__icon-cur" :src="icon">
-    <el-select popper-class="search__select" v-model="id" filterable
-        placeholder="当前渠道" default-first-option>
-      <el-option v-for="item,idx in channels" :key="idx" :label="item.name" :value="item.id">
-        <img class="option__icon fl" :src="item.icon">
-        <span class="option__name fl">{{ item.name }}</span>
-      </el-option>
-    </el-select>
+    <el-autocomplete placeholder="请输入app名称" v-model="searchKey" @select="handleSelect"
+        :fetch-suggestions="querySearch" value-key="name"></el-autocomplete>
   </div>
 </template>
 
@@ -16,8 +11,9 @@
     name: 'searchSelect',
     data() {
       return {
-        id: null,
-        icon: null
+        id: '',
+        icon: '',
+        searchKey: '',
       }
     },
     props: {
@@ -26,8 +22,24 @@
         default: []
       }
     },
+    methods: {
+      querySearch(queryString, cb) {
+        let self = this, { channels } = self;
+        let results = queryString ? channels.filter(self.createFilter(queryString)) : [];
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (item) => {
+          return item.name.toLowerCase().includes(queryString.toLowerCase());
+        };
+      },
+      handleSelect(item) {
+        this.id = item.id;
+      }
+    },
     beforeMount() {
       this.id = this.channels[0].id;
+      this.searchKey = this.channels[0].name;
     },
     watch: {
       'id': function (cur) {
