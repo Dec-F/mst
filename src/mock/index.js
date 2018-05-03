@@ -1,7 +1,7 @@
 import Mock from 'mockjs';
 
 // 获取渠道
-Mock.mock(/findAppChannelCount\?type=channel/ig, {
+Mock.mock(/findAppChannelCount/ig, {
   "resMsg": "success",
   "resCode": 200,
   "data": [

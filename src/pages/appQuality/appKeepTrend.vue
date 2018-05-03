@@ -22,7 +22,7 @@
                 <!-- 日期选择器 -->
                 <el-col :span="12">
                   <el-form-item label="时间选择">
-                    <el-date-picker v-loading="validDateFetching" v-model="queryForm.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :default-value="queryForm.date" :picker-options="{ disabledDate }" unlink-panels>
+                    <el-date-picker v-loading="validDateFetching" v-model="queryForm.date" type="daterange" value-format="yyyyMMdd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :default-value="queryForm.date" :picker-options="{ disabledDate }" unlink-panels>
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -85,10 +85,11 @@ export default {
   methods: {
     async channelFetch() {
       let self = this;
-      let channelRes = await apiRequest(findAppChannelCount, ['app']);
+      let channelRes = await apiRequest(findAppChannelCount);
       self.channelFetching = false;
       if (channelRes.status) {
-        self.channels = channelRes.result;
+        let channelsData = channelRes.result.filter(item => item.type === 'app');
+        self.channels = channelsData;
       } else {
         self.$message.error(channelRes.result);
       }
@@ -102,6 +103,8 @@ export default {
       self.validDateFetching = false;
       if (validDateRes.status) {
         let { start, end } = validDateRes.result[0];
+        start = start.replace(/[-]/g, '');
+        end = end.replace(/[-]/g, '');
         self.validDate = { start, end };
         // 设定默认值
         self.queryForm.date = [start, end];

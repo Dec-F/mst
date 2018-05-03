@@ -11,18 +11,18 @@ const request = (obj, contentType) => {
 }
 
 // 获取渠道
-const findAppChannelCount = type => request({
-  url: `http://113.200.91.62:8080/mst/appchannel/findAppChannelCount?type=${type}`
+const findAppChannelCount = () => request({
+  url: `/appchannel/findAppChannelCount`
 });
 
 // 获取可查询留存的合法时间段
 const findKeepDate = () => request({
-  url: 'http://113.200.91.62:8080/mst/quality/findKeepDate'
+  url: '/quality/findKeepDate'
 });
 
 // 获取渠道留存数据
 const findChannelKeep = (channelId, startTime, endTime, pageNo, pageSize=10) => request({
-  url: 'http://113.200.91.62:8080/mst/quality/findChannelKeep',
+  url: '/quality/findChannelKeep',
   params: {
     channelId,
     startTime,
@@ -34,7 +34,7 @@ const findChannelKeep = (channelId, startTime, endTime, pageNo, pageSize=10) => 
 
 // 获取APP留存数据
 const findAppKeep = (appId, startTime, endTime, pageNo, pageSize=10) => request({
-  url: 'http://113.200.91.62:8080/mst/appQuality/findAppKeep',
+  url: '/appQuality/findAppKeep',
   params: {
     appId,
     startTime,
