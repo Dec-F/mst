@@ -1,6 +1,6 @@
 <template>
   <div class="chart" style="padding: 20px">
-    <ECharts :options="option" theme="irs" ></ECharts>
+    <ECharts :options="option" theme="irs"></ECharts>
   </div>
 </template>
 
@@ -14,8 +14,8 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
-import 'echarts/lib/component/toolbox'
-import 'echarts/lib/component/dataZoom'
+import 'echarts/lib/component/toolbox';
+import 'echarts/lib/component/dataZoom';
 export default {
   name: 'trend-chart',
   components: {
@@ -53,16 +53,16 @@ export default {
   mounted() {},
   watch: {
     chartData(data) {
-      if(!data.data){
-        return
+      if (!data.data) {
+        return;
       }
       data.legend = data.legend || ['下载趋势', '新装趋势', '活跃趋势'];
       let series = data.legend.map((val, i) => {
         return {
           name: val,
           type: 'line',
-          areaStyle:{
-            opacity:.1
+          areaStyle: {
+            opacity: 0.1
           },
           data: data.data.map(v => {
             return v.data[i].value;
@@ -76,7 +76,7 @@ export default {
         grid: {
           left: '3%',
           right: '3%',
-          bottom: '3%',
+          bottom: '15%',
           containLabel: true
         },
         dataZoom: [
@@ -89,7 +89,7 @@ export default {
           feature: {
             magicType: { type: ['line', 'bar'] }
           },
-          right:'20'
+          right: '3%'
         },
         xAxis: {
           type: 'category',
@@ -103,9 +103,13 @@ export default {
           }
         },
         legend: {
-          x: 'bottom',
-          data: data.legend
+          bottom:0,
+          data: data.legend,
+          tooltip: {
+            show: true
+          }
         },
+       
         series: series
       };
     }
