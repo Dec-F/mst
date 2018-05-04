@@ -1,11 +1,12 @@
 <template>
   <div class="searchSelect">
     <img class="select__icon-cur" :src="icon">
-    <el-autocomplete placeholder="请输入app名称" v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name"></el-autocomplete>
+    <el-autocomplete placeholder="请输入app名称" v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name" prefix-icon="el-icon-search"></el-autocomplete>
   </div>
 </template>
 
 <script>
+import $bus from 'utils/bus';
 export default {
   name: 'searchSelect',
   data() {
@@ -19,12 +20,21 @@ export default {
     channels: {
       type: Array,
       default() {
-        return [{
-          id:'',
-          name:''
-        }];
+        return [
+          {
+            id: '',
+            name: ''
+          }
+        ];
       }
     }
+  },
+  created () {
+     $bus.$on('clear-search',()=>{
+       this.id=''
+       this.icon=''
+       this.searchKey=''
+     })
   },
   methods: {
     querySearch(queryString, cb) {
@@ -42,16 +52,18 @@ export default {
     },
     handleSelect(item) {
       this.id = item.id;
+      this.$emit('change', this.id);
     }
   },
   beforeMount() {
-    this.id = this.channels[0].id;
-    this.searchKey = this.channels[0].name;
+    this.id = this.channels[0] && this.channels[0].id;
+    this.searchKey = this.channels[0] && this.channels[0].name;
   },
   watch: {
     id: function(cur) {
-      this.icon = this.channels.find(item => item.id === cur).icon;
-      this.$emit('change', cur);
+      try {
+        this.icon = this.channels.find(item => item.id === cur).icon;
+      } catch (err) {}
     }
   }
 };

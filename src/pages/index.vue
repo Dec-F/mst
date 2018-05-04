@@ -5,14 +5,7 @@
         <h4>移动渠道市场监测</h4>
         <p>StoreTracker</p>
       </div>
-      <el-menu
-        mode="vertical"
-        :default-active="initPath"
-        class="el-menu-vertical-demo"
-        theme="dark"
-        text-color="#8996a9"
-        active-text-color="#fff"
-        unique-opened>
+      <el-menu mode="vertical" :default-active="initPath" class="el-menu-vertical-demo" theme="dark" text-color="#8996a9" active-text-color="#fff" unique-opened>
         <el-menu-item-group v-for="(group, groupIndex) in navs" :key="group.title">
           <template slot="title">
             <i class="iconfont" :class="group.class"></i>
@@ -47,16 +40,6 @@
     </div>
     <div class="content">
       <div class="breadcrumb">
-        <!--<i class="iconfont icon-dial"></i>
-                    <el-breadcrumb separator="/">
-                      <el-breadcrumb-item :to="{ path: $route.meta.bread.path }">
-                        {{ $route.meta.bread.name }}
-                      </el-breadcrumb-item>
-                      <el-breadcrumb-item v-if="$route.params.storeName">{{ $route.params.storeName }}</el-breadcrumb-item>
-                      <el-breadcrumb-item v-if="$route.params.appName">{{ $route.params.appName }}</el-breadcrumb-item>
-                    </el-breadcrumb>-->
-        <!--<search v-model="searchVal" :data="searchData" @search="startSearch" v-show="showSearch"></search>-->
-        <!---->
       </div>
       <router-view></router-view>
     </div>
@@ -64,8 +47,8 @@
 </template>
 
 <script>
-import api from '@/api/api'
-import search from '@/components/search'
+import api from '@/api/api';
+import search from '@/components/search';
 export default {
   name: 'index',
   components: {
@@ -74,10 +57,8 @@ export default {
   data() {
     return {
       initPath: this.$route.path,
-      searchVal: '',
-      searchData: [],
-      navs: [
 
+      navs: [
         // 渠道
         {
           title: '渠道',
@@ -92,7 +73,6 @@ export default {
                   link: '/downloadTrend'
                 }
               ]
-
             },
             // 质量分析
             {
@@ -116,7 +96,6 @@ export default {
             {
               title: '渠道画像',
               link: '/channelPortrait'
-
             }
           ]
         },
@@ -133,12 +112,11 @@ export default {
                   title: '行为趋势',
                   link: '/appdownloadTrend'
                 },
-                 {
+                {
                   title: '卸载趋势',
                   link: '/unloadTrend'
                 }
               ]
-
             },
             // 质量分析
             {
@@ -162,7 +140,6 @@ export default {
             {
               title: 'APP画像',
               link: '/appPortrait'
-
             },
             // 深度分析
             {
@@ -181,73 +158,26 @@ export default {
           ]
         }
       ]
-    }
-  },
-  computed: {
-    showSearch() {
-      if (this.$route.meta.type === 'unload' || this.$route.meta.type === 'time' || this.$route.meta.type === 'flow' || this.$route.meta.type === 'freq' || this.$route.meta.type === 'simul') {
-        return false
-      } else {
-        return true
-      }
-    }
-  },
-  created() {
-    this.fetchApp();
+    };
   },
   methods: {
     clickFn() {
-      this.$router.push({ path: '/faq' })
-    },
-    splitUrl(url) {
-      return '/' + url.split('/')[1]
-    },
-    fetchApp() {
-      const params = {
-        query: ''
-      }
-      api.findSearchAppChannel(params).then(res => {
-        this.searchData = res.data;
-      })
-    },
-    startSearch(item) {
-      let type = '';
-      if (item.type === 'app') {
-        if (this.$route.meta.type === 'funnel') {
-          type = 'appDetail'
-          this.$router.push({
-            path: `${this.$route.meta.bread.path}/${type}/${this.$route.params.storeId}/${item.id}/${item.name}`
-          })
-        }
-        else {
-          type = 'appDetail'
-          this.$router.push({
-            path: `${this.$route.meta.bread.path}/${type}/${item.id}/${item.name}`
-          })
-        }
-      }
-      else {
-        type = 'storeDetail'
-        this.$router.push({
-          path: `${this.$route.meta.bread.path}/${type}/${item.id}/${item.name}`
-        })
-      }
-
+      this.$router.push({ path: '/faq' });
     }
   }
-}
+};
 </script>
 
 <style lang="less">
 .index {
-  >.nav {
+  > .nav {
     width: 200px;
     position: fixed;
     top: 30px;
     left: 0;
     height: 100%;
     overflow-y: auto;
-    background-color: #323A45;
+    background-color: #323a45;
     .nav_head {
       text-align: center;
       padding-top: 40px;
@@ -298,7 +228,6 @@ export default {
         &:focus {
           background-color: #404c5a;
           color: #fff;
-          ;
         }
         span {
           display: block;
@@ -330,7 +259,7 @@ export default {
     padding: 0 20px;
     cursor: pointer;
     position: relative;
-    transition: border-color .3s, background-color .3s, color .3s;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
     box-sizing: border-box;
     white-space: nowrap;
   }
@@ -341,12 +270,12 @@ export default {
   .el-submenu .el-menu-item {
     background-color: #404c5a;
   }
-  >.content {
+  > .content {
     margin-left: 220px;
-    background: #F7F7F7;
-    >.breadcrumb {
+    background: #f7f7f7;
+    > .breadcrumb {
       background: #fff;
-      border-bottom: 1px solid #DBDEE3;
+      border-bottom: 1px solid #dbdee3;
       .el-breadcrumb {
         display: inline-block;
         line-height: 40px;

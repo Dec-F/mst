@@ -1,9 +1,13 @@
 <template>
   <div class="trend">
+    <div class="search">
+      <searchSelect v-if="openSearch" :channels='searchData' @change='searchChange'></searchSelect>
+    </div>
     <el-tabs type="border-card" @tab-click='tabClick' :value='actTab.name'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
         <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
+
             <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
               <el-table-column width="80">
                 <template slot-scope="scope">
@@ -65,10 +69,12 @@ import api from '@/api/api';
 import { getOSAv } from '@/browser/browser';
 import barChart from '@/components/barChart';
 import { getOSAndBrowser } from '@/browser/browser';
+import searchSelect from '@/components/SearchSelect/index';
 export default {
   name: 'trend-com',
   components: {
-    barChart
+    barChart,
+    searchSelect
   },
   props: {
     tableData: Array,
@@ -119,6 +125,10 @@ export default {
     },
     chartData: {
       type: Object
+    },
+    openSearch: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -136,16 +146,19 @@ export default {
       count: false,
       dateList: [],
       dateListVal: null,
-      actTab: this.tabs[0]
+      actTab: this.tabs[0],
+      searchData: []
     };
   },
   created() {
-    this.fetchDate();
     const info = getOSAndBrowser();
     if (info.browser === 'Safari') {
       this.flag = false;
     } else {
       this.flag = true;
+    }
+    if (this.openSearch) {
+      this.fetchSearchData();
     }
   },
   watch: {
@@ -169,6 +182,15 @@ export default {
     }
   },
   methods: {
+    fetchSearchData() {
+      api.findSearchAppChannel().then(res => {
+        this.searchData = res.data;
+      });
+    },
+    searchChange(id) {
+      this.$emit('search-change', id);
+    },
+
     tabClick(tab, event) {
       this.actTab = this.tabs[tab.index];
       this.$emit('tab-change', tab.name);
@@ -224,14 +246,6 @@ export default {
           };
         }
       }
-    },
-    fetchDate() {
-      api.date().then(res => {
-        this.dateVal = res.data.end;
-        this.startDate = res.data.start;
-        this.endDate = res.data.end;
-        // this.fetchTableData();
-      });
     },
 
     //打开图表框
@@ -313,7 +327,7 @@ export default {
   }
 }
 
-.el-table--border tr td:nth-child(n+1) {
+.el-table--border tr td:nth-child(n + 1) {
   border-right: none;
 }
 
@@ -325,7 +339,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-left: 20px;
   width: 10px;
@@ -333,12 +347,25 @@ export default {
   vertical-align: top;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
   vertical-align: middle;
   width: 80px;
   height: 20px;
+}
+.trend {
+  position: relative;
+  .searchSelect {
+    position: absolute;
+    z-index: 111;
+    right: 0;
+    height: 40px;
+    text-align: right;
+    .el-input__inner {
+      height: 39px;
+    }
+  }
 }
 </style>

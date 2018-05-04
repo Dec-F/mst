@@ -6,6 +6,7 @@ const api = {
   },
   // 公共接口
   date(params) {
+
     return fetch({url: '/dateTime/getDateTime', method: 'GET', params: params});
   },
   appType() {

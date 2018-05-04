@@ -43,7 +43,7 @@
               </div>
             </div>
           </el-collapse-transition>
-          <trend :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
+          <trend :openSearch='openSearch' :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData' @search-change='searchChange'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -55,7 +55,6 @@
           </span>-->
 
         </div>
-        <searchSelect></searchSelect>
       </div>
     </div>
     <div :class="clicked ? 'blue-class':'red-class'" @click="clicked = !clicked"></div>
@@ -69,9 +68,9 @@ import trendChart from '@/components/trendChart';
 import trend from '@/components/trend';
 import selectType from '@/components/appTypeMenu';
 import datePicker from '@/components/datePicker';
-import searchSelect from '@/components/SearchSelect/index';
 import moment from 'moment';
 import { formatUrl } from 'utils';
+import $bus from 'utils/bus';
 const typeMap = {
   download: 1,
   xinzhuang: 2,
@@ -83,7 +82,6 @@ export default {
     trend,
     selectType,
     datePicker,
-    searchSelect,
     trendChart
   },
   props: {
@@ -115,17 +113,14 @@ export default {
     openLink: {
       type: Boolean,
       default: false
+    },
+    openSearch:{
+      type:Boolean,
+      default:true
     }
   },
   data() {
     return {
-      // 搜索
-      searchValue: '',
-      searchId: '',
-      searchLoading: false,
-      searchData: [],
-      searchId: null,
-      searchType: null,
       // 类别选择
       bigType: 0,
       typeList: [],
@@ -166,51 +161,23 @@ export default {
   created() {
     this.fetchAppType();
     this.fetchDate();
-    this.fetchDetail();
   },
   watch: {
     $route(val) {
       this.fetchAppType();
       this.fetchDate();
-      this.fetchDetail();
     }
   },
   methods: {
-    querySearchAsync() {
-      if (this.searchValue !== '') {
-        this.searchLoading = true;
-        const params = {
-          query: this.searchValue,
-          type: 0 // 0是商店  1是app
-        };
-        api.searchData(params).then(res => {
-          this.searchData = res.data;
-
-          this.searchLoading = false;
-        });
-      } else {
-        this.searchData = [];
-      }
+    searchChange(id){
+      this.fetchTableData(id)
     },
     tabChange(name) {
       this.tabType = name;
       this.tableData = [];
+      console.log('change');
+      $bus.$emit('clear-search')
       this.fetchTableData();
-    },
-    //    获取app详细排名
-    fetchDetail() {
-      const params = {
-        date: this.dateVal,
-        dateType: this.dateTypeVal,
-        type: this.$route.meta.type,
-        channelId: parseInt(this.$route.params.storeId),
-        limit: 2
-      };
-      // api.getChannelTrend(params).then(res => {
-      //   if (res.data.tableData && res.data.tableData.length) {
-      //     this.channelData = res.data.tableData[0];
-      //   }
-      // });
     },
     //    获取app类型
     fetchAppType() {
@@ -243,6 +210,7 @@ export default {
     changeMonthDate(val) {
       this.monthDateVal = val;
     },
+
     //    获取时间数据
     fetchDate() {
       api.date().then(res => {
@@ -253,7 +221,7 @@ export default {
       });
     },
     //    获取表格数据
-    fetchTableData() {
+    fetchTableData(id) {
       this.loading = true;
       // 发送请求
       const params = {
@@ -268,8 +236,7 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderColumn,
-        queryId: this.searchId,
-        queryType: this.searchType,
+        appId: id,
         channelId: parseInt(this.$route.params.storeId),
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime
@@ -377,39 +344,10 @@ export default {
     submitData() {
       this.count = false;
       this.currentPage = 1;
+      $bus.$emit('clear-search')
       this.fetchTableData();
-      this.fetchDetail();
     },
-    handleSearch(val) {
-      const params = {
-        query: val
-      };
-      if (val !== '') {
-        this.searchLoading = true;
-        api.findSearchAppChannel(params).then(res => {
-          this.searchLoading = false;
-          // this.searchData = res.data;
-          function checkName(item) {
-            return item.name.indexOf(val.toLowerCase()) != -1;
-          }
-          var tempList = res.data;
-          this.searchData = tempList.filter(checkName);
-        });
-      } else {
-        this.searchData = [];
-      }
-    },
-    startSearch(item) {
-      let type = '';
-      if (item.type === 'app') {
-        type = 'appDetail';
-      } else {
-        type = 'storeDetail';
-      }
-      this.$router.push({
-        path: `${this.$route.meta.bread.path}/${type}/${item.id}/${item.name}`
-      });
-    },
+
     handleSizeChange(val) {
       this.pageSize = val;
       this.fetchTableData();
@@ -470,7 +408,6 @@ export default {
         > span {
           margin-right: 15px;
         }
-
       }
       .left {
         width: 100px;
