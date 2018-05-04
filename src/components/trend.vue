@@ -50,17 +50,19 @@
 
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
-    <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
-      <!--<span class="chart-date">
+    <template v-if="dialogTableVisible">
+      <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
+        <!--<span class="chart-date">
               <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
                 <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
                 </el-option>
               </el-select>
             </span>-->
-      <div class="chart-con" v-loading.chart-con="chartData.chartloading">
-        <bar-chart :chartData="chartData"></bar-chart>
-      </div>
-    </el-dialog>
+        <div class="chart-con" v-loading.chart-con="chartData.chartloading">
+          <bar-chart :chartData="chartData"></bar-chart>
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 

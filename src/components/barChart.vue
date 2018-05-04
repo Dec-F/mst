@@ -53,6 +53,9 @@ export default {
   mounted() {},
   watch: {
     chartData(data) {
+      if(!data.data){
+        return
+      }
       data.legend = data.legend || ['下载趋势', '新装趋势', '活跃趋势'];
       let series = data.legend.map((val, i) => {
         return {
@@ -66,7 +69,6 @@ export default {
           })
         };
       });
-      console.log(series);
       this.option = {
         tooltip: {
           trigger: 'axis'
@@ -106,7 +108,6 @@ export default {
         },
         series: series
       };
-      console.log(this.option);
     }
   },
   data() {
