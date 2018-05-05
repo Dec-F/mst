@@ -267,12 +267,22 @@ export default {
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime
       };
+      let title = '',
+        subTitle = '';
+      if (val.type === 1) {
+        title='当前渠道'
+        subTitle=val.payload.name
+      }else{
+        title='趋势时间'
+        subTitle=val.payload.label
+      }
       api.getCharts(params).then(res => {
         let data = res.data.echarts;
         this.chartData = {
           xAxis: data.xAxis,
           data: data.line,
-          chartTitle: '应用趋势'
+          chartTitle: title,
+          chartSubTitle:subTitle
         };
       });
     },

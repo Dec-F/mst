@@ -52,6 +52,8 @@
     </el-pagination>
     <template v-if="dialogTableVisible">
       <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
+        <div class="chart-sub-title">
+          <i class="app-icon" :style="chartIconStyle"></i> {{chartData.chartSubTitle}}</div>
         <!--<span class="chart-date">
               <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
                 <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
@@ -149,7 +151,8 @@ export default {
       dateList: [],
       dateListVal: null,
       actTab: this.tabs[0],
-      searchData: []
+      searchData: [],
+      chartIconStyle:{}
     };
   },
   created() {
@@ -206,7 +209,7 @@ export default {
           },
           on: {
             click: () => {
-              this.dialog2Table({ type: 1, payload: column });
+              this.dialog2Table({ type: 2, payload: column });
             }
           }
         },
@@ -253,6 +256,9 @@ export default {
     //打开图表框
     dialog2Table(val) {
       this.$emit('open-chart', val);
+        this.chartIconStyle={
+          backgroundImage:`url(${val.payload.icon})`
+      }
       this.dialogTableVisible = true;
     },
 
@@ -276,6 +282,21 @@ export default {
 </script>
 
 <style lang='less'>
+.chart-sub-title {
+  position: absolute;
+  top: 20px;
+  left: 120px;
+  color: #69c72b;
+  .app-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle
+  }
+}
 .box-sd {
   position: relative;
 }
