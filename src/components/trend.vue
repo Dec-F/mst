@@ -152,7 +152,7 @@ export default {
       dateListVal: null,
       actTab: this.tabs[0],
       searchData: [],
-      chartIconStyle:{}
+      chartIconStyle: {}
     };
   },
   created() {
@@ -256,14 +256,15 @@ export default {
     //打开图表框
     dialog2Table(val) {
       this.$emit('open-chart', val);
-        this.chartIconStyle={
-          backgroundImage:`url(${val.payload.icon})`
-      }
+      this.chartIconStyle = {
+        backgroundImage: `url(${val.payload.icon})`
+      };
       this.dialogTableVisible = true;
     },
 
     changeSort(sort) {
-      const { order, prop } = sort;
+      let { order, prop } = sort;
+      order = order=='descending' ? 'desc' : 'asc';
       this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
@@ -294,7 +295,7 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    vertical-align: middle
+    vertical-align: middle;
   }
 }
 .box-sd {

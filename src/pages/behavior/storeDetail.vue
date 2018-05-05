@@ -237,7 +237,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderColumn,
         appId: id,
-        channelId: parseInt(this.$route.params.storeId),
+        channelId: parseInt(this.$route.params.storeId)||0,
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime
       };
@@ -373,7 +373,7 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? sort.order : 'descending';
+      sort.order = sort.order ? sort.order : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');

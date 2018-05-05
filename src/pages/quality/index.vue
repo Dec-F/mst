@@ -14,9 +14,9 @@ export default {
   data() {
     return {
       fetchApi: {
-        all: api.findChannelUse,
+        all: api.findChannelAppUse,
         allDownload:
-          'http://113.200.91.81/mst/behavior/quality/exportChannelUse'
+          'http://113.200.91.81/mst/behavior/quality/exportChannelAppUse'
       },
       tabs: [
         {
