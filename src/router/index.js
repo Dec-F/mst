@@ -9,12 +9,9 @@ const faq = resolve => require(['@/pages/faq'], resolve);
 //行为分析
 const behaviorIndex = resolve => require(['@/pages/behavior/index'], resolve);
 const behaviorStore = resolve => require(['@/pages/behavior/storeDetail'], resolve);
-const behaviorApp = resolve => require(['@/pages/behavior/appDetail'], resolve);
 //质量分析
 const qualityIndex = resolve => require(['@/pages/quality/index'], resolve);
 const qualityStore = resolve => require(['@/pages/quality/storeDetail'], resolve);
-const qualityApp = resolve => require(['@/pages/quality/appDetail'], resolve);
-const quality = resolve => require(['@/pages/quality/quality'], resolve);
 const qualityKeep = resolve => require(['@/pages/quality/keepTrend'], resolve);
 //渠道画像
 const portrait = resolve => require(['@/pages/channel/channelPortrait'], resolve);
@@ -28,7 +25,7 @@ const appQualityStore = resolve => require(['@/pages/appQuality/storeDetail'], r
 //深度分析 流向分析
 const flowTrend = resolve => require(['@/pages/deep/flowTrend'], resolve);
 //同装分析
-const sameTrend = resolve => require(['@/pages/deep/sameTrend'], resolve); //同装分析
+const sameTrend = resolve => require(['@/pages/deep/sameTrend'], resolve);
 
 // Vue.use(Router) const $route = {};
 const routes = [
@@ -82,76 +79,6 @@ const routes = [
           }
         }
       },
-      // 行为分析 --- 安装趋势
-      {
-        path: '/installTrend',
-        name: 'install',
-        component: behaviorIndex,
-        meta: {
-          type: 'install',
-          bread: {
-            name: '安装趋势',
-            path: '/installTrend'
-          }
-        }
-      }, {
-        path: '/installTrend/storeDetail/:storeId/:storeName',
-        name: 'installStoreDetail',
-        component: behaviorStore,
-        meta: {
-          type: 'install',
-          bread: {
-            name: '安装趋势',
-            path: '/installTrend'
-          }
-        }
-      }, {
-        path: '/installTrend/appDetail/:appId/:appName',
-        name: 'installAppDetail',
-        component: behaviorApp,
-        meta: {
-          type: 'install',
-          bread: {
-            name: '安装趋势',
-            path: '/installTrend'
-          }
-        }
-      },
-      // 行为分析 --- 活跃趋势
-      {
-        path: '/activeTrend',
-        name: 'active',
-        component: behaviorIndex,
-        meta: {
-          type: 'active',
-          bread: {
-            name: '活跃趋势',
-            path: '/activeTrend'
-          }
-        }
-      }, {
-        path: '/activeTrend/storeDetail/:storeId/:storeName',
-        name: 'activeStoreDetail',
-        component: behaviorStore,
-        meta: {
-          type: 'active',
-          bread: {
-            name: '活跃趋势',
-            path: '/activeTrend'
-          }
-        }
-      }, {
-        path: '/activeTrend/appDetail/:appId/:appName',
-        name: 'activeAppDetail',
-        component: behaviorApp,
-        meta: {
-          type: 'active',
-          bread: {
-            name: '活跃趋势',
-            path: '/activeTrend'
-          }
-        }
-      },
       // 行为分析 --- 卸载趋势
       {
         path: '/unloadTrend',
@@ -176,7 +103,7 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/funnelTrend',
-            type: 'freq'
+            type: 1
           }
         }
       }, {
@@ -191,17 +118,6 @@ const routes = [
             type: 1
           }
         }
-      }, {
-        path: '/funnelTrend/appDetail/:storeId/:appId/:appName',
-        name: 'funnelAppDetail',
-        component: qualityApp,
-        meta: {
-          type: 'funnel',
-          bread: {
-            name: '漏斗趋势',
-            path: '/funnelTrend'
-          }
-        }
       },
       // 质量分析 -- 频次趋势
       {
@@ -213,7 +129,7 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/frequencyTrend',
-            type: 'time'
+            type: 2
           }
         }
       }, {
@@ -228,18 +144,7 @@ const routes = [
             type: 2
           }
         }
-      }, {
-        path: '/frequencyTrend/appDetail/:storeId/:appId/:appName',
-        name: 'funnelAppDetail',
-        component: qualityApp,
-        meta: {
-          type: 'funnel',
-          bread: {
-            name: '漏斗趋势',
-            path: '/frequencyTrend'
-          }
-        }
-      },
+      }, 
       // 质量分析 -- 时长趋势 质量分析--留存
       {
         path: '/keepTrend',
@@ -278,7 +183,8 @@ const routes = [
             path: '/appdownloadTrend'
           }
         }
-      }, {
+      }, 
+      {
         path: '/appfunnelTrend',
         name: 'appfunnelTrend',
         component: appQualityStore,
@@ -316,7 +222,8 @@ const routes = [
             path: '/appdownloadTrend'
           }
         }
-      }, {
+      },
+       {
         path: '/appdurationTrend',
         name: 'appdurationTrend',
         component: appQualityStore,
@@ -328,7 +235,8 @@ const routes = [
             type:2
           }
         }
-      }, {
+      },
+       {
         path: '/appdurationTrend/storeDetail/:storeId/:storeName',
         name: 'appdurationTrend',
         component: appQualityIndex,

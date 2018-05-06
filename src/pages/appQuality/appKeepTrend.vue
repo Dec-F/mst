@@ -61,7 +61,7 @@
 
 <script>
 import SearchSelect from '@/components/SearchSelect';
-import { findAppChannelCount, findKeepDate, findChannelKeep } from '@/api';
+import { findAppChannelCount, findKeepDate, findAppKeep } from '@/api';
 import { apiRequest } from '@/utils';
 export default {
   name: 'index',
@@ -122,7 +122,7 @@ export default {
       let self = this, { id, date } = self.queryForm;
       let params = [id, date[0], date[1], pageNo];
       self.keepDataFetching = true;
-      let queryRes = await apiRequest(findChannelKeep, params);
+      let queryRes = await apiRequest(findAppKeep, params);
       self.keepDataFetching = false;
       if (queryRes.status) {
         let { tableHeader, tableData, tablePage } = queryRes.result;

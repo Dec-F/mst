@@ -16,44 +16,11 @@
       </div>
       <div class="table-content">
         <div class="table-content-body" v-loading.table-content-body="loading">
-          <el-collapse-transition>
-            <div class="chart" v-show="switchVal">
-              <div class="ir-border" :data="channelData" style="padding:15px;text-align:center;margin-bottom:20px">
-                <el-row>
-                  <el-col :span="8">
-                    <span class="ir-span">本{{ dateTypeVal === "week" ? '周' : '月' }}
-                      <em class="ir-green">{{channelData.channelName}} </em>
-                      <em>
-                        {{channelData.rankTrend === 1 ? '上升':'下降'}}
-                        <i :class="channelData.rankTrend ===1? 'iconfont icon-shangsheng-shixin green':'iconfont icon-xiajiang-shixin red'"></i>
-                      </em>
-                    </span>
-                  </el-col>
-                  <el-col :span="8">
-                    <span class="ir-span">本{{ dateTypeVal ==="week" ? '周' : '月' }}排名：
-                      <em>{{channelData.thisWeekRank}}</em>
-                    </span>
-                  </el-col>
-                  <el-col :span="8">
-                    <span class="ir-span">上{{ dateTypeVal === "week" ? '周' : '月' }}排名：
-                      <em>{{channelData.lastWeekRank}}</em>
-                    </span>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-          </el-collapse-transition>
           <trend :openSearch='openSearch' :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData' @search-change='searchChange'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
             <i class="iconfont icon-download"></i>数据导出</el-button>
-          <!--<span>
-            <span class="label">趋势图表：</span>
-            <el-switch v-model="switchVal" on-text="" off-text="" on-color="#67C72B" off-color="#ccc">
-            </el-switch>
-          </span>-->
-
         </div>
       </div>
     </div>
@@ -141,7 +108,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       orderColumn: '',
-      orderType: 'descending',
+      orderType: 'desc',
       total: null,
       tableData: [],
       tableHeader: [],
@@ -278,7 +245,7 @@ export default {
           limit: this.dataLimitVal,
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          sort: this.orderType === 'descending' ? 'desc' : '',
+          sort: this.orderType === 'desc' ? 'desc' : '',
           sortby: this.orderBy,
           sortbyDateTime: this.sortbyDateTime,
           appId: this.$route.params.storeId
@@ -334,23 +301,6 @@ export default {
         };
       });
     },
-    fetchTop() {
-      const params = {
-        channelId: parseInt(this.$route.params.storeId),
-        type: this.$route.meta.type,
-        date: this.dateListVal,
-        dateType: this.dateTypeVal
-      };
-      this.rankLoading = true;
-      api.storeRank(params).then(res => {
-        this.rankTableData = res.data;
-        this.rankLoading = false;
-      });
-    },
-    changeTop(val) {
-      this.dateListVal = val;
-      this.fetchTop();
-    },
     submitData() {
       this.count = false;
       this.currentPage = 1;
@@ -373,7 +323,7 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? sort.order : 'desc';
+      sort.order = sort.order ?  "asc" : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');

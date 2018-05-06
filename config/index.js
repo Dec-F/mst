@@ -30,21 +30,21 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       // 正式接口配置
-      // '/mst': {
-      //   target: 'http://113.200.91.62:8080',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //       '^/mst': '/mst'
-      //   }
-      // }
-      // mock接口配置
       '/mst': {
-        target: 'https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae',
+        target: 'http://113.200.91.62:8080',
         changeOrigin: true,
         pathRewrite: {
-            '^/mst': '/mst_copy'
+            '^/mst': '/mst'
         }
       }
+      // mock接口配置
+      // '/mst': {
+      //   target: 'https://www.easy-mock.com/mock/5ad0292c3a67ed0e5975eaae',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //       '^/mst': '/mst_copy'
+      //   }
+      // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

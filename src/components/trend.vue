@@ -55,11 +55,11 @@
         <div class="chart-sub-title">
           <i class="app-icon" :style="chartIconStyle"></i> {{chartData.chartSubTitle}}</div>
         <!--<span class="chart-date">
-              <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                </el-option>
-              </el-select>
-            </span>-->
+                  <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+                    <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+                    </el-option>
+                  </el-select>
+                </span>-->
         <div class="chart-con" v-loading.chart-con="chartData.chartloading">
           <bar-chart :chartData="chartData"></bar-chart>
         </div>
@@ -264,7 +264,7 @@ export default {
 
     changeSort(sort) {
       let { order, prop } = sort;
-      order = order=='descending' ? 'desc' : 'asc';
+      order = order == 'descending' ? 'desc' : 'asc';
       this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
@@ -298,6 +298,7 @@ export default {
     vertical-align: middle;
   }
 }
+
 .box-sd {
   position: relative;
 }
@@ -312,6 +313,10 @@ export default {
   right: 0;
   background-color: rgba(0, 0, 0, 0);
   box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.el-tabs__content {
+  overflow: inherit;
 }
 
 .el-table tr:nth-child(2) {
@@ -339,6 +344,10 @@ export default {
   white-space: nowrap;
 }
 
+.logo {
+  float: left;
+}
+
 .table-left {
   display: inline-block;
   text-align: right;
@@ -363,15 +372,16 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
   margin-left: 20px;
-  width: 10px;
-  height: 20px;
-  vertical-align: top;
+  width: 7px;
+  height:16px;
+  vertical-align: middle;
+  float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -379,6 +389,7 @@ export default {
   width: 80px;
   height: 20px;
 }
+
 .trend {
   position: relative;
   .searchSelect {

@@ -102,9 +102,10 @@ body{
           }
         }
         .el-pagination {
-          padding: 15px 0;
-          text-align: center;
-          margin-top: 15px;
+              padding: 15px 0;
+              text-align: right;
+              margin-top: 15px;
+              margin-right: 20px;
         }
         .el-table {
           font-size: 12px;
@@ -130,6 +131,10 @@ body{
       }
     }
   }
+          .is-plain{
+              position: relative;
+              bottom: 55px;
+        }
   .ir-green{
     color:#6BC629;
     font-size:18px;
@@ -164,7 +169,7 @@ body{
   float: right;
   width: 380px;
   background: #fff;
-  height: 32px;
+  height: 39px;
   .el-icon-search{
       left: 0;
       color:#69C72B;
@@ -195,15 +200,19 @@ body{
     font-family: Microsoft YaHei;
     padding: 8px 10px;
     display: inline-block;
+    border: 1px solid #E1EAF3 !important;
+    background: #fff !important;
+    &:hover{
+          color: #69C72B !important;
+    border-color: rgb(210, 238, 191) !important;
+    background-color: rgb(240, 249, 234)!important
+    }
     .icon-download{
       padding-left:0;
       color: #64738A;
     }
     span{
       color: #64738A;
-    }
-    .el-button--primary.is-plain{
-      border: 1px solid #64738A !important;
     }
 }
  .red{

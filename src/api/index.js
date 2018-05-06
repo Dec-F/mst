@@ -34,7 +34,7 @@ const findChannelKeep = (channelId, startTime, endTime, pageNo, pageSize=10) => 
 
 // 获取APP留存数据
 const findAppKeep = (appId, startTime, endTime, pageNo, pageSize=10) => request({
-  url: '/appQuality/findAppKeep',
+  url: 'appQuality/findAppKeep',
   params: {
     appId,
     startTime,

@@ -6,8 +6,11 @@ const api = {
   },
   // 公共接口
   date(params) {
-
     return fetch({url: '/dateTime/getDateTime', method: 'GET', params: params});
+  },
+  // 留存时间接口
+  findKeepDate(params) {
+    return fetch({url: '/quality/findKeepDate', method: 'GET', params: params});
   },
   appType() {
     return fetch({url: 'category/getCategory', method: 'GET'});
@@ -26,7 +29,7 @@ const api = {
   },
   // 卸载趋势接口
   unloadTable(params) {
-    return fetch({url: '/appQuality/findUninstallAppList', method: 'GET', params: params});
+    return fetch({url: '/appBehavior/findUninstallAppList', method: 'GET', params: params});
   },
   // 图表接口
   getCharts(params) {
@@ -41,10 +44,11 @@ const api = {
   eachTrend(params) {
     return fetch({url: '/behavior/findEachChannelTrend', method: 'GET', params: params});
   },
-  // 质量分析
+  // 质量分析一级页面
   findChannelUse(params) {
     return fetch({url: '/quality/findChannelUse', method: 'GET', params: params});
   },
+  // 质量分析二级页面
   findChannelAppUse(params) {
     return fetch({url: '/quality/findChannelAppUse', method: 'GET', params: params});
   },
@@ -72,15 +76,19 @@ const api = {
  *
  *
  */
+// 一级页面全部渠道接口
   appTotalTrends(params) {
     return fetch({url: '/appBehavior/listAppTotalTrends', method: 'GET', params: params});
   },
+  // 一级页面下载新装活跃接口
   eachAppTrend(params) {
     return fetch({url: '/appBehavior/findEachAppTrend', method: 'GET', params: params});
   },
+  // 二级页面全部接口
   appTotalTrendsSub(params){
     return fetch({url: '/appBehavior/listAppTotalTrendsSub', method: 'GET', params: params});
   },
+  // 二级页面下载新装活跃接口
   eachAppTrendSub(params) {
     return fetch({url: '/appBehavior/findAppChannelTrend', method: 'GET', params: params});
   },

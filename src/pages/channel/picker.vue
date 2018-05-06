@@ -169,7 +169,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="less">
 .picker {
   display: flex;
 }
@@ -219,8 +219,10 @@ export default {
   background-color: #69c72b;
   letter-spacing: 4px;
 }
-.picker .el-select .el-input__inner,.picker .el-input--prefix .el-input__inner{
-      border: none;
+.picker{
+  .el-input--suffix .el-input__inner{
+    border:none;
+  }
 }
 .picker .el-input--prefix .el-input__inner{
   padding-left:50px

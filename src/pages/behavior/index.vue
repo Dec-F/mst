@@ -87,7 +87,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       orderColumn: '',
-      orderType: 'descending',
+      orderType: 'desc',
       total: null,
       tableData: [],
       tableHeader: [],
@@ -137,7 +137,7 @@ export default {
       this.dataLimitVal = 4;
       this.currentPage = 1;
       this.pageSize = 10;
-      this.orderType = 'descending';
+      this.orderType = 'desc';
       this.orderColumn = '';
       this.tableHeader = [];
       this.fetchDate();
@@ -210,7 +210,8 @@ export default {
 
             this.tableHeader = res.data.tableHeader || [];
 
-            this.tableData = res.data.tableData || [];
+            this.tableData =
+              (res.data.tableSum || []).concat(res.data.tableData) || [];
             this.total = res.data.tablePage.total;
           });
       }
@@ -232,7 +233,7 @@ export default {
           limit: this.dataLimitVal,
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          sort: this.orderType === 'descending' ? 'desc' : '',
+          sort: this.orderType === 'desc' ? 'desc' : '',
           sortby: this.orderBy,
           sortbyDateTime: this.sortbyDateTime
         };
@@ -307,7 +308,7 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? sort.order : 'desc';
+      sort.order = sort.order ? "asc" : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');

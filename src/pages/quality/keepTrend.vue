@@ -98,6 +98,7 @@ export default {
     },
     selectChange(id) {
       this.queryForm.id = id
+      console.log(this.queryForm.id)
     },
     async validDateFetch() {
       let self = this;
