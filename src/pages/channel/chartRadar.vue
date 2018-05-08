@@ -12,8 +12,6 @@ ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/radar';
 import 'echarts/lib/component/tooltip';
 
-const maxValue = 1;
-
 export default {
   name: 'chartRadar',
   components: {
@@ -41,6 +39,7 @@ export default {
         this.empty = true;
         return;
       }
+      const maxValue = this.data.reduce((prev, item) => prev + parseFloat(item.attrRatio), 0);
       const indicator = this.data.map(item => {
         return {
           name: item.attrValue,
@@ -48,12 +47,17 @@ export default {
         };
       });
       const options = {
-        grid: {
-          containLabel: true,
-        },
-        tooltip : {},
         radar: {
-          indicator: indicator.length ? indicator : [{}]
+          indicator: indicator.length ? indicator : [{}],
+          // name: {
+          //   formatter: name => `{a|${name}}`,
+          //   rich: {
+          //     a: {
+          //       color: 'red',
+          //       width: 36
+          //     }
+          //   }
+          // }
         },
         series: [{
           type: 'radar',

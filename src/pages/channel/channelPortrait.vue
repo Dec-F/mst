@@ -33,14 +33,14 @@
           <div class="photo-section">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> 年代体系占比</h4>
             <div class="photo-section-con">
-              <chart-radar class="photo-chart" style="height: 100%" :data="ageRangeData"></chart-radar>
+              <chart-radar class="photo-chart" style="height: 70%; margin-top: 15%" :data="ageRangeData"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> 年龄段占比</h4>
             <div class="photo-section-con">
-              <chart-radar class="photo-chart" style="height: 100%" :data="ageGroupData"></chart-radar>
+              <chart-radar class="photo-chart" style="height: 70%; margin-top: 15%" :data="ageGroupData"></chart-radar>
             </div>
             <div class="photo-section-footer">年龄段占比</div>
           </div>
