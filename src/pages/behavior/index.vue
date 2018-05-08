@@ -47,12 +47,9 @@ export default {
       type: Object,
       default() {
         return {
-          all: api.downloadTrend,
-          classify: api.eachTrend,
+          all: api.listChannelTrends,
           allDownload:
-            'http://113.200.91.81/mst/behavior/exportChannelTotalTrends',
-          classifyDownload:
-            'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+            'http://113.200.91.81/mst/behavior/exportChannelTotalTrends'
         };
       }
     },
@@ -188,7 +185,7 @@ export default {
         orderColumn: this.orderColumn,
         sortby: this.orderBy,
         sortbyDateTime: this.sortbyDateTime,
-        appId: parseInt(this.$route.params.storeId)||0
+        appId: parseInt(this.$route.params.storeId) || 0
       };
       if (this.tabType === 'all') {
         this.fetchApi
@@ -203,7 +200,7 @@ export default {
           });
       } else {
         this.fetchApi
-          .classify(Object.assign(params, this.coverParams.classify))
+          .all(Object.assign(params, this.coverParams.classify))
           .then(res => {
             this.loading = false;
             this.count = true;
@@ -308,7 +305,7 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? "asc" : 'desc';
+      sort.order = sort.order ? 'asc' : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
