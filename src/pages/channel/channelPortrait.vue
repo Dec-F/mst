@@ -115,10 +115,7 @@ export default {
     chartBar
   },
   data() {
-    const type = this.$route.meta.type;
     return {
-      type,
-      api: type === 'channel' ? channelApi : appApi,
       genderMRate: null,
       genderFRate: null,
       ageGroupData: [],
@@ -127,6 +124,14 @@ export default {
       cityData: [],
       educationData: [],
       incomeData: []
+    }
+  },
+  computed: {
+    type: function () {
+      return this.$route.meta.type;
+    },
+    api: function () {
+      return this.type === 'channel' ? channelApi : appApi;
     }
   },
   methods: {
