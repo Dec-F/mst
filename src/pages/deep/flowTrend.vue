@@ -86,12 +86,15 @@
             </el-footer>
 
           </div>
-          <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
+          <el-dialog title="当前渠道" width="1000px" :visible.sync="dialogTableVisible">
             <div class="chart-con">
-              <div style="text-align:center">
-                <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
+              <div style="position: absolute;top: 20px;left: 125px;">
+                <span>{{chartTile}}</span>
               </div>
-              <ECharts style="width:700px;" :options="chartOption" theme="irs"></ECharts>
+              <div style="position: absolute;top: 20px;left: 175px;">
+                <span style="color:#69C72B">{{chartTile}}</span>
+              </div>
+              <ECharts style="width:900px;" :options="chartOption" theme="irs"></ECharts>
             </div>
           </el-dialog>
         </div>
@@ -153,6 +156,7 @@ export default {
       chartXAxis: [],
       chartOption: {},
       chartTile: '',
+      chartLogo: '',
       dialogTableVisible: false,
       startDate: null,
       endDate: null,
@@ -242,7 +246,7 @@ export default {
     dialogHandle(item) {
       this.dialogTableVisible = true
       this.queryForm.appId = item.id
-        console.log(item)
+      console.log(item)
       api.flowBarecharts(this.queryForm).then(res => {
         console.log(res)
         if (res.resCode == 200) {
@@ -250,25 +254,40 @@ export default {
           this.chartData1 = res.data.ratios
           this.chartData2 = res.data.ratios1
           this.chartTile = res.data.fromAppName
+          this.chartLogo = res.data.logo
           this.chartOption = {
             legend: {
-              data: ['下载趋势', '流向分析',]
+              data: ['卸载流向', '同装流向',],
+              orient: 'horizontal', // 'vertical'
+              x: 'center', // 'center' | 'left' | {number},
+              y: 'bottom', // 'center' | 'bottom' | {number}
             },
             tooltip: {
               trigger: 'axis',
-              // extraCssText: 'fds',
               textStyle: {
-                fontSize: 12
+                color: '#999999',
+                decoration: 'none',
+                fontFamily: 'Verdana, sans-serif',
+                fontSize: 12,
               },
+              backgroundColor: '#FFFFFF',
+              borderColor: '#E5E5E5',
+              borderRadius: 4,
               formatter: function(params) {
-                let tooltip = `<div style ="${option.tipHeaderCss}"> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
+                let tooltip = `<div> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
                 return tooltip
+              }
+            },
+            toolbox: {
+              show: true,
+              feature: {
+                magicType: { show: true, type: ['line', 'bar'] },
               }
             },
             grid: {
               left: '3%',
               right: '3%',
-              bottom: '3%',
+              bottom: '10%',
               containLabel: true,
             },
             xAxis: {
@@ -281,15 +300,15 @@ export default {
               }
             },
             series: [{
-              name: '下载趋势',
+              name: '卸载流向',
               type: 'bar',
               barGap: 0,
-              barWidth: '40px',
+              barWidth: '20px',
               data: this.chartData1
             }, {
-              name: '新装趋势',
+              name: '同装流向',
               type: 'bar',
-              barWidth: '40px',
+              barWidth: '20px',
               data: this.chartData2
             },]
           }
@@ -473,12 +492,12 @@ export default {
   .is-group tr th:nth-child(3) .cell {
     border-right: none;
   }
-  .table-content-header{
+  .table-content-header {
     background: #f9f9f9;
     border: 1px solid #e2e9f3;
     padding: 8px 20px;
   }
-  .table-con{
+  .table-con {
     padding: 20px 20px;
   }
   .table-con-line span {
@@ -533,12 +552,31 @@ export default {
     content: "";
   }
 
+  .el-dialog__header {
+    border-bottom: 1px solid #E2E9F3;
+    background: #F8F8F8;
+    .el-dialog__title {
+      border: 1px solid rgb(221, 221, 221) !important;
+      padding: 6px 10px;
+      line-height: 24px;
+      font-size: 14px;
+      color: #63738C;
+      background: #fff;
+    }
+    .el-dialog__title::before {
+      content: "\E636";
+      font-family: "iconfont" !important;
+      padding-right: 10px;
+      color: #E2E9F3
+    }
+  }
 
   .detail-content-menu {
     border: 1px solid #ddd;
     background: #fff;
     overflow: hidden;
     padding: 20px 10px;
+
     .app-type {
       .el-radio-button__inner {
         border: none;

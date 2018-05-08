@@ -80,18 +80,15 @@
               </el-row>
             </el-footer>
           </div>
-          <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
-            <!-- <span class="chart-date">
-                                            <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                                              <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                                              </el-option>
-                                            </el-select>
-                                          </span> -->
+          <el-dialog title="当前APP" width="1000px" :visible.sync="dialogTableVisible">
             <div class="chart-con">
-              <div style="text-align:center">
-                <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
+              <div style="position: absolute;top: 20px;left: 125px;">
+                <span>{{chartTile}}</span>
               </div>
-              <ECharts style="width:700px;" :options="chartOption" theme="irs"></ECharts>
+              <div style="position: absolute;top: 20px;left: 175px;">
+                <span style="color:#69C72B">{{chartTile}}</span>
+              </div>
+              <ECharts style="width:900px;" :options="chartOption" theme="irs"></ECharts>
             </div>
           </el-dialog>
         </div>
@@ -250,24 +247,34 @@ export default {
         if (res.resCode == 200) {
           this.chartXAxis = res.data.xAxis
           this.chartData1 = res.data.ratios
+          this.chartTile = res.data.fromAppName
           this.chartOption = {
-            // legend: {
-            //   data: ['下载趋势',]
-            // },
             tooltip: {
               trigger: 'axis',
               textStyle: {
-                fontSize: 12
+                color: '#999999',
+                decoration: 'none',
+                fontFamily: 'Verdana, sans-serif',
+                fontSize: 12,
               },
+              backgroundColor: '#FFFFFF',
+              borderColor: '#E5E5E5',
+              borderRadius: 4,
               formatter: function(params) {
-                let tooltip = `<div style ="${option.tipHeaderCss}"> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
+                let tooltip = `<div> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
                 return tooltip
+              }
+            },
+            toolbox: {
+              show: true,
+              feature: {
+                magicType: { show: true, type: ['line', 'bar'] },
               }
             },
             grid: {
               left: '3%',
-              right: '3%',
-              bottom: '3%',
+              right: '5%',
+              bottom: '10%',
               containLabel: true,
             },
             xAxis: {
@@ -280,9 +287,9 @@ export default {
               }
             },
             series: [{
-              name: '下载趋势',
+              name: '同装分析',
               type: 'bar',
-              barWidth: '40px',
+              barWidth: '20px',
               data: this.chartData1
             }]
           }
@@ -525,7 +532,24 @@ export default {
     content: "";
   }
 
-
+  .el-dialog__header {
+    border-bottom: 1px solid #E2E9F3;
+    background: #F8F8F8;
+    .el-dialog__title {
+      border: 1px solid rgb(221, 221, 221) !important;
+      padding: 6px 10px;
+      line-height: 24px;
+      font-size: 14px;
+      color: #63738C;
+      background: #fff;
+    }
+    .el-dialog__title::before {
+      content: "\E636";
+      font-family: "iconfont" !important;
+      padding-right: 10px;
+      color: #E2E9F3
+    }
+  }
   .detail-content-menu {
     border: 1px solid #ddd;
     background: #fff;
