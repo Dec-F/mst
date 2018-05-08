@@ -2,8 +2,8 @@
   <div class="wrapper">
     <div class="content">
       <div class="contentflow">
-        <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}
-          <el-tooltip class="item" effect="light" content="Right Center 提示文字" placement="right">
+        <div class="navname" style="margin-top: 25px;padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
+          <el-tooltip class="item" effect="light" content="APP与上月/周相比活性（时间）降低，流向同类别APP的占比。" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </div>
@@ -39,7 +39,9 @@
         </div>
         <div class="table-content flowTable">
           <div class="table-content-header">
-            <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appname" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
+            <div class="searchSelect">
+              <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appname" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect" prefix-icon="el-icon-search"></el-autocomplete>
+            </div>
           </div>
           <!-- v-loading.table-content-body="loading" -->
           <div class="table-con ">
@@ -55,7 +57,7 @@
                         <div>
                           <span class="logo"><img :src="scope.row.logo" alt=""></span>
                           <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
-                          <span style="margin-left:20px" @click="dialogHandle(item)" class="iconChart"></span>
+                          <span style="margin-left:20px" @click="dialogHandle(scope.row)" class="iconChart"></span>
                         </div>
                       </div>
                       <div v-else-if="index==2">
@@ -100,12 +102,6 @@
 
 <script>
 import api from "@/api/api";
-// import barChart from "@/components/barChart";
-// import trend from '@/components/flow'
-// import selectType from "@/components/appTypeMenu";
-// import datePicker from "@/components/datePicker";
-// import search from "@/components/search";
-
 import option from '@/echarts/echartTooltip'
 import { formatLegend } from '@/echarts/echartFormat'
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -207,7 +203,7 @@ export default {
     },
     // 查询按钮
     queryHandle() {
-      this.queryForm.appid = ''
+      this.queryForm.queryId = ''
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
@@ -230,7 +226,7 @@ export default {
     typeListHandle(item) {
       this.bigTypeItem = item.children
       let id = item.categoryId
-      if (id =='') {
+      if (id == '') {
         this.typeSubList = []
       } else {
         this.typeSubList = item.children
@@ -245,13 +241,14 @@ export default {
     // 表格弹出
     dialogHandle(item) {
       this.dialogTableVisible = true
-      this.queryForm.id = item.id
-      api.sambarecharts(this.queryForm).then(res => {
+      this.queryForm.appId = item.id
+        console.log(item)
+      api.flowBarecharts(this.queryForm).then(res => {
         console.log(res)
         if (res.resCode == 200) {
           this.chartXAxis = res.data.xAxis
           this.chartData1 = res.data.ratios
-          this.chartData2 = res.data.ratios
+          this.chartData2 = res.data.ratios1
           this.chartTile = res.data.fromAppName
           this.chartOption = {
             legend: {
@@ -343,7 +340,7 @@ export default {
     },
     handleSelect(item) {
       if (item.id) {
-        this.queryForm.appid = item.id
+        this.queryForm.queryId = item.id
         this.queryForm.appname = item.name
         this.fetchTableData()
       }
@@ -403,22 +400,6 @@ export default {
 
     // 导出数据
     downloadData() {
-      // const params = {
-      //   // 发送请求
-      //   type: this.$route.meta.type,
-      //   date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
-      //   dateType: this.dateTypeVal,
-      //   limit: this.dataLimitVal,
-      //   subCategoryId: this.checkedType,
-      //   categoryId: this.bigType === 0 ? null : this.bigType,
-      //   pageNo: this.currentPage,
-      //   pageSize: this.pageSize,
-      //   orderType: this.orderType,
-      //   orderColumn: this.orderColumn,
-      //   queryId: this.searchId,
-      //   queryType: this.searchType
-      // }
-
       var path = "http://113.200.91.81/mst/deep/exportAppDeepsExcel?";
       var paras1 =
         "type=" +
@@ -492,6 +473,14 @@ export default {
   .is-group tr th:nth-child(3) .cell {
     border-right: none;
   }
+  .table-content-header{
+    background: #f9f9f9;
+    border: 1px solid #e2e9f3;
+    padding: 8px 20px;
+  }
+  .table-con{
+    padding: 20px 20px;
+  }
   .table-con-line span {
     position: relative;
     display: inline-block;
@@ -529,8 +518,7 @@ export default {
   }
   .el-table tr:nth-child(2) {
     th {
-      background-color: #e1f4d6 !important;
-      // border-bottom: 1px solid #bde6a2;
+      background-color: #e1f4d6 !important; // border-bottom: 1px solid #bde6a2;
       padding: 2px;
     }
   }
@@ -609,7 +597,7 @@ export default {
       }
     }
     .date-type {
-      margin-right:20px;
+      margin-right: 20px;
       .el-radio-button__inner:hover {
         color: #69C72B;
       }
@@ -662,8 +650,7 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 30px;
-      line-height:30px;
+      height: 39px;
       width: 300px;
       border: none;
       background: #f9f9f9;
@@ -673,7 +660,10 @@ export default {
 }
 
 .margintop {
-  margin-top: 40px
+  margin-top: 40px;
+  .is-plain {
+    bottom: 0
+  }
 }
 
 .iconChart {
@@ -683,5 +673,25 @@ export default {
   background: url(../../assets/iconChart.png) no-repeat;
   vertical-align: middle;
   margin: 0 5px;
+}
+
+// 搜索框
+.searchSelect {
+  position: relative;
+  z-index: 111;
+  height: 40px;
+  text-align: right;
+  float: right;
+}
+
+.select__icon-cur {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 33px;
+  padding: 5px;
+  border-radius: 50%;
+  z-index: 1;
 }
 </style>

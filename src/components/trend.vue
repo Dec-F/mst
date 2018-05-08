@@ -55,11 +55,11 @@
         <div class="chart-sub-title">
           <i class="app-icon" :style="chartIconStyle"></i> {{chartData.chartSubTitle}}</div>
         <!--<span class="chart-date">
-                  <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                    <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                    </el-option>
-                  </el-select>
-                </span>-->
+                      <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+                        <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+                        </el-option>
+                      </el-select>
+                    </span>-->
         <div class="chart-con" v-loading.chart-con="chartData.chartloading">
           <bar-chart :chartData="chartData"></bar-chart>
         </div>
@@ -376,7 +376,7 @@ export default {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
-  height:16px;
+  height: 16px;
   vertical-align: middle;
   float: right;
 }
@@ -392,14 +392,24 @@ export default {
 
 .trend {
   position: relative;
+  border: 1px solid #DCDFE6;
+  .el-tabs--border-card {
+    border: none;
+  }
   .searchSelect {
     position: absolute;
     z-index: 111;
-    right: 0;
+    right: 20px;
     height: 40px;
     text-align: right;
     .el-input__inner {
-      height: 39px;
+      height: 32px;
+      width: 260px;
+      border-bottom: 1px solid #DBDEE3;
+      background: #F5F7FA
+    }
+    .el-icon-search {
+      line-height: 35px;
     }
   }
 }

@@ -35,6 +35,9 @@
           </el-card>
           <!-- 留存数据 表格 -->
           <el-card class="table-card" shadow="never">
+            <div slot="header">
+              <span class="table-card__title">留存数据</span>
+            </div>
             <div class="table-card__body" v-loading="keepDataFetching">
               <el-table :data="keepData" header-row-class-name="table__header" stripe style="width: 100%" v-if="tableHeader">
                 <!-- 序号 -->
@@ -170,14 +173,17 @@ export default {
 }
 
 .keepBox {
+  .el-icon-search:before {
+    content: ""
+  }
   .el-table__body-wrapper.is-scrolling-left~.el-table__fixed,
   .el-table__body-wrapper.is-scrolling-none~.el-table__fixed,
   .el-table__body-wrapper.is-scrolling-none~.el-table__fixed-right,
   .el-table__body-wrapper.is-scrolling-right~.el-table__fixed-right {
     box-shadow: 4px 0 18px #e6e7e8;
   }
-  .table__header th:nth-child(2) .cell{
-    border-right:none
+  .table__header th:nth-child(2) .cell {
+    border-right: none
   }
   .el-range-editor--small .el-range-separator {
     padding: 2px 0px !important;

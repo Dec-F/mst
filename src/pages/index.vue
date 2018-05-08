@@ -271,7 +271,7 @@ export default {
     background-color: #404c5a;
   }
   > .content {
-    margin-left: 220px;
+    margin-left: 200px;
     background: #f7f7f7;
     > .breadcrumb {
       background: #fff;

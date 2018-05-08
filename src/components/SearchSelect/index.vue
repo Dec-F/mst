@@ -1,7 +1,7 @@
 <template>
   <div class="searchSelect">
     <img class="select__icon-cur" :src="icon">
-    <el-autocomplete placeholder="请输入app名称" v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name" prefix-icon="el-icon-search"></el-autocomplete>
+    <el-autocomplete placeholder="请输入您所要查找的内容..." v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name" prefix-icon="el-icon-search"></el-autocomplete>
   </div>
 </template>
 

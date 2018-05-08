@@ -34,6 +34,9 @@
           </el-card>
           <!-- 留存数据 表格 -->
           <el-card class="table-card" shadow="never">
+            <div slot="header">
+              <span class="table-card__title">留存数据</span>
+            </div>
             <div class="table-card__body" v-loading="keepDataFetching">
               <el-table :data="keepData" header-row-class-name="table__header" style="width: 100%" v-if="tableHeader">
                 <!-- 序号 -->

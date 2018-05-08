@@ -53,10 +53,10 @@ const api = {
     return fetch({url: '/quality/findChannelAppUse', method: 'GET', params: params});
   },
   findAppChannelUse(params) {
-    return fetch({url: 'appQuality/findAppChannelUse', method: 'GET', params: params});
+    return fetch({url: '/appQuality/findAppChannelUse', method: 'GET', params: params});
   },
   findAppUse(params) {
-    return fetch({url: 'appQuality/findAppUse', method: 'GET', params: params});
+    return fetch({url: '/appQuality/findAppUse', method: 'GET', params: params});
   },
   // 深度分析 同装
   flowTable(params) {
@@ -68,9 +68,12 @@ const api = {
   },
   // 同装echarts接口
   sambarecharts(params) {
-    return fetch({url: '/sambarecharts', method: 'GET', params: params});
+    return fetch({url: '/depth/getSimulEcharts', method: 'GET', params: params});
   },
-
+ // 流向echarts接口
+  flowBarecharts(params) {
+    return fetch({url: '/depth/getFlowEcharts', method: 'GET', params: params});
+  },
   /**
  * app
  *

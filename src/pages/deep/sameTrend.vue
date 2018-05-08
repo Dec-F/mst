@@ -1,9 +1,12 @@
 <template>
   <div class="wrapper">
     <div class="content">
-
       <div class="contentsame">
-        <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}</div>
+        <div class="navname" style="margin-top: 25px;padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
+          <el-tooltip class="item" effect="light" content="同时用户安装app的占比" placement="right">
+            <i class="el-icon-question"></i>
+          </el-tooltip>
+        </div>
         <div class="detail-content-menu ">
           <el-form ref="form" class="app-type-content" :model="queryForm" label-width="80px" size="small">
             <el-form-item label="APP类别">
@@ -35,7 +38,9 @@
         </div>
         <div class="table-content flowTable">
           <div class="table-content-header">
-            <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appname" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
+            <div class="searchSelect">
+              <el-autocomplete class="fr search" size="small" style="display:inline-block;" v-model="queryForm.appname" :fetch-suggestions="querySearch" placeholder="输入您要查找的内容..." :trigger-on-focus="false" @select="handleSelect" prefix-icon="el-icon-search"></el-autocomplete>
+            </div>
           </div>
           <!-- v-loading.table-content-body="loading" -->
           <div class="table-con ">
@@ -59,7 +64,7 @@
                     </div>
                     <div v-else>
                       <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
-                      <div>{{scope.row[item.uninstall]}}%</div>
+                      <div>{{scope.row[item.activity]}}%</div>
                     </div>
                   </template>
                 </el-table-column>
@@ -77,11 +82,11 @@
           </div>
           <el-dialog title="图表" width="700px" :visible.sync="dialogTableVisible">
             <!-- <span class="chart-date">
-                                          <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                                            <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                                            </el-option>
-                                          </el-select>
-                                        </span> -->
+                                            <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
+                                              <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
+                                              </el-option>
+                                            </el-select>
+                                          </span> -->
             <div class="chart-con">
               <div style="text-align:center">
                 <span style="border:1px solid #ddd; padding:8px;">{{chartTile}}</span>
@@ -92,18 +97,11 @@
         </div>
       </div>
     </div>
-    <!-- <div :class="clicked? 'blue-class':'red-class'" @click="clicked = !clicked"></div> -->
   </div>
 </template>
 
 <script>
 import api from "@/api/api";
-// import barChart from "@/components/barChart";
-// import trend from '@/components/flow'
-// import selectType from "@/components/appTypeMenu";
-// import datePicker from "@/components/datePicker";
-// import search from "@/components/search";
-
 import option from '@/echarts/echartTooltip'
 import { formatLegend } from '@/echarts/echartFormat'
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -207,7 +205,7 @@ export default {
     },
     // 查询按钮
     queryHandle() {
-      this.queryForm.appid = ''
+      this.queryForm.queryId = ''
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
@@ -245,20 +243,19 @@ export default {
     // 表格弹出
     dialogHandle(item) {
       this.dialogTableVisible = true
-      this.queryForm.id = item.id
+      this.queryForm.appId = item.id
+      console.log(this.queryForm.id)
       api.sambarecharts(this.queryForm).then(res => {
         console.log(res)
         if (res.resCode == 200) {
           this.chartXAxis = res.data.xAxis
           this.chartData1 = res.data.ratios
-          this.chartData2 = [1.278689, 3.178689, 2.639344, 4.639344, 5.639344] //res.data2
           this.chartOption = {
             // legend: {
             //   data: ['下载趋势',]
             // },
             tooltip: {
               trigger: 'axis',
-              // extraCssText: 'fds',
               textStyle: {
                 fontSize: 12
               },
@@ -274,7 +271,7 @@ export default {
               containLabel: true,
             },
             xAxis: {
-              data: ['总费用', '房租', '水电费', '交通费', '伙食费', '日用品数']
+              data: this.chartXAxis
             },
             yAxis: {
               type: 'value',
@@ -336,11 +333,11 @@ export default {
     },
     handleSelect(item) {
       if (item.id) {
-        this.queryForm.appid = item.id
+        this.queryForm.queryId = item.id
         this.queryForm.appname = item.name
         this.fetchTableData()
       }
-      
+
     },
     // 获取当前时间周方法
     getWeekNumber(src) {
@@ -376,7 +373,7 @@ export default {
     fetchTableData() {
       this.loading = true;
       this.queryForm.subCategoryId = this.subIdArr.join(',')
-      api.findFlowTrend(this.queryForm).then(res => {
+      api.flowTable(this.queryForm).then(res => {
         this.queryForm.pageNo = res.data.tablePage.pageNo
         this.total = res.data.tablePage.total
         this.loading = true;
@@ -621,6 +618,10 @@ export default {
   }
   .table-content-header {
     overflow: hidden;
+    border: 1px solid #e2e9f3;
+  }
+  .table-con {
+    padding: 20px 20px;
   }
   .el-table__header tr th:nth-child(3) .cell {
     border-right: none;
@@ -645,8 +646,7 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 30px;
-      line-height: 30px;
+      height: 39px;
       width: 300px;
       border: none;
       background: #f9f9f9;
