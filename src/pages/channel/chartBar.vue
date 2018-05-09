@@ -42,7 +42,7 @@ export default {
         return;
       }
       const xAxis = this.data.map(item => item.attrValue);
-      const data = this.data.map(item => item.attrRatio);
+      const data = this.data.map(item => Math.round(item.attrRatio * 1000) / 1000);
       const options = {
         tooltip : {
           trigger: 'axis',
@@ -74,7 +74,7 @@ export default {
           },
           axisLabel: {
             formatter: function (value) {
-              return `${value * 100}%`;
+              return `${value}%`;
             }
           },
           splitLine: {

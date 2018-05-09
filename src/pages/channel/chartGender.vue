@@ -72,7 +72,7 @@ export default {
         yAxis: {
           type: 'value',
           min: 0,
-          max: 1,
+          max: 100,
           axisLine: {
             lineStyle: {
               color: '#f5f5f5'
@@ -80,7 +80,7 @@ export default {
           },
           axisLabel: {
             formatter: function (value) {
-              return `${value * 100}%`;
+              return `${value}%`;
             }
           },
           splitLine: {
@@ -95,8 +95,7 @@ export default {
               color: isMale ? '#b2d233' : '#1fc8f3'
             }
           },
-          // data: this.data,
-          data: [0.5],
+          data: [Math.round(this.data * 1000) / 1000],
           barWidth: 16,
           type: 'bar'
         }]

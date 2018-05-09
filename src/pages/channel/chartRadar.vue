@@ -47,6 +47,7 @@ export default {
         };
       });
       const options = {
+        tooltip : {},
         radar: {
           indicator: indicator.length ? indicator : [{}],
           // name: {
@@ -63,7 +64,7 @@ export default {
           type: 'radar',
           data : [
             {
-              value : this.data.map(item => parseFloat(item.attrRatio)),
+              value : this.data.map(item => Math.round(item.attrRatio * 1000) / 1000),
             }
           ]
         }]

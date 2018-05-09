@@ -43,7 +43,7 @@ export default {
       const data = this.data.map((item, index) => {
         return {
           name: item.attrValue,
-          value: item.attrRatio,
+          value: Math.round(item.attrRatio * 1000) / 1000,
           itemStyle:{
             normal: {
               label: {

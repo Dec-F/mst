@@ -42,7 +42,7 @@ export default {
         return;
       }
       const yAxis = this.data.map(item => item.attrValue);
-      const data = this.data.map(item => item.attrRatio);
+      const data = this.data.map(item => Math.round(item.attrRatio * 1000) / 1000);
       const options = {
         grid: {
           left: '3%',
