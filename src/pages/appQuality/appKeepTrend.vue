@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <h4 class="page__title">新装留存
-          <el-tooltip class="item" effect="dark" content="Right Center 提示文字" placement="right">
+          <el-tooltip class="item" effect="light" content="本月/周内新装APP在次日、三日、7日等活跃的设备用户" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </h4>
@@ -16,7 +16,7 @@
                 <!-- app下拉菜单 -->
                 <el-col :span="9">
                   <el-form-item label="当前APP">
-                    <SearchSelect :channels="channels" @change="selectChange" v-if="!channelFetching"></SearchSelect>
+                    <selectIndex :channels="channels" @change="selectChange" v-if="!channelFetching"></selectIndex>
                   </el-form-item>
                 </el-col>
                 <!-- 日期选择器 -->
@@ -52,7 +52,7 @@
         </el-main>
       </div>
       <el-footer>
-        <el-row type="flex" justify="space-between" class="margintop">
+        <el-row type="flex" justify="space-between" >
           <el-button size="small" @click="exportKeep('channel')" v-if="keepData">
             <i class="iconfont icon-download" style="padding-left: 0;"></i>数据导出</el-button>
           <el-pagination background layout="total, prev, pager, next,jumper" :total="pageData.total" @current-change="pageChange" v-if="pageData"></el-pagination>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import SearchSelect from '@/components/SearchSelect';
+import selectIndex from '@/components/select';
 import { findAppChannelCount, findKeepDate, findAppKeep } from '@/api';
 import { apiRequest } from '@/utils';
 export default {
@@ -84,7 +84,7 @@ export default {
       keepDataFetching: false
     }
   },
-  components: { SearchSelect },
+  components: { selectIndex },
   methods: {
     async channelFetch() {
       let self = this;
@@ -144,7 +144,7 @@ export default {
     },
     exportKeep(type) {
       let { pageNo, pageSize } = this.pageData;
-      location.href = `/mst/behavior/exportTrendExcel?type=${type}&pageNo=${pageNo}&pageSize=${pageSize}`;
+      location.href = `/mst/appQuality/exportAppKeep?type=${type}&pageNo=${pageNo}&pageSize=${pageSize}`;
     }
   },
   async beforeMount() {
@@ -258,12 +258,18 @@ export default {
 .margintop {
   margin-top: 40px;
 }
-
+.selectIndex .el-input__inner {
+    padding-left: 33px;
+    border: 0 none;
+}
 .exportData {
   width: 120px;
   height: 30px;
   font-size: 14px;
   color: #64728D;
   padding: 5px 0px;
+}
+.el-tooltip__popper.is-light[x-placement^=right] .popper__arrow{
+      border-right-color: #69C72B;
 }
 </style>

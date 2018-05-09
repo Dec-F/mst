@@ -66,8 +66,8 @@
                       <div v-else>
                         <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
                         <div class="table-con-line">
-                          <span class="fl">{{scope.row[item.uninstall]}}%</span>
-                          <span class="fl">{{scope.row[item.activity]}}%</span>
+                          <span class="fl">{{scope.row[item.uninstall].toFixed(3)}}%</span>
+                          <span class="fl">{{scope.row[item.activity].toFixed(3)}}%</span>
                         </div>
                       </div>
                     </template>
