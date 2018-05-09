@@ -21,7 +21,7 @@
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
-                    <span @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../dist/static/img/tableleft.png"></span>
+                    <span @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
                   </div>
                 </template>
               </el-table-column>
@@ -137,8 +137,8 @@ export default {
   },
   data() {
     return {
-      tableupImg: require('../../dist/static/img/table-in-up.png'),
-      tabledownImg: require('../../dist/static/img/table-in-down.png'),
+      tableupImg: require('../../static/img/table-in-up.png'),
+      tabledownImg: require('../../static/img/table-in-down.png'),
       pageSize: 10,
       currentPage: this.current,
       dialogTableVisible: false,
@@ -217,7 +217,7 @@ export default {
           createElement('span', [column.label]),
           createElement('img', {
             attrs: {
-              src: require('../../dist/static/img/tabletop.png')
+              src: require('../../static/img/tabletop.png')
             }
           })
         ]

@@ -28,13 +28,13 @@
       </el-menu>
       <div class="footer">
         <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">
-          <img src="../../dist/static/img/email.png">
+          <img src="../../static/img/email.png">
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">
-          <img src="../../dist/static/img/tell.png">
+          <img src="../../static/img/tell.png">
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="名词解释" placement="top-start">
-          <img src="../../dist/static/img/help.png" @click="clickFn">
+          <img src="../../static/img/help.png" @click="clickFn">
         </el-tooltip>
       </div>
     </div>
