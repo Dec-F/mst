@@ -64,7 +64,7 @@
                     </div>
                     <div v-else>
                       <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
-                      <div>{{scope.row[item.activity]}}%</div>
+                      <div>{{scope.row[item.activity].toFixed(3)}}%</div>
                     </div>
                   </template>
                 </el-table-column>
@@ -401,23 +401,7 @@ export default {
 
     // 导出数据
     downloadData() {
-      // const params = {
-      //   // 发送请求
-      //   type: this.$route.meta.type,
-      //   date: this.dateTypeVal === 'week' ? this.weekDateVal : this.monthDateVal,
-      //   dateType: this.dateTypeVal,
-      //   limit: this.dataLimitVal,
-      //   subCategoryId: this.checkedType,
-      //   categoryId: this.bigType === 0 ? null : this.bigType,
-      //   pageNo: this.currentPage,
-      //   pageSize: this.pageSize,
-      //   orderType: this.orderType,
-      //   orderColumn: this.orderColumn,
-      //   queryId: this.searchId,
-      //   queryType: this.searchType
-      // }
-
-      var path = "http://113.200.91.81/mst/deep/exportAppDeepsExcel?";
+      var path = "http://113.200.91.62:8080/mst/depth/exportSimulTrend?";
       var paras1 =
         "type=" +
         this.$route.meta.type +
@@ -451,9 +435,6 @@ export default {
         "&" +
         "orderColumn=" +
         this.orderColumn;
-      // "queryId=" + this.searchId + "&" +
-      // "queryType=" + this.searchType;
-      // window.location.href = path + paras1 + paras2 + paras3;
 
       if (this.bigType == 0) {
         window.location.href = path + paras1 + paras3;
