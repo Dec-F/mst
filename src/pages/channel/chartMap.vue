@@ -47,18 +47,24 @@ export default {
           itemStyle:{
             normal: {
               label: {
-                show:true
+                show: true
               }
             },
             emphasis: {
               label: {
-                show:true
+                show: true
               },
               areaColor: '#b2d233'
             }
           },
+          label: {
+            normal: {
+              show: true
+            }
+          }
         };
       });
+      const max = this.data.reduce((prev, item) => Math.max(prev, item.attrRatio), Number.MIN_SAFE_INTEGER);
       const options = {
         tooltip: {
           trigger: 'item',
@@ -75,7 +81,7 @@ export default {
         },
         visualMap: {
           min: 0,
-          max: 1,
+          max,
           itemWidth: 10,
           itemHeight: 100,
           precision: 4,
@@ -93,39 +99,41 @@ export default {
             zoom: 1.2,
             itemStyle: {
               normal: {
-                label: {
-                  show:false
-                },
+                show: false,
                 areaColor: '#e5e5e5',
                 borderColor: '#fff',
                 borderWidth: 1
               },
               emphasis:{
-                label:{show:false},
-                areaColor: '#e5e5e5',
+                show: false,
+                areaColor: '#e5e5e5'
               }
             },
             label: {
               normal: {
+                show: false,
                 formatter: params => `{a|Top${params.dataIndex + 1}}{b|${params.name}}`,
                 borderColor: '#c0c4c7',
                 borderWidth: 1,
                 rich: {
                   a: {
-                height: 20,
-                lineHeight: 20,
+                    height: 20,
+                    lineHeight: 20,
                     color: '#fff',
                     backgroundColor: 'rgba(0,0,0,.3)',
                     padding: [0, 10]
                   },
                   b: {
-                height: 20,
-                lineHeight: 20,
+                    height: 20,
+                    lineHeight: 20,
                     color: '#999',
                     backgroundColor: 'rgba(255,255,255,.8)',
                     padding: [0, 10]
                   }
                 }
+              },
+              emphasis: {
+                show: false
               }
             },
             data,

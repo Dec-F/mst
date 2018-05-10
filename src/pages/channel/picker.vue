@@ -88,7 +88,7 @@ export default {
   computed: {
     logoSrc() {
       this.options.forEach(v => {
-        if (v.id === this.option) return v.img || defaultLogo;
+        if (v.id === this.option) return v.logo || defaultLogo;
       });
       return defaultLogo;
     },

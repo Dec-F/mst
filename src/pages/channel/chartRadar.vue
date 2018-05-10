@@ -72,9 +72,12 @@ export default {
         },
         series: [{
           type: 'radar',
-          data : [
+          data: [
             {
-              value : this.data.map(item => Math.round(item.attrRatio * 1000) / 1000),
+              value: this.data.map(item => Math.round(item.attrRatio * 1000) / 1000),
+              tooltip: {
+                formatter: this.data.map(item => `${item.attrValue}: ${Math.round(item.attrRatio * 1000) / 1000}`).join('<br>')
+              }
             }
           ]
         }]
