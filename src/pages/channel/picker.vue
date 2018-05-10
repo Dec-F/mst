@@ -87,9 +87,12 @@ export default {
   },
   computed: {
     logoSrc() {
-      this.options.forEach(v => {
-        if (v.id === this.option) return v.logo || defaultLogo;
-      });
+      for (var i = 0, len = this.options.length; i < len; i ++) {
+        const item = this.options[i];
+        if (item.id === this.option) {
+          return item.logo || defaultLogo;
+        }
+      }
       return defaultLogo;
     },
   },
