@@ -30,7 +30,7 @@
               <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy第WW周" placeholder="选择周" :picker-options="{ disabledDate }" @change="dateHandle">
               </el-date-picker>
 
-              <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy-MM" placeholder="选择月" :picker-options="{ disabledDate }" @change="dateHandle" value-format="yyyyMM">
+              <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy-MM" placeholder="选择月" :picker-options="{ disabledDate }" @change="dateHandle">
               </el-date-picker>
               <el-button type="success" @click="queryHandle" class="" size="small">确定</el-button>
             </el-form-item>
@@ -203,14 +203,16 @@ export default {
     // 查询按钮
     queryHandle() {
       this.queryForm.queryId = ''
+      this.queryForm.appname = ''
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
         let year = date.getFullYear()
-        let month = date.getMonth()
+        let month = date.getMonth()+1+''
         if (month.length == 1) {
           month = 0 + month
         }
+        console.log(month)
         let yearMM = year + month
         this.queryForm.date = yearMM
       }
@@ -396,7 +398,6 @@ export default {
         } else {
           this.tableData = [];
         }
-        this.queryForm.appname = ''
       });
     },
       // queryForm: {

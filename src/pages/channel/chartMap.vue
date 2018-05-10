@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ECharts v-if="!empty" :options="options" theme="irs" style="width: 80%; height: 80%;margin:0 auto"></ECharts>
+    <ECharts v-if="!empty" :options="options" theme="irs" style="width:100%; height:100%"></ECharts>
     <div v-else class="channel-chart-empty">暂无数据</div>
   </div>
 </template>

@@ -54,12 +54,12 @@
               <chart-map class="photo-chart" :data="provinceData"></chart-map>
             </div>
           </div>
-          <!--<div class="photo-section">
+          <div class="photo-section">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市占比</h4>
             <div class="photo-section-con">
               <chart-xbar class="photo-chart" :data="cityData"></chart-xbar>
             </div>
-          </div>-->
+          </div>
         </div>
       </div>
       <el-row :gutter="24">
@@ -172,7 +172,7 @@ export default {
       this.load(params, 'province').then(data => {
         this.provinceData = data.seriesPieData || [];
       });
-      this.load(params, 'city').then(data => {
+      this.load(params, 'city_level').then(data => {
         this.cityData = data.seriesPieData || [];
       });
       this.load(params, 'education_grade').then(data => {

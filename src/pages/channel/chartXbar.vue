@@ -74,7 +74,7 @@ export default {
           },
           axisLabel: {
             formatter: function (value) {
-              return `${value * 100}%`;
+              return `${value }%`;
             }
           },
           splitLine: {
