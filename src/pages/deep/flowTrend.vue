@@ -55,8 +55,8 @@
                       </div>
                       <div v-else-if="index==1">
                         <div>
-                          <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                          <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
+                          <span class="logo"><img :src="scope.row.logo" alt="" style="width: 30px;height: 30px;"></span>
+                          <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;line-height: 35px;">{{scope.row[item.column]}}</span>
                           <span style="margin-left:20px" @click="dialogHandle(scope.row)" class="iconChart"></span>
                         </div>
                       </div>
@@ -88,8 +88,8 @@
           </div>
           <el-dialog title="当前渠道" width="1000px" :visible.sync="dialogTableVisible">
             <div class="chart-con">
-              <div style="position: absolute;top: 20px;left: 125px;">
-                <span>{{chartTile}}</span>
+              <div style="position: absolute;top: 17px;left: 133px;">
+                <span><img :src="chartLogo" alt="" style="width: 30px;height: 30px;"></span>
               </div>
               <div style="position: absolute;top: 20px;left: 175px;">
                 <span style="color:#69C72B">{{chartTile}}</span>
@@ -211,13 +211,15 @@ export default {
       this.queryForm.pageNo = 1
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
+
         let year = date.getFullYear()
-        let month = date.getMonth() + 1 + ''
+        let month = date.getMonth()
         if (month.length == 1) {
           month = 0 + month
         }
         let yearMM = year + month
         this.queryForm.date = yearMM
+                console.log(yearMM)
       }
       this.fetchTableData()
     },
@@ -419,49 +421,13 @@ export default {
 
     // 导出数据
     downloadData() {
-      var path = "http://113.200.91.81/mst/deep/exportAppDeepsExcel?";
-      var paras1 =
-        "type=" +
-        this.$route.meta.type +
-        "&" +
-        "date=" +
-        (this.dateTypeVal === "week" ? this.weekDateVal : this.monthDateVal) +
-        "&" +
-        "dateType=" +
-        this.dateTypeVal +
-        "&" +
-        "limit=" +
-        this.dataLimitVal +
-        "&";
-      var paras2 =
-        "subCategoryId=" +
-        this.checkedType +
-        "&" +
-        "categoryId=" +
-        (this.bigType === 0 ? null : this.bigType) +
-        "&";
+      var path = "http://113.200.91.62:8080/mst/depth/exportFlowTrend?";
+      var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&"+"subCategoryId="
+                 +(this.queryForm.subCategoryId) +"&" +"dateType=" +(this.queryForm.dateType)+"&"
+                 + "date=" +(this.queryForm.date) +"&"+"pageNo="+ (this.queryForm.pageNo)
+                 +"&" +"pageSize=" +(this.queryForm.pageSize) +"&"+ "appId="+(this.queryForm.appId)
+        window.location.href = path + paras1 ;
 
-      var paras3 =
-        "pageNo=" +
-        this.currentPage +
-        "&" +
-        "pageSize=" +
-        this.pageSize +
-        "&" +
-        "orderType=" +
-        this.orderType +
-        "&" +
-        "orderColumn=" +
-        this.orderColumn;
-      // "queryId=" + this.searchId + "&" +
-      // "queryType=" + this.searchType;
-      // window.location.href = path + paras1 + paras2 + paras3;
-
-      if (this.bigType == 0) {
-        window.location.href = path + paras1 + paras3;
-      } else {
-        window.location.href = path + paras1 + paras2 + paras3;
-      }
     },
   }
 };

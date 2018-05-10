@@ -47,7 +47,17 @@ export default {
         };
       });
       const options = {
-        tooltip : {},
+        tooltip : {
+          textStyle: {
+            color: '#999999',
+            decoration: 'none',
+            fontFamily: 'Verdana, sans-serif',
+            fontSize: 12,
+          },
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E5E5',
+          borderRadius: 4,
+        },
         radar: {
           indicator: indicator.length ? indicator : [{}],
           // name: {

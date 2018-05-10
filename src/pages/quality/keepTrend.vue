@@ -145,8 +145,10 @@ export default {
     },
     exportKeep(type) {
       let { pageNo, pageSize } = this.pageData;
-      console.log(params)
-      location.href = `/mst/quality/exportChannelKeep?type=${type}&pageNo=${pageNo}&pageSize=${pageSize}&startTime=&endTime=`;
+      let startTime = this.queryForm.date[0];
+      let endTime = this.queryForm.date[1];
+      let { id } = this.queryForm;
+      location.href = `/mst/quality/exportChannelKeep?channelId=${id}&pageNo=${pageNo}&pageSize=${pageSize}&startTime=${startTime}&endTime=${endTime}`;
     }
   },
   async beforeMount() {

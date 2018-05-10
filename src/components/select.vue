@@ -1,5 +1,6 @@
 <template>
   <div class="selectIndex">
+     <img class="select__icon-cur" :src="logo">
     <el-autocomplete placeholder="请输入您所要查找的内容..." v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name"></el-autocomplete>
   </div>
 </template>
@@ -11,7 +12,7 @@ export default {
   data() {
     return {
       id: '',
-      icon: '',
+      logo: '',
       searchKey: ''
     };
   },
@@ -31,7 +32,7 @@ export default {
   created () {
      $bus.$on('clear-search',()=>{
        this.id=''
-       this.icon=''
+       this.logo=''
        this.searchKey=''
      })
   },
@@ -60,9 +61,10 @@ export default {
   watch: {
     id: function(cur) {
       try {
-        this.icon = this.channels.find(item => item.id === cur).icon;
+        this.logo = this.channels.find(item => item.id === cur).logo;
         this.$emit('change', this.id);
       } catch (err) {}
+      console.log(this.logo)
     }
   }
 };

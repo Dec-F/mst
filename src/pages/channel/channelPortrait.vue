@@ -54,12 +54,12 @@
               <chart-map class="photo-chart" :data="provinceData"></chart-map>
             </div>
           </div>
-          <div class="photo-section">
+          <!--<div class="photo-section">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市占比</h4>
             <div class="photo-section-con">
               <chart-xbar class="photo-chart" :data="cityData"></chart-xbar>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
       <el-row :gutter="24">
@@ -253,6 +253,7 @@ export default {
 .photo-chart {
   width: 100%;
   height: 100%;
+  padding-top: 34px;
 }
 .photo-title-icon {
   margin-right: 0.5em;

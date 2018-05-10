@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ECharts v-if="!empty" :options="options" theme="irs" style="width: 100%; height: 100%;"></ECharts>
+    <ECharts v-if="!empty" :options="options" theme="irs" style="width: 80%; height: 80%;margin:0 auto"></ECharts>
     <div v-else class="channel-chart-empty">暂无数据</div>
   </div>
 </template>
@@ -62,6 +62,15 @@ export default {
       const options = {
         tooltip: {
           trigger: 'item',
+          textStyle: {
+            color: '#999999',
+            decoration: 'none',
+            fontFamily: 'Verdana, sans-serif',
+            fontSize: 12,
+          },
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E5E5',
+          borderRadius: 4,
           formatter: params => `${params.name}${params.value ? '<br />' + params.value : ''}`
         },
         visualMap: {

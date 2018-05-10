@@ -144,7 +144,10 @@ export default {
     },
     exportKeep(type) {
       let { pageNo, pageSize } = this.pageData;
-      location.href = `/mst/appQuality/exportAppKeep?type=${type}&pageNo=${pageNo}&pageSize=${pageSize}`;
+      let startTime = this.queryForm.date[0];
+      let endTime = this.queryForm.date[1];
+      let { id } = this.queryForm;
+      location.href = `/mst/appQuality/exportAppKeep?appId=${id}&pageNo=${pageNo}&pageSize=${pageSize}&startTime=${startTime}&endTime=${endTime}`;
     }
   },
   async beforeMount() {
