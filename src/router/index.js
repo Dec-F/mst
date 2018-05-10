@@ -89,7 +89,7 @@ const routes = [
           bread: {
             name: '卸载趋势',
             path: '/unloadTrend',
-            type:1
+            type: 1
           }
         }
       },
@@ -103,7 +103,10 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/funnelTrend',
-            type: 1
+            type: 'freq'
+          },
+          orderByMap: {
+            all: 'use_freq'
           }
         }
       }, {
@@ -115,7 +118,10 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/funnelTrend',
-            type: 1
+            type: 'freq'
+          },
+          orderByMap: {
+            all: 'use_freq'
           }
         }
       },
@@ -129,7 +135,10 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/frequencyTrend',
-            type: 2
+            type: 'time'
+          },
+          orderByMap: {
+            all: 'use_time'
           }
         }
       }, {
@@ -141,10 +150,13 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/frequencyTrend',
-            type: 2
+            type: 'time'
+          },
+          orderByMap: {
+            all: 'use_time'
           }
         }
-      }, 
+      },
       // 质量分析 -- 时长趋势 质量分析--留存
       {
         path: '/keepTrend',
@@ -183,8 +195,7 @@ const routes = [
             path: '/appdownloadTrend'
           }
         }
-      }, 
-      {
+      }, {
         path: '/appfunnelTrend',
         name: 'appfunnelTrend',
         component: appQualityStore,
@@ -193,11 +204,13 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/appfunnelTrend',
-            type:1
+            type: 'freq'
+          },
+          orderByMap: {
+            all: 'use_freq'
           }
         }
-      },
-      {
+      }, {
         path: '/appfunnelTrend/storeDetail/:storeId/:storeName',
         name: 'appfunnelTrend',
         component: appQualityIndex,
@@ -206,7 +219,10 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/appfunnelTrend',
-            type:1
+            type: 'freq'
+          },
+          orderByMap: {
+            all: 'use_freq'
           }
         }
       },
@@ -222,8 +238,7 @@ const routes = [
             path: '/appdownloadTrend'
           }
         }
-      },
-       {
+      }, {
         path: '/appdurationTrend',
         name: 'appdurationTrend',
         component: appQualityStore,
@@ -232,11 +247,13 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/appdurationTrend',
-            type:2
+            type: 'time'
+          },
+          orderByMap: {
+            all: 'use_time'
           }
         }
-      },
-       {
+      }, {
         path: '/appdurationTrend/storeDetail/:storeId/:storeName',
         name: 'appdurationTrend',
         component: appQualityIndex,
@@ -245,10 +262,13 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/appdurationTrend',
-            type:2
+            type: 'time'
+          },
+          orderByMap: {
+            all: 'use_time'
           }
         }
-      },{
+      }, {
         path: '/appKeepTrend',
         name: 'appKeepTrend',
         component: appKeepTrend,
@@ -307,9 +327,8 @@ router.beforeEach((to, from, next) => {
   next();
 
   // 路由拦截 if (to.matched.some(r => r.meta.requireAuth)) {   if
-  // (localStorage.getItem('token')) {     next();   } else {
-  // window.location.href =
-  // 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'   } }
+  // (localStorage.getItem('token')) {     next();   } else { window.location.href
+  // = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'   } }
   // else {   next(); }
 });
 

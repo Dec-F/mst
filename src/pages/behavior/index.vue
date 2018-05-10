@@ -31,9 +31,9 @@ import search from '@/components/search';
 import moment from 'moment';
 import { formatUrl } from 'utils';
 const typeMap = {
-  download: 1,
-  xinzhuang: 2,
-  huoyue: 3
+  download: 'download',
+  xinzhuang: 'install',
+  huoyue: 'active'
 };
 export default {
   name: 'download',
@@ -48,8 +48,8 @@ export default {
       default() {
         return {
           all: api.listChannelTrends,
-          allDownload:
-            'http://113.200.91.81/mst/behavior/exportChannelTotalTrends'
+          allDownload: api.download.exportChannelTrends,
+          allCharts: api.listChannelEcharts
         };
       }
     },
@@ -69,6 +69,17 @@ export default {
     openLink: {
       type: Boolean,
       default: true
+    },
+    orderByMap: {
+      type: Object,
+      default() {
+        return {
+          all: 'download_volume',
+          download: 'download_volume',
+          xinzhuang: 'install_volume',
+          huoyue: 'active_volume'
+        };
+      }
     }
   },
   data() {
@@ -158,6 +169,7 @@ export default {
     tabChange(name) {
       this.tabType = name;
       this.tableData = [];
+      this.orderBy = this.orderByMap[this.tabType];
       this.fetchTableData();
     },
     // 获取日期数据
@@ -177,41 +189,31 @@ export default {
         // 发送请求
         date: this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
-        type: typeMap[this.tabType],
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn,
-        sortby: this.orderBy,
-        sortbyDateTime: this.sortbyDateTime,
+        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0
       };
       if (this.tabType === 'all') {
-        this.fetchApi
-          .all(Object.assign(params, this.coverParams.all))
-          .then(res => {
-            this.loading = false;
-            this.count = true;
-            this.tableHeader = res.data.tableHeader || [];
-            this.tableData =
-              (res.data.tableSum || []).concat(res.data.tableData) || [];
-            this.total = res.data.tablePage.total;
-          });
+        params.totalOrEach = 1;
+        params.trendType = 'download';
       } else {
-        this.fetchApi
-          .all(Object.assign(params, this.coverParams.classify))
-          .then(res => {
-            this.loading = false;
-            this.count = true;
-
-            this.tableHeader = res.data.tableHeader || [];
-
-            this.tableData =
-              (res.data.tableSum || []).concat(res.data.tableData) || [];
-            this.total = res.data.tablePage.total;
-          });
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
       }
+      this.fetchApi
+        .all(Object.assign(params, this.coverParams.all))
+        .then(res => {
+          this.loading = false;
+          this.count = true;
+          this.tableHeader = res.data.tableHeader || [];
+          this.tableData =
+            (res.data.tableSum || []).concat(res.data.tableData) || [];
+          this.total = res.data.tablePage.total;
+        });
     },
     submitData() {
       this.count = false;
@@ -222,50 +224,55 @@ export default {
     downloadData() {
       let url = '';
       let params = {};
+      url = this.fetchApi.allDownload;
+      params = {
+        // 发送请求
+        date: this.dateVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        limit: this.dataLimitVal,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        orderType: this.orderType,
+        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
+        appId: parseInt(this.$route.params.storeId) || 0
+      };
       if (this.tabType === 'all') {
-        url = fetchApi.allDownload;
-        params = {
-          dateTime: this.dateVal,
-          dateType: this.dateTypeVal,
-          limit: this.dataLimitVal,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
-          sort: this.orderType === 'desc' ? 'desc' : '',
-          sortby: this.orderBy,
-          sortbyDateTime: this.sortbyDateTime
-        };
+        params.totalOrEach = 1;
+        params.trendType = 'download';
       } else {
-        url = fetchApi.classifyDownload;
-        params = {
-          type: typeMap[this.tabType],
-          date: this.dateVal,
-          dateType: this.dateTypeVal,
-          limit: this.dataLimitVal,
-          pageNo: this.currentPage,
-          pageSize: this.pageSize,
-          orderType: this.orderType,
-          orderColumn: this.orderColumn
-        };
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
       }
+      params=Object.assign(params,this.coverParams.all)
       window.location.href = formatUrl(url, params);
     },
     //    获取图表数据
     fetchChartsData(val) {
       this.chartloading = true;
       // 发送请求
-      const params = {
+      let params = {
         // 发送请求
-        date: this.dateVal,
+        date: val.payload.children&&val.payload.children[0]&&val.payload.children[0].property.split('--')[0]||this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
-        type: typeMap[this.tabType] || 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn,
-        sortby: this.orderBy,
-        sortbyDateTime: this.sortbyDateTime
+        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
+        appId: parseInt(this.$route.params.storeId) || 0,
+        channelId:(val.type==1?val.payload.id:'')
       };
+      console.log(111);
+      if (this.tabType === 'all') {
+        params.totalOrEach = 1;
+        params.trendType = 'download';
+      } else {
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
+      }
+      params=Object.assign(params,this.coverParams.all)
       let title = '',
         subTitle = '';
       if (val.type === 1) {
@@ -275,7 +282,7 @@ export default {
         title = '趋势时间';
         subTitle = val.payload.label;
       }
-      api.getCharts(params).then(res => {
+      this.fetchApi.allCharts(params).then(res => {
         let data = res.data.echarts;
         this.chartData = {
           xAxis: data.xAxis,
@@ -307,12 +314,13 @@ export default {
       }
       sort.order = sort.order ? 'asc' : 'desc';
       this.orderType = sort.order;
+      console.log(sort);
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
         this.orderBy =
-          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
+          sortArr[1].indexOf('count') > -1 ? this.orderByMap[this.tabType] : 'ratio';
       }
       this.fetchTableData();
     },

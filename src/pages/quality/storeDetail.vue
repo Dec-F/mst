@@ -1,6 +1,6 @@
 <template>
   <div class="hide-tabs">
-    <behaviorDetail :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+    <behaviorDetail :orderByMap='orderByMap' :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
   </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
     return {
       fetchApi: {
         all: api.findChannelAppUse,
-        allDownload:
-          'http://113.200.91.81/mst/behavior/quality/exportChannelAppUse'
+        allDownload: api.download.exportChannelAppUse,
+        allCharts: api.listChannelAppEcharts
       },
       tabs: [
         {
@@ -28,17 +28,18 @@ export default {
       ],
       coverParams: {
         all: {
-          type: this.$route.meta.bread.type
+          trendType: this.$route.meta.bread.type
         }
-      }
+      },
+      orderByMap: this.$route.meta.orderByMap
     };
   },
   watch: {
     $route() {
-      console.log(this.$route);
       this.coverParams.all = {
-        type: this.$route.meta.bread.type
+        trendType: this.$route.meta.bread.type
       };
+      this.orderByMap = this.$route.meta.orderByMap;
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="hide-tabs">
-    <behaviorDetail :openLink='true' :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+    <behaviorDetail :orderByMap='orderByMap' :openLink='true' :coverParams="coverParams" :tabs="tabs" :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
   </div>
 </template>
 
@@ -16,11 +16,8 @@ export default {
     return {
       fetchApi: {
         all: api.findAppUse,
-        classify: api.findAppChannelUse,
-        allDownload:
-          'http://113.200.91.81/mst/behavior/exportChannelTotalTrends',
-        classifyDownload:
-          'http://113.200.91.81/mst/behavior/exportEachChannelTrend'
+        allDownload: api.download.exportAppUse,
+        allCharts: api.listAppEcharts
       },
       tabs: [
         {
@@ -32,17 +29,19 @@ export default {
       ],
       coverParams: {
         all: {
-          type: this.$route.meta.bread.type
+          trendType: this.$route.meta.bread.type
         }
-      }
+      },
+      orderByMap: this.$route.meta.orderByMap
     };
   },
+
   watch: {
     $route() {
-      console.log(this.$route);
       this.coverParams.all = {
-        type: this.$route.meta.bread.type
+        trendType: this.$route.meta.bread.type
       };
+      this.orderByMap = this.$route.meta.orderByMap;
     }
   }
 };

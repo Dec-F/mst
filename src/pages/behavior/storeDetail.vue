@@ -39,9 +39,9 @@ import moment from 'moment';
 import { formatUrl } from 'utils';
 import $bus from 'utils/bus';
 const typeMap = {
-  download: 1,
-  xinzhuang: 2,
-  huoyue: 3
+  download: 'download',
+  xinzhuang: 'install',
+  huoyue: 'active'
 };
 export default {
   name: 'detail',
@@ -56,12 +56,9 @@ export default {
       type: Object,
       default() {
         return {
-          all: api.findChannelAppTrend,
-          classify: api.findAppChannelTrends,
-          allDownload:
-            'http://113.200.91.81/mst/appBehavior/exportAppTotalTrendsSub',
-          classifyDownload:
-            'http://113.200.91.81/mst/appBehavior/exportAppChannelTrend'
+          all: api.listChannelTrendsSub,
+          allDownload: api.download.exportChannelTrendsSub,
+          allCharts: api.listChannelEchartsSub
         };
       }
     },
@@ -81,9 +78,20 @@ export default {
       type: Boolean,
       default: false
     },
-    openSearch:{
-      type:Boolean,
-      default:true
+    openSearch: {
+      type: Boolean,
+      default: true
+    },
+    orderByMap: {
+      type: Object,
+      default() {
+        return {
+          all: 'download_volume',
+          download: 'download_volume',
+          xinzhuang: 'install_volume',
+          huoyue: 'active_volume'
+        };
+      }
     }
   },
   data() {
@@ -128,6 +136,7 @@ export default {
   created() {
     this.fetchAppType();
     this.fetchDate();
+    console.log(this.orderByMap, this.coverParams);
   },
   watch: {
     $route(val) {
@@ -136,14 +145,14 @@ export default {
     }
   },
   methods: {
-    searchChange(id){
-      this.fetchTableData(id)
+    searchChange(id) {
+      this.fetchTableData(id);
     },
     tabChange(name) {
       this.tabType = name;
       this.tableData = [];
-      console.log('change');
-      $bus.$emit('clear-search')
+      this.orderBy = this.orderByMap[this.tabType];
+      $bus.$emit('clear-search');
       this.fetchTableData();
     },
     //    获取app类型
@@ -193,20 +202,18 @@ export default {
       // 发送请求
       const params = {
         // 发送请求
-        type: typeMap[this.tabType],
         date: this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
-        subCategoryId: this.checkedType,
-        categoryId: this.bigType === 0 ? null : this.bigType,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn,
+        orderColumn: this.orderBy || this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
         appId: id,
-        channelId: parseInt(this.$route.params.storeId)||0,
-        sortby: this.orderBy,
-        sortbyDateTime: this.sortbyDateTime
+        channelId: parseInt(this.$route.params.storeId) || 0,
+        categoryId: this.bigType,
+        subCategoryIds: this.checkedType
       };
       const resHandler = res => {
         this.loading = false;
@@ -222,89 +229,100 @@ export default {
         }
         this.total = res.data.tablePage.total;
       };
-      //      请求
       if (this.tabType === 'all') {
-        this.fetchApi
-          .all(Object.assign(params, this.coverParams.all))
-          .then(resHandler);
+        params.totalOrEach = 1;
+        params.trendType = 'download';
       } else {
-        this.fetchApi
-          .classify(Object.assign(params, this.coverParams.all))
-          .then(resHandler);
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
       }
+      //      请求
+      this.fetchApi
+        .all(Object.assign(params, this.coverParams.all))
+        .then(resHandler);
     },
     // 导出数据
     downloadData() {
       let url = '';
       let params = {};
+      url = this.fetchApi.allDownload;
+      params = {
+        // 发送请求
+        date: this.dateVal,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        limit: this.dataLimitVal,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        orderType: this.orderType,
+        orderColumn: this.orderBy || this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
+        appId: id,
+        channelId: parseInt(this.$route.params.storeId) || 0,
+        categoryId: this.bigType,
+        subCategoryIds: this.checkedType
+      };
       if (this.tabType === 'all') {
-        url = fetchApi.allDownload;
-        params = {
-          dateTime: this.dateVal,
-          dateType: this.dateTypeVal,
-          limit: this.dataLimitVal,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
-          sort: this.orderType === 'desc' ? 'desc' : '',
-          sortby: this.orderBy,
-          sortbyDateTime: this.sortbyDateTime,
-          appId: this.$route.params.storeId
-        };
+        params.totalOrEach = 1;
+        params.trendType = 'download';
       } else {
-        url = fetchApi.classifyDownload;
-        params = {
-          type: typeMap[this.tabType],
-          date: this.dateVal,
-          dateType: this.dateTypeVal,
-          limit: this.dataLimitVal,
-          pageNo: this.currentPage,
-          pageSize: this.pageSize,
-          orderType: this.orderType,
-          orderColumn: this.orderColumn,
-          appId: this.$route.params.storeId
-        };
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
       }
+      params = Object.assign(params, this.coverParams.all);
+
       window.location.href = formatUrl(url, params);
     },
     fetchChartsData(val) {
       this.chartloading = true;
       // 发送请求
-      const params = {
+      let params = {
         // 发送请求
-        date: this.dateVal,
+        date:val.payload.children&&val.payload.children[0]&&val.payload.children[0].property.split('--')[0]||this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
-        type: typeMap[this.tabType] || 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderColumn,
-        sortby: this.orderBy,
-        sortbyDateTime: this.sortbyDateTime
+        orderColumn: this.orderBy || this.orderByMap['all'],
+        orderDate: this.sortbyDateTime,
+        channelId: parseInt(this.$route.params.storeId) || 0,
+        categoryId: this.bigType,
+        subCategoryIds: this.checkedType,
+        appId:val.type==1?val.payload.id:'',
+        channelId:(val.type==1?val.payload.id:'')
       };
+      if (this.tabType === 'all') {
+        params.totalOrEach = 1;
+        params.trendType = 'download';
+      } else {
+        params.totalOrEach = 0;
+        params.trendType = typeMap[this.tabType];
+      }
+      params = Object.assign(params, this.coverParams.all);
+
       let title = '',
         subTitle = '';
       if (val.type === 1) {
-        title='当前应用'
-        subTitle=val.payload.name
-      }else{
-        title='趋势时间'
-        subTitle=val.payload.label
+        title = '当前应用';
+        subTitle = val.payload.name;
+      } else {
+        title = '趋势时间';
+        subTitle = val.payload.label;
       }
-      api.getCharts(params).then(res => {
+      this.fetchApi.allCharts(params).then(res => {
         let data = res.data.echarts;
         this.chartData = {
           xAxis: data.xAxis,
           data: data.line,
           chartTitle: title,
-          chartSubTitle:subTitle
+          chartSubTitle: subTitle
         };
       });
     },
     submitData() {
       this.count = false;
       this.currentPage = 1;
-      $bus.$emit('clear-search')
+      $bus.$emit('clear-search');
       this.fetchTableData();
     },
 
@@ -323,14 +341,16 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ?  "asc" : 'desc';
+      sort.order = sort.order ? 'asc' : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
         this.orderBy =
-          sortArr[1].indexOf('count') > -1 ? 'download_volume' : 'ratio';
+          sortArr[1].indexOf('count') > -1
+            ? this.orderByMap[this.tabType]
+            : 'ratio';
       }
       this.fetchTableData();
     },

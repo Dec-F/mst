@@ -12,13 +12,11 @@ export default {
   data() {
     return {
       fetchApi: {
-        all: api.appTotalTrendsSub,
-        classify: api.eachAppTrendSub,
+        all: api.listAppTrendsSub,
         allDownload:
-          'http://113.200.91.81/mst/appBehavior/exportAppTotalTrendsSub',
-        classifyDownload:
-          'http://113.200.91.81/mst/appBehavior/exportAppChannelTrend'
-      }
+         api.download.exportAppTrendsSub,
+       allCharts:api.listAppEchartsSub
+      },
     };
   }
 };

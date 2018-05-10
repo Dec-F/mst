@@ -19,19 +19,38 @@ const api = {
   findSearchAppChannel(params) {
     return fetch({url: '/search/getSearch', method: 'GET', params: params});
   },
-  // 质量分析一级页面
+  // 渠道  质量分析一级页面
   findChannelUse(params) {
     return fetch({url: '/quality/findChannelUse', method: 'GET', params: params});
   },
-  // 质量分析二级页面
+  // 渠道  质量分析一级页面图表
+  listChannelEcharts(params) {
+    return fetch({url: '/quality/listChannelEcharts', method: 'GET', params: params});
+  },
+
+  // 渠道  质量分析二级页面
   findChannelAppUse(params) {
     return fetch({url: '/quality/findChannelAppUse', method: 'GET', params: params});
   },
+  //  渠道 质量分析二级页面图表
+  listChannelAppEcharts(params) {
+    return fetch({url: '/quality/listChannelAppEcharts', method: 'GET', params: params});
+  },
+  // app 质量分析二级页面
   findAppChannelUse(params) {
     return fetch({url: '/appQuality/findAppChannelUse', method: 'GET', params: params});
   },
+  // app 质量分析二级页面图表
+  listAppEchartsSub(params) {
+    return fetch({url: '/appQuality/listAppEchartsSub', method: 'GET', params: params});
+  },
+  //  app 质量分析一级页面
   findAppUse(params) {
     return fetch({url: '/appQuality/findAppUse', method: 'GET', params: params});
+  },
+  // app 质量分析一级页面图表
+  listAppEcharts(params) {
+    return fetch({url: '/appQuality/listAppEcharts', method: 'GET', params: params});
   },
   // 深度分析 同装
   flowTable(params) {
@@ -73,15 +92,6 @@ const api = {
     return fetch({url: '/behavior/listChannelEchartsSub', method: 'GET', params: params});
   },
 
-  // 渠道行为分析--下载趋势--一级页面--全部趋势和各个趋势导出
-  exportChannelTrends(params) {
-    return fetch({url: '/behavior/exportChannelTrends', method: 'GET', params: params});
-  },
-  // 渠道行为分析--下载趋势--二级页面--全部趋势和各个趋势导出
-  exportChannelTrendsSub(params) {
-    return fetch({url: '//behavior/exportChannelTrendsSub', method: 'GET', params: params});
-  },
-
   /**
    * APP行为趋势api
    *
@@ -104,10 +114,6 @@ const api = {
   listAppEchartsSub(params) {
     return fetch({url: '/appBehavior/listAppEchartsSub', method: 'GET', params: params});
   },
-  //APP行为分析--下载趋势--一级页面--全部趋势和各个趋势导出
-  exportAppTrends(params) {
-    return fetch({url: '/appBehavior/exportAppTrends', method: 'GET', params: params});
-  },
   // APP行为分析--下载趋势--二级页面--按日期和渠道展示图表
   exportAppTrendsSub(params) {
     return fetch({url: '/appBehavior/exportAppTrendsSub', method: 'GET', params: params});
@@ -128,7 +134,16 @@ const api = {
     exportAppTrends: 'http://113.200.91.62:8080/mst/appBehavior/exportAppTrends',
 
     // APP行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportAppTrendsSub: 'http://113.200.91.62:8080/mst/appBehavior/exportAppTrendsSub'
+    exportAppTrendsSub: 'http://113.200.91.62:8080/mst/appBehavior/exportAppTrendsSub',
+
+    // 质量分析----渠道--   一级页面导出
+    exportChannelUse: 'http://113.200.91.62:8080/mst/quality/exportChannelUse',
+    // 质量分析----渠道--   二级页面导出
+    exportChannelAppUse: 'http://113.200.91.62:8080/mst/quality/exportChannelAppUse',
+    // 质量分析-----APP --   一级页面导出
+    exportAppUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppUse',
+    // 质量分析-----APP --   二级页面导出
+    exportAppChannelUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppChannelUse'
 
   }
 }

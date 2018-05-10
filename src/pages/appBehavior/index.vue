@@ -1,5 +1,5 @@
 <template>
-  <behaviorDetail :openLink='true' :mergeCells="true" :fetchApi="fetchApi"></behaviorDetail>
+  <behaviorDetail :orderByMap='orderByMap' :openLink='true' :mergeCells="true" :fetchApi="fetchApi"></behaviorDetail>
 </template>
 
 <script>
@@ -10,16 +10,29 @@ export default {
     behaviorDetail
   },
   data() {
+    console.log(this.$route.meta.orderByMap,1111);
+    console.log(11111);
     return {
       fetchApi: {
-        all: api.appTotalTrends,
-        classify: api.eachAppTrend,
-        allDownload:
-          'http://113.200.91.81/mst/appBehavior/exportAppTotalTrends',
-        classifyDownload:
-          'http://113.200.91.81/mst/appBehavior/exportEachAppTrend'
+        all: api.listAppTrends,
+        allDownload: api.download.exportAppTrends,
+        allCharts: api.listAppEcharts
       },
+      coverParams: {
+        all: {
+          trendType: this.$route.meta.bread.type
+        }
+      },
+      orderByMap: this.$route.meta.orderByMap
     };
+  },
+  watch: {
+    $route() {
+      this.coverParams.all = {
+        trendType: this.$route.meta.bread.type
+      };
+      this.orderByMap = this.$route.meta.orderByMap;
+    }
   }
 };
 </script>

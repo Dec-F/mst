@@ -109,7 +109,7 @@ export default {
             show: true
           }
         },
-       
+
         series: series
       };
     }
