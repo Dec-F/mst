@@ -65,7 +65,7 @@ export default {
             opacity: 0.1
           },
           data: data.data.map(v => {
-            return v.data[i].value;
+            return v.data[i]&&v.data[i].value;
           })
         };
       });

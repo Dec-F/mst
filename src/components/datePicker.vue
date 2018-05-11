@@ -117,6 +117,7 @@ export default {
     changeWeek(val) {
       if (val) {
         this.dateValFormat = new Date(val);
+        this.dateVal = moment(val).format('YYYYWW');
       }else(
         this.dateVal=moment(this.dateValFormat).format('YYYYWW')
       )
