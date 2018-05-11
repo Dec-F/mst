@@ -231,7 +231,7 @@ export default {
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
-        params.trendType = 'download';
+        params.trendType = this.$route.meta.trendType || 'download';
       } else {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];
@@ -263,7 +263,7 @@ export default {
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
-        params.trendType = 'download';
+        params.trendType = this.$route.meta.trendType || 'download';
       } else {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];
@@ -277,7 +277,11 @@ export default {
       // 发送请求
       let params = {
         // 发送请求
-        date:val.payload.children&&val.payload.children[0]&&val.payload.children[0].property.split('--')[0]||this.dateVal,
+        date:
+          (val.payload.children &&
+            val.payload.children[0] &&
+            val.payload.children[0].property.split('--')[0]) ||
+          this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
@@ -288,12 +292,12 @@ export default {
         channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
-        appId:val.type==1?val.payload.id:'',
-        channelId:(val.type==1?val.payload.id:'')
+        appId: val.type == 1 ? val.payload.id : '',
+        channelId: val.type == 1 ? val.payload.id : ''
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
-        params.trendType = 'download';
+        params.trendType = this.$route.meta.trendType || 'download';
       } else {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];

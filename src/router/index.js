@@ -90,7 +90,11 @@ const routes = [
             name: '卸载趋势',
             path: '/unloadTrend',
             type: 1
-          }
+          },
+          orderByMap: {
+            all: 'uninstall_volume'
+          },
+          trendType:'uninstall'
         }
       },
       // 质量分析 -- 频次/时长趋势

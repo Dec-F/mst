@@ -39,7 +39,7 @@
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
                   {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] == 1 ? tableupImg : tabledownImg">
                 </template>
               </el-table-column>
             </el-table-column>

@@ -121,8 +121,13 @@ const api = {
 
   // 卸载趋势接口
   unloadTable(params) {
-    return fetch({url: '/appBehavior/findUninstallAppList', method: 'GET', params: params});
+    return fetch({url: '/appBehavior/listAppUninstall', method: 'GET', params: params});
   },
+  // 卸载趋势 图表
+  listUninstallEcharts(params) {
+    return fetch({url: '/appBehavior/listUninstallEcharts', method: 'GET', params: params});
+  },
+
   download: {
     // 渠道行为分析--下载趋势--一级页面--全部趋势和各个趋势
     exportChannelTrends: 'http://113.200.91.62:8080/mst/behavior/exportChannelTrends',
@@ -143,7 +148,10 @@ const api = {
     // 质量分析-----APP --   一级页面导出
     exportAppUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppUse',
     // 质量分析-----APP --   二级页面导出
-    exportAppChannelUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppChannelUse'
+    exportAppChannelUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppChannelUse',
+
+    // 卸载   -----  导出接口
+    exportUninstall:'http://113.200.91.62:8080/mst/appBehavior/exportUninstall'
 
   }
 }

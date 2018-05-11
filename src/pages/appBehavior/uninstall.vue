@@ -1,6 +1,6 @@
 <template>
   <div class="hide-tabs">
-    <behaviorDetail :coverParams="coverParams" :tabs="tabs" :openLink='false' :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
+    <behaviorDetail :orderByMap='orderByMap' :coverParams="coverParams" :tabs="tabs" :openLink='false' :mergeCells="false" :fetchApi="fetchApi"></behaviorDetail>
   </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
     return {
       fetchApi: {
         all: api.unloadTable,
-        allDownload:
-          'http://113.200.91.81/mst/appQuality/exportUninstallAppList'
+        allDownload: api.download.exportUninstall,
+        allCharts: api.listUninstallEcharts
       },
       tabs: [
         {
@@ -30,7 +30,8 @@ export default {
         all: {
           type: this.$route.meta.bread.type
         }
-      }
+      },
+      orderByMap: this.$route.meta.orderByMap
     };
   }
 };
