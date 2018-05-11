@@ -38,7 +38,7 @@
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
-                  {{ sub.columnName === '环比(%)' ? (scope.row[sub.column] !== null ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (scope.row[sub.column] !== null ? (scope.row[sub.column]).toFixed(3) : '-') }}
+                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : '-') }}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] === '1' ? tableupImg : tabledownImg">
                 </template>
               </el-table-column>
@@ -372,7 +372,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
@@ -381,7 +381,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -392,7 +392,7 @@ export default {
 
 .trend {
   position: relative;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
   .el-tabs--border-card {
     border: none;
   }
@@ -405,8 +405,8 @@ export default {
     .el-input__inner {
       height: 32px;
       width: 260px;
-      border-bottom: 1px solid #DBDEE3;
-      background: #F5F7FA
+      border-bottom: 1px solid #dbdee3;
+      background: #f5f7fa;
     }
     .el-icon-search {
       line-height: 35px;
