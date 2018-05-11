@@ -187,7 +187,7 @@ export default {
       this.dateVal = val;
     },
     changeMonthDate(val) {
-      this.monthDateVal = val;
+      this.dateVal = val;
     },
 
     //    获取时间数据
@@ -285,18 +285,17 @@ export default {
             val.payload.children[0] &&
             val.payload.children[0].property.split('--')[0]) ||
           this.dateVal,
-        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        dateType: 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
         appId: val.type == 1 ? val.payload.id : '',
-        channelId: val.type == 1 ? val.payload.id : ''
+        channelId: val.type == 1 ? val.payload.id : parseInt(this.$route.params.storeId) || 0
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;

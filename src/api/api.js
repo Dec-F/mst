@@ -151,7 +151,7 @@ const api = {
     exportAppChannelUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppChannelUse',
 
     // 卸载   -----  导出接口
-    exportUninstall:'http://113.200.91.62:8080/mst/appBehavior/exportUninstall'
+    exportUninstall: 'http://113.200.91.62:8080/mst/appBehavior/exportUninstall'
 
   }
 }

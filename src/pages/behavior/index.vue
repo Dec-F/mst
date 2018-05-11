@@ -258,7 +258,7 @@ export default {
             val.payload.children[0] &&
             val.payload.children[0].property.split('--')[0]) ||
           this.dateVal,
-        dateType: this.dateTypeVal === 'week' ? 1 : 2,
+        dateType: 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
