@@ -41,7 +41,7 @@ const api = {
     return fetch({url: '/appQuality/findAppChannelUse', method: 'GET', params: params});
   },
   // app 质量分析二级页面图表
-  listAppEchartsSub(params) {
+  qlistAppEchartsSub(params) {
     return fetch({url: '/appQuality/listAppEchartsSub', method: 'GET', params: params});
   },
   //  app 质量分析一级页面
@@ -49,7 +49,7 @@ const api = {
     return fetch({url: '/appQuality/findAppUse', method: 'GET', params: params});
   },
   // app 质量分析一级页面图表
-  listAppEcharts(params) {
+  qlistAppEcharts(params) {
     return fetch({url: '/appQuality/listAppEcharts', method: 'GET', params: params});
   },
   // 深度分析 同装

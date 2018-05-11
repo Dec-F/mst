@@ -265,7 +265,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        appId: parseInt(this.$route.params.storeId) || 0,
+        appId: val.type == 1 ? val.payload.id : '',
         channelId: val.type == 1 ? val.payload.id : ''
       };
       console.log(111);

@@ -16,7 +16,7 @@ export default {
       fetchApi: {
         all: api.findAppChannelUse,
         allDownload: api.download.exportAppChannelUse,
-        allCharts: api.listAppEchartsSub
+        allCharts: api.qlistAppEchartsSub
       },
       tabs: [
         {
