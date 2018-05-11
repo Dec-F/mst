@@ -193,7 +193,7 @@ export default {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0
       };
@@ -233,7 +233,7 @@ export default {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0
       };
@@ -244,7 +244,7 @@ export default {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];
       }
-      params=Object.assign(params,this.coverParams.all)
+      params = Object.assign(params, this.coverParams.all);
       window.location.href = formatUrl(url, params);
     },
     //    获取图表数据
@@ -253,16 +253,20 @@ export default {
       // 发送请求
       let params = {
         // 发送请求
-        date: val.payload.children&&val.payload.children[0]&&val.payload.children[0].property.split('--')[0]||this.dateVal,
+        date:
+          (val.payload.children &&
+            val.payload.children[0] &&
+            val.payload.children[0].property.split('--')[0]) ||
+          this.dateVal,
         dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
-        orderColumn: this.orderBy||this.orderByMap['all'],
+        orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0,
-        channelId:(val.type==1?val.payload.id:'')
+        channelId: val.type == 1 ? val.payload.id : ''
       };
       console.log(111);
       if (this.tabType === 'all') {
@@ -272,7 +276,7 @@ export default {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];
       }
-      params=Object.assign(params,this.coverParams.all)
+      params = Object.assign(params, this.coverParams.all);
       let title = '',
         subTitle = '';
       if (val.type === 1) {
@@ -312,15 +316,16 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? 'asc' : 'desc';
+      sort.order = sort.order ? sort.order : 'desc';
       this.orderType = sort.order;
-      console.log(sort);
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
         this.orderBy =
-          sortArr[1].indexOf('count') > -1 ? this.orderByMap[this.tabType] : 'ratio';
+          sortArr[1].indexOf('count') > -1
+            ? this.orderByMap[this.tabType]
+            : 'ratio';
       }
       this.fetchTableData();
     },
