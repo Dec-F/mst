@@ -1,7 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="content" style="margin-top:0">
-      <div class="navname" style="margin-top: 25px;">{{ $route.meta.bread.name }}</div>
+      <div class="navname" style="margin-top: 25px;" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
+      <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
       <div class="detail-content-menu">
         <el-col :span="24">
           <selectType :data="typeList" v-model="bigType" @change-big-type="changeBigType" @change-small-type="changeSmallType"></selectType>
@@ -136,7 +137,6 @@ export default {
   created() {
     this.fetchAppType();
     this.fetchDate();
-    console.log(this.orderByMap, this.coverParams);
   },
   watch: {
     $route(val) {
@@ -295,7 +295,10 @@ export default {
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
         appId: val.type == 1 ? val.payload.id : '',
-        channelId: val.type == 1 ? val.payload.id : parseInt(this.$route.params.storeId) || 0
+        channelId:
+          val.type == 1
+            ? val.payload.id
+            : parseInt(this.$route.params.storeId) || 0
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -365,7 +368,10 @@ export default {
         return;
       }
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
+        query:{
+          icon:row.logo
+        }
       });
     }
   }
@@ -373,6 +379,7 @@ export default {
 </script>
 
 <style lang="less">
+
 .content {
   .detail-content-menu {
     border: 1px solid #ddd;

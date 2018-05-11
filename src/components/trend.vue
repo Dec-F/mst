@@ -21,7 +21,7 @@
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
-                    <span @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
+                    <span v-if="(scope.row.name!=='合计')" @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
                   </div>
                 </template>
               </el-table-column>

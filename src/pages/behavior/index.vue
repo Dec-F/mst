@@ -1,7 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <div class="navname">{{ $route.meta.bread.name }}</div>
+      <div class="navname" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
+      <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
       <div class="menu">
         <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
           <span>
@@ -333,8 +334,12 @@ export default {
       if (!this.openLink) {
         return;
       }
+
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
+        query:{
+          icon:row.logo
+        }
       });
     }
   }
@@ -342,6 +347,7 @@ export default {
 </script>
 
 <style lang="less">
+
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
