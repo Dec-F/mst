@@ -164,6 +164,9 @@ export default {
     },
     //    切换大类
     changeBigType(val) {
+      if (val == 0) {
+        this.checkedType = '';
+      }
       this.bigType = val;
     },
     //    切换小类
