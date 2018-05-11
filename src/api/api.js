@@ -24,7 +24,7 @@ const api = {
     return fetch({url: '/quality/findChannelUse', method: 'GET', params: params});
   },
   // 渠道  质量分析一级页面图表
-  listChannelEcharts(params) {
+  qlistChannelEcharts(params) {
     return fetch({url: '/quality/listChannelEcharts', method: 'GET', params: params});
   },
 
