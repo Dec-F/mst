@@ -52,9 +52,7 @@
     <template v-if="dialogTableVisible">
       <el-dialog width='1000px' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
         <div class="chart-sub-title">
-          <i class="app-icon" :style="chartIconStyle"></i>
-          <!--<img :src="chartIconStyle" alt="">-->
-          {{chartData.chartSubTitle}}
+          <img class="app-icon" :src="chartIconSrc" alt=""> {{chartData.chartSubTitle}}
         </div>
 
         <div class="chart-con" v-loading.chart-con="chartData.chartloading">
@@ -149,7 +147,7 @@ export default {
       dateListVal: null,
       actTab: this.tabs[0],
       searchData: [],
-      chartIconStyle: ''
+      chartIconSrc: ''
     };
   },
   created() {
@@ -243,11 +241,8 @@ export default {
     //打开图表框
     dialog2Table(val) {
       this.$emit('open-chart', val);
-      this.chartIconStyle = {
-        backgroundImage: `url(${val.payload.logo})`
-
-      };
-      console.log(val.payload.logo)
+      console.log(val.payload.logo);
+      this.chartIconSrc = decodeURIComponent(val.payload.logo);
       this.dialogTableVisible = true;
     },
 
@@ -383,7 +378,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
@@ -392,7 +387,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -431,22 +426,22 @@ export default {
 }
 
 .el-dialog__header {
-  border-bottom: 1px solid #E2E9F3;
+  border-bottom: 1px solid #e2e9f3;
   padding: 13px 20px 10px;
-  background: #F8F8F8;
+  background: #f8f8f8;
   .el-dialog__title {
     border: 1px solid rgb(221, 221, 221) !important;
     padding: 6px 10px;
     line-height: 24px;
     font-size: 14px;
-    color: #63738C;
+    color: #63738c;
     background: #fff;
   }
   .el-dialog__title::before {
-    content: "\E636";
-    font-family: "iconfont" !important;
+    content: '\E636';
+    font-family: 'iconfont' !important;
     padding-right: 10px;
-    color: #E2E9F3
+    color: #e2e9f3;
   }
 }
 </style>
