@@ -222,7 +222,8 @@ export default {
         this.loading = false;
         this.count = true;
         this.tableHeader = res.data.tableHeader || [];
-        this.tableData =(res.data.tableSum || []).concat(res.data.tableData) || [];
+        this.tableData =
+          (res.data.tableSum || []).concat(res.data.tableData) || [];
         if (res.data.dateTimes !== null) {
           this.dateList = res.data.dateTimes;
           this.dateListVal = res.data.dateTimes[0].id;
@@ -350,7 +351,7 @@ export default {
       if (!sort.order || !sort.prop) {
         return;
       }
-      sort.order = sort.order ? 'asc' : 'desc';
+      sort.order = sort.order ? sort.order : 'desc';
       this.orderType = sort.order;
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
@@ -368,9 +369,11 @@ export default {
         return;
       }
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
-        query:{
-          icon:row.logo
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
+          row.name
+        }`,
+        query: {
+          icon: row.logo
         }
       });
     }
@@ -379,7 +382,6 @@ export default {
 </script>
 
 <style lang="less">
-
 .content {
   .detail-content-menu {
     border: 1px solid #ddd;
