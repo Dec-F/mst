@@ -184,7 +184,7 @@ export default {
       background: #232a32;
       width: 200px;
       padding-bottom: 40px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       h4:first-child {
         font-size: 20px;
         text-align: center;
@@ -292,7 +292,7 @@ export default {
   } // footer
   .footer {
     display: flex;
-    margin: 80px auto;
+    margin: 30px auto;
     text-align: center;
     justify-content: center;
     img {
@@ -313,7 +313,7 @@ export default {
 .right .el-tooltip__popper {
   padding: 8px 10px;
 }
-.hide-tabs .el-tabs__header {
+.hide-tabs .el-tabs__nav-wrap {
   display: none;
 }
 </style>

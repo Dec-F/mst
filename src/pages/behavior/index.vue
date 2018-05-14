@@ -2,6 +2,9 @@
   <div class="wrapper">
     <div class="content">
       <div class="navname" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
+      <el-tooltip class="item" effect="light" :content="$route.meta.bread.content" placement="right">
+        <i class="el-icon-question"></i>
+      </el-tooltip>
       <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
       <div class="menu">
         <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
@@ -255,10 +258,10 @@ export default {
       let params = {
         // 发送请求
         date:
-          (val.payload.children &&
-            val.payload.children[0] &&
-            val.payload.children[0].property.split('--')[0]) ||
-          this.dateVal,
+        (val.payload.children &&
+          val.payload.children[0] &&
+          val.payload.children[0].property.split('--')[0]) ||
+        this.dateVal,
         dateType: 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
@@ -299,7 +302,7 @@ export default {
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => {});
+        this.searchData.filter(item => { });
       }
     },
     handleSizeChange(val) {
@@ -337,8 +340,8 @@ export default {
 
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
-        query:{
-          icon:row.logo
+        query: {
+          icon: row.logo
         }
       });
     }
@@ -347,14 +350,15 @@ export default {
 </script>
 
 <style lang="less">
-
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
   background: #69c72b;
 }
-.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
+
+.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
-.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content">
       <div class="contentflow">
-        <div class="navname" style="margin-top: 25px;padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
+        <div class="navname" style="padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
           <el-tooltip class="item" effect="light" content="APP与上月/周相比活性（时间）降低，流向同类别APP的占比。" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
@@ -88,10 +88,10 @@
           </div>
           <el-dialog title="当前APP" width="1000px" :visible.sync="dialogTableVisible">
             <div class="chart-con">
-              <div style="position: absolute;top: 17px;left: 133px;">
+              <div style="position: absolute;top: 8px;left: 133px;">
                 <span><img :src="chartLogo" alt="" style="width: 30px;height: 30px;"></span>
               </div>
-              <div style="position: absolute;top: 20px;left: 175px;">
+              <div style="position: absolute;top: 10px;left: 175px;">
                 <span style="color:#69C72B">{{chartTile}}</span>
               </div>
               <ECharts style="width:900px;" :options="chartOption" theme="irs"></ECharts>
@@ -214,13 +214,13 @@ export default {
         let date = new Date(this.month)
 
         let year = date.getFullYear()
-        let month = date.getMonth()+1+''
+        let month = date.getMonth() + 1 + ''
         if (month.length == 1) {
           month = 0 + month
         }
         let yearMM = year + month
         this.queryForm.date = yearMM
-                console.log(yearMM)
+        console.log(yearMM)
       }
       this.fetchTableData()
     },
@@ -277,7 +277,14 @@ export default {
               borderColor: '#E5E5E5',
               borderRadius: 4,
               formatter: function(params) {
-                let tooltip = `<div> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
+                let tooltip = `<div style ="${option.tipHeaderCss}"> ${params[0].name} </div>`;
+                for (let i = 0; i < params.length; i++) {
+                  tooltip += `<div style="${option.tipBodyCss}">
+                      <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
+                      ${params[i].seriesName}
+                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}%
+                    </div>`;
+                }
                 return tooltip
               }
             },
@@ -423,11 +430,11 @@ export default {
     // 导出数据
     downloadData() {
       var path = "http://113.200.91.62:8080/mst/depth/exportFlowTrend?";
-      var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&"+"subCategoryId="
-                 +(this.queryForm.subCategoryId) +"&" +"dateType=" +(this.queryForm.dateType)+"&"
-                 + "date=" +(this.queryForm.date) +"&"+"pageNo="+ (this.queryForm.pageNo)
-                 +"&" +"pageSize=" +(this.queryForm.pageSize) +"&"+ "appId="+(this.queryForm.appId)
-        window.location.href = path + paras1 ;
+      var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&" + "subCategoryId="
+        + (this.queryForm.subCategoryId) + "&" + "dateType=" + (this.queryForm.dateType) + "&"
+        + "date=" + (this.queryForm.date) + "&" + "pageNo=" + (this.queryForm.pageNo)
+        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)
+      window.location.href = path + paras1;
 
     },
   }
@@ -466,6 +473,10 @@ export default {
   }
   .table-con {
     padding: 20px 20px;
+    border: 1px solid #e2e9f3;
+    border-top: none;
+    margin-bottom: 20px;
+    padding-bottom: 0px;
   }
   .table-con-line span {
     position: relative;
@@ -521,6 +532,7 @@ export default {
 
   .el-dialog__header {
     border-bottom: 1px solid #E2E9F3;
+    padding: 13px 20px 10px;
     background: #F8F8F8;
     .el-dialog__title {
       border: 1px solid rgb(221, 221, 221) !important;
@@ -655,7 +667,7 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 39px;
+      height: 32px;
       width: 300px;
       border: none;
       background: #f9f9f9;

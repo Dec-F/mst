@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const api = {
   login(data) {
-    return fetch({url: '/login/login', method: 'POST', data: data});
+    return fetch({url: '/irviews/validToken', method: 'POST', data: data});
   },
   // 公共接口
   date(params) {
@@ -11,6 +11,10 @@ const api = {
   // 留存时间接口
   findKeepDate(params) {
     return fetch({url: '/quality/findKeepDate', method: 'GET', params: params});
+  },
+  //画像时间接口
+  getPortraitTime(params) {
+    return fetch({url: '/dateTime/getPortraitTime', method: 'GET', params: params});
   },
   appType() {
     return fetch({url: 'category/getCategory', method: 'GET'});

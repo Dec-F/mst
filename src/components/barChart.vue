@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import optionTool from '@/echarts/echartTooltip';
+import option from '@/echarts/echartTooltip'
 import ECharts from 'vue-echarts/components/ECharts.vue';
 import theme from '@/echarts/theme.json';
 ECharts.registerTheme('irs', theme);
@@ -50,7 +50,7 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() { },
   watch: {
     chartData(data) {
       if (!data.data) {
@@ -65,13 +65,34 @@ export default {
             opacity: 0.1
           },
           data: data.data.map(v => {
-            return v.data[i]&&v.data[i].value;
+            return v.data[i] && v.data[i].value;
           })
         };
       });
       this.option = {
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          textStyle: {
+            color: '#999999',
+            decoration: 'none',
+            fontFamily: 'Verdana, sans-serif',
+            fontSize: 12,
+          },
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E5E5',
+          borderRadius: 4,
+          formatter: function(params) {
+            console.log(params)
+            let tooltip = `<div> ${params[0].name} </div>`;
+            for (let i = 0; i < params.length; i++) {
+              tooltip += `<div>
+              <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
+                      ${params[i].seriesName}
+                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}
+                    </div>`;
+            }
+            return tooltip
+          }
         },
         grid: {
           left: '3%',
@@ -87,8 +108,19 @@ export default {
         toolbox: {
           show: true,
           feature: {
-            magicType: { type: ['line', 'bar'] }
+            magicType: {
+              type: ['line', 'bar'],
+              iconStyle: {
+                borderColor: '#69c72b'
+              },
+              emphasis: {
+                iconStyle: {
+                  borderColor: '#69c72b'
+                },
+              }
+            }
           },
+
           right: '3%'
         },
         xAxis: {
@@ -103,7 +135,7 @@ export default {
           }
         },
         legend: {
-          bottom:0,
+          bottom: 0,
           data: data.legend,
           tooltip: {
             show: true

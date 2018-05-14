@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     updateData() {
-      const axiosGetDate = axios.get('/mst/dateTime/getDateTime').then(res => {
+      const axiosGetDate = axios.get('/mst/dateTime/getPortraitTime').then(res => {
         if (!res.data || !res.data.data) return;
         this.dateRange = {
           start: res.data.data.start,

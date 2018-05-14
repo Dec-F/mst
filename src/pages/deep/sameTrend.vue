@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content">
       <div class="contentsame">
-        <div class="navname" style="margin-top: 25px;padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
+        <div class="navname" style="padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
           <el-tooltip class="item" effect="light" content="同时用户安装app的占比" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
@@ -72,7 +72,7 @@
             </template>
             <el-footer>
               <el-row type="flex" justify="space-between" class="margintop">
-                <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'style="bottom:0">
+                <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download' style="bottom:0">
                   <i class="iconfont icon-download"></i>数据导出
                 </el-button>
                 <el-pagination @current-change="handleCurrentChange" :current-page.sync="queryForm.pageNo" layout="total, prev, pager, next, jumper" :total="total">
@@ -82,10 +82,10 @@
           </div>
           <el-dialog title="当前APP" width="1000px" :visible.sync="dialogTableVisible">
             <div class="chart-con">
-              <div style="position: absolute;top: 17px;left: 133px;">
+              <div style="position: absolute;top: 8px;left: 133px;">
                 <span><img :src="chartLogo" alt="" style="width: 30px;height: 30px;"></span>
               </div>
-              <div style="position: absolute;top: 20px;left: 175px;">
+              <div style="position: absolute;top: 10px;left: 175px;">
                 <span style="color:#69C72B">{{chartTile}}</span>
               </div>
               <ECharts style="width:900px;" :options="chartOption" theme="irs"></ECharts>
@@ -208,7 +208,7 @@ export default {
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
         let year = date.getFullYear()
-        let month = date.getMonth()+1+''
+        let month = date.getMonth() + 1 + ''
         if (month.length == 1) {
           month = 0 + month
         }
@@ -264,7 +264,14 @@ export default {
               borderColor: '#E5E5E5',
               borderRadius: 4,
               formatter: function(params) {
-                let tooltip = `<div> ${params[0].name}: ${params[0].value.toFixed(3) + '%'} </div>`;
+                let tooltip = `<div style ="${option.tipHeaderCss}"> ${params[0].name} </div>`;
+                for (let i = 0; i < params.length; i++) {
+                  tooltip += `<div style="${option.tipBodyCss}">
+                      <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
+                      ${params[i].seriesName}
+                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}%
+                    </div>`;
+                }
                 return tooltip
               }
             },
@@ -400,23 +407,23 @@ export default {
         }
       });
     },
-      // queryForm: {
-      //   categoryId: '', //大类id
-      //   subCategoryId: '',
-      //   dateType: '1',  //1/2周或者月
-      //   date: '',//时间
-      //   pageNo: 1, //分页
-      //   pageSize: 10, //条数
-      //   orderType: 'descending', //排序类型
-      // },
+    // queryForm: {
+    //   categoryId: '', //大类id
+    //   subCategoryId: '',
+    //   dateType: '1',  //1/2周或者月
+    //   date: '',//时间
+    //   pageNo: 1, //分页
+    //   pageSize: 10, //条数
+    //   orderType: 'descending', //排序类型
+    // },
     // 导出数据
     downloadData() {
       var path = "http://113.200.91.62:8080/mst/depth/exportSimulTrend?";
-      var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&"+"subCategoryId="
-                 +(this.queryForm.subCategoryId) +"&" +"dateType=" +(this.queryForm.dateType)+"&"
-                 + "date=" +(this.queryForm.date) +"&"+"pageNo="+ (this.queryForm.pageNo)
-                 +"&" +"pageSize=" +(this.queryForm.pageSize) +"&"+ "appId="+(this.queryForm.appId)
-        window.location.href = path + paras1 ;
+      var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&" + "subCategoryId="
+        + (this.queryForm.subCategoryId) + "&" + "dateType=" + (this.queryForm.dateType) + "&"
+        + "date=" + (this.queryForm.date) + "&" + "pageNo=" + (this.queryForm.pageNo)
+        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)
+      window.location.href = path + paras1;
 
     },
   }
@@ -437,6 +444,13 @@ export default {
 }
 
 .contentsame {
+  .table-con {
+    padding: 20px 20px;
+    border: 1px solid #e2e9f3;
+    border-top: none;
+    margin-bottom: 20px;
+    padding-bottom: 0px;
+  }
   .table-con .el-table .cell {
     padding-left: 0;
     padding-right: 0
@@ -492,6 +506,7 @@ export default {
 
   .el-dialog__header {
     border-bottom: 1px solid #E2E9F3;
+    padding: 13px 20px 10px;
     background: #F8F8F8;
     .el-dialog__title {
       border: 1px solid rgb(221, 221, 221) !important;
@@ -628,7 +643,7 @@ export default {
     display: inline-block;
     width: 300px;
     .el-input__inner {
-      height: 39px;
+      height: 32px;
       width: 300px;
       border: none;
       background: #f9f9f9;
@@ -636,7 +651,12 @@ export default {
     }
   }
 }
-
+.margintop {
+  margin-top: 40px;
+  .is-plain {
+    bottom: 0
+  }
+}
 .iconChart {
   width: 24px;
   height: 24px;

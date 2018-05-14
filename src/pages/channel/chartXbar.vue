@@ -7,6 +7,7 @@
 
 <script>
 import ECharts from 'vue-echarts/components/ECharts.vue';
+import option from '@/echarts/echartTooltip'
 import theme from '@/echarts/theme.json';
 ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/bar';
@@ -19,7 +20,7 @@ export default {
   components: {
     ECharts
   },
-  data () {
+  data() {
     return {
       empty: true,
       options: {}
@@ -28,13 +29,13 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
       }
     },
   },
   watch: {
-    'data': function () {
+    'data': function() {
       if (this.data.length) {
         this.empty = false;
       } else {
@@ -50,10 +51,21 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        tooltip : {
+        tooltip: {
           trigger: 'axis',
-          axisPointer : {
-            type : 'shadow'
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: function(params) {
+            let tooltip = `<div> ${params[0].name} </div>`;
+            for (let i = 0; i < params.length; i++) {
+              tooltip += `<div>
+              <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
+                      ${params[i].name}
+                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}%
+                    </div>`;
+            }
+            return tooltip
           },
           textStyle: {
             color: '#999999',
@@ -73,8 +85,8 @@ export default {
             }
           },
           axisLabel: {
-            formatter: function (value) {
-              return `${value }%`;
+            formatter: function(value) {
+              return `${value}%`;
             }
           },
           splitLine: {

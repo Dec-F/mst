@@ -64,7 +64,8 @@ const routes = [
           type: 'download',
           bread: {
             name: '行为趋势',
-            path: '/downloadTrend'
+            path: '/downloadTrend',
+            content:"用户下载、新装、活跃行为趋势"
           }
         }
       }, {
@@ -89,7 +90,8 @@ const routes = [
           bread: {
             name: '卸载趋势',
             path: '/unloadTrend',
-            type: 1
+            type: 1,
+            content:"APP卸载后，流向同类别APP的占比。"
           },
           orderByMap: {
             all: 'uninstall_volume'
@@ -107,7 +109,8 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/funnelTrend',
-            type: 'freq'
+            type: 'freq',
+            content:"本月/周内通过应用商店新装APP的人均次数"
           },
           orderByMap: {
             all: 'use_freq'
@@ -123,6 +126,7 @@ const routes = [
             name: '新装人均次数',
             path: '/funnelTrend',
             type: 'freq'
+            
           },
           orderByMap: {
             all: 'use_freq'
@@ -139,7 +143,8 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/frequencyTrend',
-            type: 'time'
+            type: 'time',
+            content:"本月/周内通过应用商店新装APP的人均次时长。"
           },
           orderByMap: {
             all: 'use_time'
@@ -170,7 +175,8 @@ const routes = [
           type: 'keep',
           bread: {
             name: '留存趋势',
-            path: '/keepTrend'
+            path: '/keepTrend',
+            content:"本月/周内通过应用商店新装APP在次日、三日、7日等活跃的设备用户。"
           }
         }
       },
@@ -183,7 +189,8 @@ const routes = [
           type: 'channel',
           bread: {
             name: '用户画像分析',
-            path: '/channelPortrait'
+            path: '/channelPortrait',
+            content:"本月/周内应用商店有下行为用户的画像。"
           }
         }
       },
@@ -196,7 +203,8 @@ const routes = [
           type: 'download',
           bread: {
             name: '行为趋势',
-            path: '/appdownloadTrend'
+            path: '/appdownloadTrend',
+            content:"本月/周内应用商店有下行为用户的画像。"
           }
         }
       }, {
@@ -208,7 +216,8 @@ const routes = [
           bread: {
             name: '新装人均次数',
             path: '/appfunnelTrend',
-            type: 'freq'
+            type: 'freq',
+            content:"本月/周内新装APP的人均次数。"
           },
           orderByMap: {
             all: 'use_freq'
@@ -251,7 +260,8 @@ const routes = [
           bread: {
             name: '新装人均时长',
             path: '/appdurationTrend',
-            type: 'time'
+            type: 'time',
+            content:"本月/周内新装APP的人均时长。"
           },
           orderByMap: {
             all: 'use_time'
@@ -293,7 +303,8 @@ const routes = [
           type: 'app',
           bread: {
             name: '用户画像分析',
-            path: '/appPortrait'
+            path: '/appPortrait',
+            content:"本月/周内APP有新装行为的用户画像"
           }
         }
       }, {
@@ -330,10 +341,14 @@ router.beforeEach((to, from, next) => {
   NProgress.start();
   next();
 
-  // 路由拦截 if (to.matched.some(r => r.meta.requireAuth)) {   if
+  // 路由拦截
+  //  if (to.matched.some(r => r.meta.requireAuth)) {   if
   // (localStorage.getItem('token')) {     next();   } else { window.location.href
   // = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'   } }
   // else {   next(); }
+
+
+  
 });
 
 router.afterEach(() => {

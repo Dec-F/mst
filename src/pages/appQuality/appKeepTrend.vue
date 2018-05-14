@@ -48,16 +48,17 @@
                 </el-table-column>
               </el-table>
             </div>
+            <el-footer>
+              <el-row type="flex" justify="space-between">
+                <el-button size="small" @click="exportKeep('channel')" v-if="keepData">
+                  <i class="iconfont icon-download" style="padding-left: 0;"></i>数据导出</el-button>
+                <el-pagination background layout="total, prev, pager, next,jumper" :total="pageData.total" @current-change="pageChange" v-if="pageData"></el-pagination>
+              </el-row>
+            </el-footer>
           </el-card>
         </el-main>
       </div>
-      <el-footer>
-        <el-row type="flex" justify="space-between" >
-          <el-button size="small" @click="exportKeep('channel')" v-if="keepData">
-            <i class="iconfont icon-download" style="padding-left: 0;"></i>数据导出</el-button>
-          <el-pagination background layout="total, prev, pager, next,jumper" :total="pageData.total" @current-change="pageChange" v-if="pageData"></el-pagination>
-        </el-row>
-      </el-footer>
+
     </el-container>
   </div>
 </template>
@@ -261,10 +262,12 @@ export default {
 .margintop {
   margin-top: 40px;
 }
+
 .selectIndex .el-input__inner {
-    padding-left: 33px;
-    border: 0 none;
+  padding-left: 33px;
+  border: 0 none;
 }
+
 .exportData {
   width: 120px;
   height: 30px;
@@ -272,7 +275,8 @@ export default {
   color: #64728D;
   padding: 5px 0px;
 }
-.el-tooltip__popper.is-light[x-placement^=right] .popper__arrow{
-      border-right-color: #69C72B;
+
+.el-tooltip__popper.is-light[x-placement^=right] .popper__arrow {
+  border-right-color: #69C72B;
 }
 </style>

@@ -2,6 +2,9 @@
   <div class="wrapper">
     <div class="content">
       <div class="navname">{{ $route.meta.bread.name }}</div>
+      <el-tooltip class="item" effect="light" :content="$route.meta.bread.content" placement="right">
+        <i class="el-icon-question"></i>
+      </el-tooltip>
       <div class="photo-card photo-card-con">
         <picker :type="$route.meta.type === 'channel' ? 'channel' : 'app'" @submit="submit"></picker>
       </div>

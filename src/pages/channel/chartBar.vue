@@ -10,6 +10,7 @@ import ECharts from 'vue-echarts/components/ECharts.vue';
 import theme from '@/echarts/theme.json';
 ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/bar';
+import option from '@/echarts/echartTooltip'
 import 'echarts/lib/component/tooltip';
 
 const maxValue = 1;
@@ -19,7 +20,7 @@ export default {
   components: {
     ECharts
   },
-  data () {
+  data() {
     return {
       empty: true,
       options: {}
@@ -28,13 +29,13 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
       }
     },
   },
   watch: {
-    'data': function () {
+    'data': function() {
       if (this.data.length) {
         this.empty = false;
       } else {
@@ -44,10 +45,10 @@ export default {
       const xAxis = this.data.map(item => item.attrValue);
       const data = this.data.map(item => Math.round(item.attrRatio * 1000) / 1000);
       const options = {
-        tooltip : {
+        tooltip: {
           trigger: 'axis',
-          axisPointer : {
-            type : 'shadow'
+          axisPointer: {
+            type: 'shadow'
           },
           textStyle: {
             color: '#999999',
@@ -58,6 +59,17 @@ export default {
           backgroundColor: '#FFFFFF',
           borderColor: '#E5E5E5',
           borderRadius: 4,
+        },
+        formatter: function(params) {
+          let tooltip = `<div> ${params[0].name} </div>`;
+          for (let i = 0; i < params.length; i++) {
+            tooltip += `<div>
+              <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
+                      ${params[i].name}
+                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}%
+                    </div>`;
+          }
+          return tooltip
         },
         xAxis: {
           type: 'category',
@@ -82,7 +94,7 @@ export default {
             }
           },
           axisLabel: {
-            formatter: function (value) {
+            formatter: function(value) {
               return `${value}%`;
             }
           },

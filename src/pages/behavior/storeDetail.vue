@@ -222,7 +222,7 @@ export default {
         this.loading = false;
         this.count = true;
         this.tableHeader = res.data.tableHeader || [];
-        this.tableData = res.data.tableData || [];
+        this.tableData =(res.data.tableSum || []).concat(res.data.tableData) || [];
         if (res.data.dateTimes !== null) {
           this.dateList = res.data.dateTimes;
           this.dateListVal = res.data.dateTimes[0].id;

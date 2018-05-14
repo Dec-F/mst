@@ -7,7 +7,6 @@
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
         <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" :row-class-name='rowClass' border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
-
             <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
               <el-table-column width="80">
                 <template slot-scope="scope">
@@ -15,8 +14,8 @@
                 </template>
               </el-table-column>
             </el-table-column>
-            <el-table-column v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-              <el-table-column min-width="180" fixed class-name='box-sd'>
+            <el-table-column fixed v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
+              <el-table-column min-width="180" class-name='box-sd'>
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" class="link">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
@@ -51,15 +50,13 @@
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
     <template v-if="dialogTableVisible">
-      <el-dialog width='100%' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
+      <el-dialog width='1000px' :title="chartData.chartTitle" :visible.sync="dialogTableVisible">
         <div class="chart-sub-title">
-          <i class="app-icon" :style="chartIconStyle"></i> {{chartData.chartSubTitle}}</div>
-        <!--<span class="chart-date">
-                      <el-select v-model="dateListVal" placeholder="请选择" @change="changeChart">
-                        <el-option v-for="item in dateList" :key="item.id" :value="item.id" :label="item.label">
-                        </el-option>
-                      </el-select>
-                    </span>-->
+          <i class="app-icon" :style="chartIconStyle"></i>
+          <!--<img :src="chartIconStyle" alt="">-->
+          {{chartData.chartSubTitle}}
+        </div>
+
         <div class="chart-con" v-loading.chart-con="chartData.chartloading">
           <bar-chart :chartData="chartData"></bar-chart>
         </div>
@@ -152,7 +149,7 @@ export default {
       dateListVal: null,
       actTab: this.tabs[0],
       searchData: [],
-      chartIconStyle: {}
+      chartIconStyle: ''
     };
   },
   created() {
@@ -223,16 +220,6 @@ export default {
         ]
       );
     },
-    // renderHeader1(createElement, { column }) {
-    //   return createElement('div', [
-    //     createElement('span', [column.label]),
-    //     createElement('img', {
-    //       attrs: {
-    //         src: require('../../dist/static/img/sort.png')
-    //       }
-    //     })
-    //   ]);
-    // },
     // 单元格合并
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       if (!this.actTab.mergeCells) {
@@ -257,8 +244,10 @@ export default {
     dialog2Table(val) {
       this.$emit('open-chart', val);
       this.chartIconStyle = {
-        backgroundImage: `url(${val.payload.icon})`
+        backgroundImage: `url(${val.payload.logo})`
+
       };
+      console.log(val.payload.logo)
       this.dialogTableVisible = true;
     },
 
@@ -300,13 +289,15 @@ export default {
 .row-light {
   background-color: #fff;
 }
+
 .row-night td {
   background-color: #fafafa;
 }
+
 .chart-sub-title {
   position: absolute;
-  top: 20px;
-  left: 120px;
+  top: 11px;
+  left: 150px;
   color: #69c72b;
   .app-icon {
     display: inline-block;
@@ -343,7 +334,7 @@ export default {
   th {
     background-color: #e1f4d6 !important;
     border-bottom: 1px solid #bde6a2;
-    padding: 2px;
+    padding: 0px;
   }
 }
 
@@ -392,7 +383,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
@@ -401,7 +392,7 @@ export default {
   float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -415,12 +406,17 @@ export default {
   border: 1px solid #dcdfe6;
   .el-tabs--border-card {
     border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    .el-tabs__header {
+      height: 39px;
+    }
   }
   .searchSelect {
     position: absolute;
     z-index: 111;
     right: 20px;
-    height: 40px;
+    height: 39px;
     text-align: right;
     .el-input__inner {
       height: 32px;
@@ -431,6 +427,26 @@ export default {
     .el-icon-search {
       line-height: 35px;
     }
+  }
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid #E2E9F3;
+  padding: 13px 20px 10px;
+  background: #F8F8F8;
+  .el-dialog__title {
+    border: 1px solid rgb(221, 221, 221) !important;
+    padding: 6px 10px;
+    line-height: 24px;
+    font-size: 14px;
+    color: #63738C;
+    background: #fff;
+  }
+  .el-dialog__title::before {
+    content: "\E636";
+    font-family: "iconfont" !important;
+    padding-right: 10px;
+    color: #E2E9F3
   }
 }
 </style>
