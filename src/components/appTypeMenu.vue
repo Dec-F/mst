@@ -19,12 +19,12 @@
       </div>
       <div class="right">
         <div class="rightBox">
-          <el-checkbox-button v-model="checkAll" @change="selectAllType(checkAll)" style="float:left">
+          <!-- <el-checkbox-button v-model="checkAll" @change="selectAllType(checkAll)" style="float:left">
             全选
-          </el-checkbox-button>
-          <el-checkbox-group v-model="checkedType" @change="selectType">
-            <el-checkbox-button v-for="item in smallTypeList" :label="item.subCategoryId" :value="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
-          </el-checkbox-group>
+          </el-checkbox-button> -->
+          <el-radio-group v-model="checkedType" @change="selectType">
+            <el-radio-button v-for="item in smallTypeList" :label="item.subCategoryId" :value="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-radio-button>
+          </el-radio-group>
         </div>
       </div>
     </div>
@@ -81,9 +81,9 @@ export default {
       this.$emit('change-small-type', this.checkedType.join(','));
     },
     selectType(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.smallTypeList.length;
-      this.$emit('change-small-type', this.checkedType.join(','));
+      // let checkedCount = value.length;
+      // this.checkAll = checkedCount === this.smallTypeList.length;
+      this.$emit('change-small-type', this.checkedType);
     }
 
   }
