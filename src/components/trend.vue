@@ -5,7 +5,7 @@
     </div>
     <el-tabs type="border-card" @tab-click='tabClick' :value='actTab.name'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
-        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" border @sort-change="changeSort">
+        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" :row-class-name='rowClass' border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
 
             <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
@@ -277,12 +277,32 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.$emit('change-current', val);
+    },
+    rowClass({ row, rowIndex }) {
+      if (!this.actTab.mergeCells) {
+        if (rowIndex % 2 === 0) {
+          return '';
+        } else {
+          return 'row-night';
+        }
+      }
+      if (Math.floor(rowIndex / 3) % 2 === 0) {
+        return 'row-light';
+      } else {
+        return 'row-night';
+      }
     }
   }
 };
 </script>
 
 <style lang='less'>
+.row-light {
+  background-color: #fff;
+}
+.row-night td {
+  background-color: #fafafa;
+}
 .chart-sub-title {
   position: absolute;
   top: 20px;
