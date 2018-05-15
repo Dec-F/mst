@@ -17,7 +17,7 @@
             <el-table-column fixed v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
               <el-table-column min-width="180" class-name='box-sd'>
                 <template slot-scope="scope">
-                  <div @click="linkDetail(scope.row)" class="link">
+                  <div @click="linkDetail(scope.row)" :class="scope.row.name!=='合计'?'link':''">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
                     <span>{{ scope.row.name }}</span>
                     <span v-if="(scope.row.name!=='合计')" @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
@@ -250,6 +250,9 @@ export default {
       this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
+      if (item.name == '合计') {
+        return;
+      }
       this.$emit('link-page', item);
     },
     handleSizeChange(val) {
@@ -376,7 +379,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
@@ -385,7 +388,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
