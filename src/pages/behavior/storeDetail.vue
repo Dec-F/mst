@@ -294,13 +294,25 @@ export default {
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         categoryId: this.bigType,
-        subCategoryIds: this.checkedType,
-        appId: val.type == 1 ? val.payload.id : '',
-        channelId:
-          val.type == 1
-            ? val.payload.id
-            : parseInt(this.$route.params.storeId) || 0
+        subCategoryIds: this.checkedType
       };
+      console.log(
+        this.$route.meta.rowId,
+        this.$route.params.storeId,
+        val.payload.id,
+        'ddd'
+      );
+      if (this.$route.meta.rowId == 'cid') {
+        (params.appId =
+          val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
+          (params.channelId =
+            val.type == 1
+              ? val.payload.id
+              : parseInt(this.$route.params.storeId) || 0);
+      } else {
+        params.appId = val.type == 1 ? val.payload.id : '';
+        params.channelId = parseInt(this.$route.params.storeId) || 0;
+      }
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
         params.trendType = this.$route.meta.trendType || 'download';

@@ -66,7 +66,8 @@ const routes = [
             name: '行为趋势',
             path: '/downloadTrend',
             content:"用户下载、新装、活跃行为趋势"
-          }
+          },
+          rowId:'cid'
         }
       }, {
         path: '/downloadTrend/storeDetail/:storeId/:storeName',
@@ -77,7 +78,8 @@ const routes = [
           bread: {
             name: '行为趋势',
             path: '/downloadTrend'
-          }
+          },
+          rowId:'appId'
         }
       },
       // 行为分析 --- 卸载趋势
@@ -96,7 +98,8 @@ const routes = [
           orderByMap: {
             all: 'uninstall_volume'
           },
-          trendType:'uninstall'
+          trendType:'uninstall',
+          rowId:'appId'
         }
       },
       // 质量分析 -- 频次/时长趋势
@@ -114,7 +117,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_freq'
-          }
+          },
+          rowId:'cid'
         }
       }, {
         path: '/funnelTrend/storeDetail/:storeId/:storeName',
@@ -126,11 +130,12 @@ const routes = [
             name: '新装人均次数',
             path: '/funnelTrend',
             type: 'freq'
-            
+
           },
           orderByMap: {
             all: 'use_freq'
-          }
+          },
+          rowId:'appId'
         }
       },
       // 质量分析 -- 频次趋势
@@ -148,7 +153,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_time'
-          }
+          },
+          rowId:'cid'
         }
       }, {
         path: '/frequencyTrend/storeDetail/:storeId/:storeName',
@@ -163,7 +169,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_time'
-          }
+          },
+          rowId:'appId'
         }
       },
       // 质量分析 -- 时长趋势 质量分析--留存
@@ -205,7 +212,8 @@ const routes = [
             name: '行为趋势',
             path: '/appdownloadTrend',
             content:"本月/周内应用商店有下行为用户的画像。"
-          }
+          },
+          rowId:'appId'
         }
       }, {
         path: '/appfunnelTrend',
@@ -221,7 +229,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_freq'
-          }
+          },
+          rowId:'appId'
         }
       }, {
         path: '/appfunnelTrend/storeDetail/:storeId/:storeName',
@@ -236,7 +245,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_freq'
-          }
+          },
+          rowId:'cid'
         }
       },
       //二级页面
@@ -249,7 +259,8 @@ const routes = [
           bread: {
             name: '行为趋势',
             path: '/appdownloadTrend'
-          }
+          },
+          rowId:'cid'
         }
       }, {
         path: '/appdurationTrend',
@@ -261,11 +272,12 @@ const routes = [
             name: '新装人均时长',
             path: '/appdurationTrend',
             type: 'time',
-           
+
           },
           orderByMap: {
             all: 'use_time'
-          }
+          },
+          rowId:'appId'
         }
       }, {
         path: '/appdurationTrend/storeDetail/:storeId/:storeName',
@@ -280,7 +292,8 @@ const routes = [
           },
           orderByMap: {
             all: 'use_time'
-          }
+          },
+          rowId:'cid'
         }
       }, {
         path: '/appKeepTrend',
@@ -348,7 +361,7 @@ router.beforeEach((to, from, next) => {
   // else {   next(); }
 
 
-  
+
 });
 
 router.afterEach(() => {
