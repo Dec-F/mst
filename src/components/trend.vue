@@ -97,19 +97,17 @@ export default {
           mergeCells: true
         },
         {
-          index: 1,
-          name: 'xinzhuang',
-          label: '新装趋势',
-          mergeCells: false
-        },
-
-        {
           index: 2,
           name: 'download',
           label: '下载趋势',
           mergeCells: false
         },
-
+        {
+          index: 1,
+          name: 'xinzhuang',
+          label: '新装趋势',
+          mergeCells: false
+        },
         {
           index: 3,
           name: 'huoyue',
@@ -378,7 +376,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
   margin-left: 20px;
   width: 7px;
@@ -387,7 +385,7 @@ export default {
   float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -411,7 +409,7 @@ export default {
     position: absolute;
     z-index: 111;
     right: 20px;
-    height: 39px;
+    height: 30px;
     text-align: right;
     .el-input__inner {
       height: 32px;
