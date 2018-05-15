@@ -59,7 +59,7 @@ export default {
           },
           label: {
             normal: {
-              show: true
+              show: index < 6
             }
           }
         };
@@ -88,7 +88,7 @@ export default {
           text:['高','低'],
           orient: 'horizontal',
           inRange: {
-            color: ['#d6fa96','#b5d337']
+            color: ['#f2f2f2','#b5d337']
           }
         },
         series: [

@@ -37,7 +37,7 @@
       <label class="picker-label">时间选择</label>
       <el-date-picker
         v-model="date"
-        default-time="defDate"
+        :default-time="defDate"
         type="month"
         value-format="yyyy-MM"
         placeholder="选择月"
@@ -57,7 +57,7 @@ function dateInRange(val, start, end) {
   const valDateStamp = new Date(val).getTime();
   const startDateStamp = new Date(start).getTime();
   const endDateStamp = new Date(end).getTime();
-  return valDateStamp > startDateStamp && valDateStamp < endDateStamp;
+  return valDateStamp >= startDateStamp && valDateStamp <= endDateStamp;
 }
 
 export default {
@@ -107,10 +107,14 @@ export default {
     updateData() {
       const axiosGetDate = axios.get('/mst/dateTime/getPortraitTime').then(res => {
         if (!res.data || !res.data.data) return;
+        const start = res.data.data.start.slice(0, 7);
+        const end = res.data.data.end.slice(0, 7);
         this.dateRange = {
-          start: res.data.data.start,
-          end: res.data.data.end,
+          start,
+          end
         };
+        this.defDate = end;
+        this.date = end;
       });
       const axiosGetOption = axios.get('/mst/appchannel/findAppChannelCount').then(res => {
         if (!res.data || !res.data.data) return;
