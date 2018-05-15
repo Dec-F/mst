@@ -1,5 +1,5 @@
 <template>
-  <div class="chart" style="padding: 20px">
+  <div class="chart" style="padding: 20px" >
     <ECharts :options="option" theme="irs"></ECharts>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
         return {
           name: val,
           type: 'line',
+          smooth: true,
           areaStyle: {
             opacity: 0.1
           },
@@ -126,7 +127,11 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: true,
-          data: data.xAxis
+          data: data.xAxis,
+          axisLabel: {
+            interval: 0,
+            rotate:30
+          }
         },
         yAxis: {
           type: 'value',

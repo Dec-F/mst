@@ -5,7 +5,7 @@
       <el-tooltip class="item" effect="light" :content="$route.meta.bread.content" placement="right">
         <i class="el-icon-question"></i>
       </el-tooltip>
-      <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
+      <div class="navname" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
       <div class="menu">
         <date-picker v-if="startDate && endDate" :limit="dataLimitVal" :type="dateTypeVal" @change-date-type="changeDateType" @change-date-limit="changeDateLimit" @change-date="changeDate" @change-week-date="changeWeekDate" @change-month-date="changeMonthDate" :startDate="startDate" :endDate="endDate">
           <span>

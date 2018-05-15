@@ -696,7 +696,7 @@ export default {
 .searchSelect {
   position: relative;
   z-index: 111;
-  height: 40px;
+  height: 30px;
   text-align: right;
   float: right;
 }

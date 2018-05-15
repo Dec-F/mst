@@ -261,7 +261,7 @@ const routes = [
             name: '新装人均时长',
             path: '/appdurationTrend',
             type: 'time',
-            content:"本月/周内新装APP的人均时长。"
+           
           },
           orderByMap: {
             all: 'use_time'
