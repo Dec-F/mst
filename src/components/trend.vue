@@ -19,7 +19,7 @@
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" :class="scope.row.name!=='合计'?'link':''">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                    <span>{{ scope.row.name }}</span>
+                    <span class="item-name">{{ scope.row.name }}</span>
                     <span v-if="(scope.row.name!=='合计')" @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
                   </div>
                 </template>
@@ -318,8 +318,7 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0);
-  box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -351,14 +350,25 @@ export default {
   white-space: nowrap;
 }
 
+.link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
 .logo {
   float: left;
 }
 
+.item-name {
+  float: left;
+  margin-left: 10px;
+}
+
 .table-left {
-  display: inline-block;
-  text-align: right;
+  display: inline-block; 
   float: right;
+  margin-right:20px;
   img {
     display: inline-block;
     vertical-align: middle;
@@ -367,8 +377,12 @@ export default {
   }
 }
 
-.el-table--border tr td:nth-child(n + 1) {
-  border-right: none;
+.el-table--border tr td:nth-child(n) {
+  // border-right: none;
+}
+
+.el-table--border tr td:first-child {
+  border-right: #ebeef5
 }
 
 .el-table--border th {
@@ -379,34 +393,46 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
-  margin-left: 20px;
+  margin-right: 20px;
   width: 7px;
   height: 16px;
   vertical-align: middle;
   float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
   vertical-align: middle;
-  width: 80px;
-  height: 20px;
+  width: 70px;
+  height: 21px;
 }
 
 .trend {
   position: relative;
   border: 1px solid #dcdfe6;
+  .el-tabs__item{
+height: 45px;
+  }
   .el-tabs--border-card {
     border: none;
     box-shadow: none;
     -webkit-box-shadow: none;
     .el-tabs__header {
-      height: 39px;
+      height: 44px;
     }
+  }
+  .el-table--border td:first-child .cell{
+    padding-left: 0px;
+  }
+  .el-table .cell, .el-table th div{
+    margin-left: 0px;
+    margin-right:0px;
+    padding-left: 0px;
+    padding-right:0px
   }
   .searchSelect {
     position: absolute;
@@ -415,7 +441,7 @@ export default {
     height: 30px;
     text-align: right;
     .el-input__inner {
-      height: 32px;
+      height: 38px;
       width: 260px;
       border-bottom: 1px solid #dbdee3;
       background: #f5f7fa;
@@ -444,5 +470,9 @@ export default {
     padding-right: 10px;
     color: #e2e9f3;
   }
+}
+
+.el-table__body tr.hover-row>td {
+  background-color: transparent
 }
 </style>

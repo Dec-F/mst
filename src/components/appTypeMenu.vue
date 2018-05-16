@@ -20,8 +20,8 @@
       <div class="right">
         <div class="rightBox">
           <!-- <el-checkbox-button v-model="checkAll" @change="selectAllType(checkAll)" style="float:left">
-                全选
-              </el-checkbox-button> -->
+                  全选
+                </el-checkbox-button> -->
           <el-radio-group v-model="checkedType" @change="selectType">
             <el-radio-button v-for="item in smallTypeList" :label="item.subCategoryId" :value="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-radio-button>
           </el-radio-group>
@@ -95,7 +95,7 @@ export default {
   .right {
     padding-top: 13px;
     padding-left: 6px;
-    padding-bottom: 0px;
+    padding-bottom: 0px !important;
   }
   .el-radio-button__inner {
     height: 30px;
@@ -152,6 +152,9 @@ export default {
     padding: 10px;
     background-color: #F9F9F9;
     border: 1px dashed #E3EAF4;
+    .el-radio-group {
+      margin-bottom: -10px;
+    }
     .el-radio-button {
       margin-right: 10px;
       margin-bottom: 10px;
@@ -160,10 +163,13 @@ export default {
         background: #F9F9F9;
       }
     }
-  .el-radio-button__orig-radio:checked+.el-radio-button__inner{
-        background-color: #69C72B;
-        border-color: #69C72B;
-  }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+      background-color: #69C72B;
+      border-color: #69C72B;
+    }
+    .el-radio-button__inner {
+      border-radius: 0;
+    }
   }
 }
 </style>

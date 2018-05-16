@@ -16,10 +16,10 @@
                 </span>
               </el-radio-group>
               <div class="sub-type" v-show="queryForm.categoryId!=0">
-                <el-checkbox-button class="fl" @change="allSelHandle" v-model="allSel">全部</el-checkbox-button>
-                <el-checkbox-group class="fl" v-model="subIdArr">
-                  <el-checkbox-button @change="subSelHandle" v-for="item in typeSubList" :label="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-checkbox-button>
-                </el-checkbox-group>
+                <!-- <el-checkbox-button class="fl" @change="allSelHandle" v-model="allSel">全部</el-checkbox-button> -->
+                <el-radio-group class="fl" v-model="subIdArr">
+                  <el-radio-button @change="subSelHandle" v-for="item in typeSubList" :label="item.subCategoryId" :key="item.subCategoryId">{{ item.label }}</el-radio-button>
+                </el-radio-group>
               </div>
             </el-form-item>
             <el-form-item label="时间筛选">
@@ -127,7 +127,7 @@ export default {
       typeList: [], //app类型数据
       typeSubList: [], //app类型数据
       allSel: false,
-      subIdArr: [],
+      subIdArr: '',
       queryForm: {
         categoryId: '', //大类id
         subCategoryId: '',
@@ -184,16 +184,16 @@ export default {
     }
   },
   methods: {
-    allSelHandle(val) {
-      if (val) {
-        this.subIdArr = []
-        this.bigTypeItem.forEach((item) => {
-          this.subIdArr.push(item.subCategoryId)
-        })
-      } else {
-        this.subIdArr = []
-      }
-    },
+    // allSelHandle(val) {
+    //   if (val) {
+    //     this.subIdArr = []
+    //     this.bigTypeItem.forEach((item) => {
+    //       this.subIdArr.push(item.subCategoryId)
+    //     })
+    //   } else {
+    //     this.subIdArr = []
+    //   }
+    // },
     subSelHandle(val) {
       if (!val) {
         this.allSel = false
@@ -407,7 +407,8 @@ export default {
     // 获取表格数据
     fetchTableData() {
       this.loading = true;
-      this.queryForm.subCategoryId = this.subIdArr.join(',')
+      // this.queryForm.subCategoryId = this.subIdArr.join(',')
+      this.queryForm.subCategoryId = this.subIdArr
       api.findFlowTrend(this.queryForm).then(res => {
         this.queryForm.pageNo = res.data.tablePage.pageNo
         this.total = res.data.tablePage.total

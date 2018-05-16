@@ -281,18 +281,16 @@ export default {
       // 发送请求
       let params = {
         // 发送请求
-        date:
-          (val.payload.children &&
-            val.payload.children[0] &&
-            val.payload.children[0].property.split('--')[0]) ||
-          this.dateVal,
+        date: this.dateVal,
         dateType: 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime,
+        orderDate: this.sortbyDateTime || (val.payload.children &&
+          val.payload.children[0] &&
+          val.payload.children[0].property.split('--')[0]),
         categoryId: this.bigType,
         subCategoryIds: this.checkedType
       };
@@ -308,10 +306,10 @@ export default {
           (params.channelId =
             val.type == 1
               ? val.payload.id
-              : parseInt(this.$route.params.storeId) || 0);
+              : parseInt(this.$route.params.storeId) || '');
       } else {
         params.appId = val.type == 1 ? val.payload.id : '';
-        params.channelId = parseInt(this.$route.params.storeId) || 0;
+        params.channelId = parseInt(this.$route.params.storeId) || '';
       }
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -337,7 +335,8 @@ export default {
           xAxis: data.xAxis,
           data: data.line,
           chartTitle: title,
-          chartSubTitle: subTitle
+          chartSubTitle: subTitle,
+          legend: data.legend
         };
       });
     },
@@ -382,7 +381,7 @@ export default {
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-          row.name
+        row.name
         }`,
         query: {
           icon: row.logo
@@ -412,7 +411,7 @@ export default {
       .right {
         padding: 15px 15px;
         margin: 5px 0;
-        > span {
+        >span {
           margin-right: 15px;
         }
       }
@@ -428,7 +427,7 @@ export default {
         .el-checkbox {
           margin: 5px 15px 5px 0;
         }
-        .el-checkbox + .el-checkbox {
+        .el-checkbox+.el-checkbox {
           margin: 5px 15px 5px 0;
         }
         .el-checkbox-group {
@@ -438,7 +437,7 @@ export default {
         .el-radio {
           margin: 5px 15px 5px 0;
         }
-        .el-radio + .el-radio {
+        .el-radio+.el-radio {
           margin: 5px 15px 5px 0;
         }
       }
@@ -474,7 +473,7 @@ export default {
     height: 36px;
     background: #ffffff;
   }
-  .el-table th > .cell {
+  .el-table th>.cell {
     background: #ffffff;
     color: #64748a;
   }

@@ -307,6 +307,7 @@ export default {
 
 .item {
   margin: 4px;
+  margin-left:-5px;
 }
 
 .left .el-tooltip__popper,

@@ -12,7 +12,7 @@
               <span style="color:#69C82C; font-size:60px;display: inline-block;vertical-align: middle;">·</span>
               <span style="color:#69C82C;display: inline-block;">行为分析</span>
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">下载趋势</el-col>
               </span>
@@ -21,7 +21,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;    overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装趋势</el-col>
               </span>
@@ -30,7 +30,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">活跃趋势</el-col>
               </span>
@@ -42,7 +42,7 @@
               <span style="color:#69C82C; font-size:60px;display: inline-block;vertical-align: middle;">·</span>
               <span style="color:#69C82C;display: inline-block;">质量分析</span>
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装人均次数</el-col>
               </span>
@@ -51,7 +51,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装人均时长</el-col>
               </span>
@@ -60,7 +60,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装留存</el-col>
               </span>
@@ -73,7 +73,7 @@
               <span style="color:#69C82C;display: inline-block;">渠道画像</span>
 
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">渠道画像</el-col>
               </span>
@@ -92,7 +92,7 @@
               <span style="color:#69C82C;display: inline-block;">行为分析</span>
 
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">下载趋势</el-col>
               </span>
@@ -101,7 +101,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装趋势</el-col>
               </span>
@@ -110,7 +110,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">活跃趋势</el-col>
               </span>
@@ -123,7 +123,7 @@
               <span style="color:#69C82C;display: inline-block;">质量分析</span>
 
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装人均次数</el-col>
               </span>
@@ -132,7 +132,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装人均时长</el-col>
               </span>
@@ -141,7 +141,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">新装留存</el-col>
               </span>
@@ -154,7 +154,7 @@
               <span style="color:#69C82C;display: inline-block;">APP画像</span>
 
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">APP画像</el-col>
               </span>
@@ -167,7 +167,7 @@
               <span style="color:#69C82C;display: inline-block;">深度分析</span>
 
             </div>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">同装分析</el-col>
               </span>
@@ -176,7 +176,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">活性流向</el-col>
               </span>
@@ -185,7 +185,7 @@
               </span>
             </div>
             <hr>
-            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;">
+            <div class="grid-content bg-purple" style="margin:20px 0 20px 0;display: flow-root;overflow: hidden;">
               <span style="color:#343434">
                 <el-col :md="6" style="padding-left:0">卸载流向</el-col>
               </span>

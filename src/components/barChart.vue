@@ -43,7 +43,8 @@ export default {
                   hb: 0,
                   value: 0
                 }
-              ]
+              ],
+              legend:[]
             }
           ]
         };
@@ -83,7 +84,7 @@ export default {
           borderColor: '#E5E5E5',
           borderRadius: 4,
           formatter: function(params) {
-            let tooltip = `<div> ${params[0].name} </div>`;
+            let tooltip = `<div> ${params[0].name} </div>`;            
             for (let i = 0; i < params.length; i++) {
               tooltip += `<div>
               <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
@@ -120,7 +121,6 @@ export default {
               }
             }
           },
-
           right: '3%'
         },
         xAxis: {

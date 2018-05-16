@@ -257,31 +257,32 @@ export default {
       // 发送请求
       let params = {
         // 发送请求
-        date:
-          (val.payload.children &&
-            val.payload.children[0] &&
-            val.payload.children[0].property.split('--')[0]) ||
-          this.dateVal,
+        date: this.dateVal,
         dateType: 1,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime
+        orderDate: this.sortbyDateTime || (val.payload.children &&
+          val.payload.children[0] &&
+          val.payload.children[0].property.split('--')[0])
       };
-      console.log(this.$route.meta.rowId,this.$route.params.storeId,val.payload.id,'ddd');
-      if (this.$route.meta.rowId == 'cid') {
-        (params.appId =
-          val.type == 1 ? parseInt(this.$route.params.storeId)||'' : ''),
-          (params.channelId =
-            val.type == 1
-              ? val.payload.id
-              : parseInt(this.$route.params.storeId) || 0);
-      } else {
-        params.appId = val.type == 1 ? val.payload.id : '';
-        params.channelId = parseInt(this.$route.params.storeId) || 0;
+      console.log(this.$route.meta.rowId, this.$route.params.storeId, val.payload.id, 'ddd');
+      if (val.type == 1) {
+        if (this.$route.meta.rowId == 'cid') {
+          (params.appId =
+            val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
+            (params.channelId =
+              val.type == 1
+                ? val.payload.id
+                : parseInt(this.$route.params.storeId) || '');
+        } else {
+          params.appId = val.type == 1 ? val.payload.id : '';
+          params.channelId = parseInt(this.$route.params.storeId) || '';
+        }
       }
+
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
         params.trendType = 'download';
@@ -305,13 +306,14 @@ export default {
           xAxis: data.xAxis,
           data: data.line,
           chartTitle: title,
-          chartSubTitle: subTitle
+          chartSubTitle: subTitle,
+          legend: data.legend
         };
       });
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => {});
+        this.searchData.filter(item => { });
       }
     },
     handleSizeChange(val) {
@@ -349,7 +351,7 @@ export default {
 
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-          row.name
+        row.name
         }`,
         query: {
           icon: row.logo
@@ -361,15 +363,15 @@ export default {
 </script>
 
 <style lang="less">
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
   background: #69c72b;
 }
 
-.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
+.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
 
-.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>
