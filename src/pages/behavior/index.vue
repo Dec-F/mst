@@ -286,6 +286,9 @@ export default {
         if (this.$route.meta.storeId == 'appId') {
           params.appId = parseInt(this.$route.params.storeId);
           params.channelId = '';
+        } else {
+          params.appId = val.type == 1 ? val.payload.id : '';
+          params.channelId = parseInt(this.$route.params.storeId) || '';
         }
       }
 
