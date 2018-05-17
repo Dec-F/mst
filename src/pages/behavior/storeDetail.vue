@@ -136,7 +136,7 @@ export default {
   },
   created() {
     this.fetchAppType();
-    this.fetchDate();
+    this.fetchDate(1, true);
   },
   watch: {
     $route(val) {
@@ -176,6 +176,7 @@ export default {
     changeDateType(val) {
       this.dateTypeVal = val;
       this.dataLimitVal = 4;
+      this.fetchDate(val === 'week' ? 1 : 2);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -191,13 +192,22 @@ export default {
     },
 
     //    获取时间数据
-    fetchDate() {
-      api.date().then(res => {
-        this.dateVal = moment(res.data.end).format('YYYYWW');
-        this.startDate = res.data.start;
-        this.endDate = res.data.end;
-        this.fetchTableData();
-      });
+    fetchDate(dateType = 1, isInit) {
+      api
+        .date({
+          dateType
+        })
+        .then(res => {
+          this.dateVal =
+            dateType === 1
+              ? moment(res.data.end).format('YYYYWW')
+              : moment(res.data.end).format('YYYYMM');
+          this.startDate = res.data.start;
+          this.endDate = res.data.end;
+          if (isInit) {
+            this.fetchTableData();
+          }
+        });
     },
     //    获取表格数据
     fetchTableData(id) {
@@ -288,9 +298,11 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime || (val.payload.children &&
-          val.payload.children[0] &&
-          val.payload.children[0].property.split('--')[0]),
+        orderDate:
+          this.sortbyDateTime ||
+          (val.payload.children &&
+            val.payload.children[0] &&
+            val.payload.children[0].property.split('--')[0]),
         categoryId: this.bigType,
         subCategoryIds: this.checkedType
       };
@@ -381,7 +393,7 @@ export default {
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-        row.name
+          row.name
         }`,
         query: {
           icon: row.logo
@@ -411,7 +423,7 @@ export default {
       .right {
         padding: 15px 15px;
         margin: 5px 0;
-        >span {
+        > span {
           margin-right: 15px;
         }
       }
@@ -427,7 +439,7 @@ export default {
         .el-checkbox {
           margin: 5px 15px 5px 0;
         }
-        .el-checkbox+.el-checkbox {
+        .el-checkbox + .el-checkbox {
           margin: 5px 15px 5px 0;
         }
         .el-checkbox-group {
@@ -437,7 +449,7 @@ export default {
         .el-radio {
           margin: 5px 15px 5px 0;
         }
-        .el-radio+.el-radio {
+        .el-radio + .el-radio {
           margin: 5px 15px 5px 0;
         }
       }
@@ -473,7 +485,7 @@ export default {
     height: 36px;
     background: #ffffff;
   }
-  .el-table th>.cell {
+  .el-table th > .cell {
     background: #ffffff;
     color: #64748a;
   }

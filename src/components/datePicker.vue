@@ -86,6 +86,9 @@ export default {
   watch: {
     limit(val) {
       this.dataLimitVal = val;
+    },
+    endDate(val) {
+      this.dateValFormat = new Date(val);
     }
   },
   mounted() {

@@ -116,7 +116,7 @@ export default {
     };
   },
   created() {
-    this.fetchDate();
+    this.fetchDate(1, true);
   },
   computed: {
     filterData() {
@@ -157,6 +157,7 @@ export default {
     changeDateType(val) {
       this.dateTypeVal = val;
       this.dataLimitVal = 4;
+      this.fetchDate(val === 'week' ? 1 : 2);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -177,13 +178,22 @@ export default {
       this.fetchTableData();
     },
     // 获取日期数据
-    fetchDate() {
-      api.date().then(res => {
-        this.dateVal = moment(res.data.end).format('YYYYWW');
-        this.startDate = res.data.start;
-        this.endDate = res.data.end;
-        this.fetchTableData();
-      });
+    fetchDate(dateType = 1, isInit) {
+      api
+        .date({
+          dateType
+        })
+        .then(res => {
+          this.dateVal =
+            dateType === 1
+              ? moment(res.data.end).format('YYYYWW')
+              : moment(res.data.end).format('YYYYMM');
+          this.startDate = res.data.start;
+          this.endDate = res.data.end;
+          if (isInit) {
+            this.fetchTableData();
+          }
+        });
     },
     // 获取表格数据
     fetchTableData() {
