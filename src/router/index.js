@@ -260,7 +260,8 @@ const routes = [
             name: '行为趋势',
             path: '/appdownloadTrend'
           },
-          rowId:'cid'
+          rowId:'cid',
+          storeId:'appId'
         }
       }, {
         path: '/appdurationTrend',

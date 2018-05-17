@@ -264,11 +264,12 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime || (val.payload.children &&
-          val.payload.children[0] &&
-          val.payload.children[0].property.split('--')[0])
+        orderDate:
+          this.sortbyDateTime ||
+          (val.payload.children &&
+            val.payload.children[0] &&
+            val.payload.children[0].property.split('--')[0])
       };
-      console.log(this.$route.meta.rowId, this.$route.params.storeId, val.payload.id, 'ddd');
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
           (params.appId =
@@ -280,6 +281,11 @@ export default {
         } else {
           params.appId = val.type == 1 ? val.payload.id : '';
           params.channelId = parseInt(this.$route.params.storeId) || '';
+        }
+      } else {
+        if (this.$route.meta.storeId == 'appId') {
+          params.appId = parseInt(this.$route.params.storeId);
+          params.channelId = '';
         }
       }
 
@@ -313,7 +319,7 @@ export default {
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => { });
+        this.searchData.filter(item => {});
       }
     },
     handleSizeChange(val) {
@@ -351,7 +357,7 @@ export default {
 
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-        row.name
+          row.name
         }`,
         query: {
           icon: row.logo
@@ -363,15 +369,15 @@ export default {
 </script>
 
 <style lang="less">
-.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>
