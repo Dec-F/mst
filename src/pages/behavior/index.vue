@@ -296,13 +296,8 @@ export default {
           params.appId = parseInt(this.$route.params.storeId);
           params.channelId = '';
         } else {
-<<<<<<< HEAD
-          params.appId = val.type == 1 ? val.payload.id : '';
-          params.channelId = parseInt(this.$route.params.storeId) || '';
-=======
           params.channelId = val.type == 1 ? val.payload.id : '';
           params.appId = parseInt(this.$route.params.storeId) || '';
->>>>>>> cxy
         }
       }
       if (this.tabType === 'all') {
@@ -387,17 +382,11 @@ export default {
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
-<<<<<<< HEAD
 
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
 
-=======
-.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
-  color: #69c72b;
-}
->>>>>>> cxy
 .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
