@@ -30,7 +30,6 @@ fetch.interceptors.response.use(
         duration: 5 * 1000
       })
       if (res.resCode === 401) {
-        // router.replace('Login')一直注释掉
         // window.location.href = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46';
       } else {
         Message({
@@ -48,7 +47,17 @@ fetch.interceptors.response.use(
   error => {
     console.log(error)
     // router.replace('NotFound')
-    return Promise.reject(error);
+    switch (error.response.status){
+      case 500:
+      Message ({
+        message:'系统异常！',
+        type:'warning'
+      });
+      break;
+      default:
+      break;
+    }
+    return Promise.reject(error)
   })
 
 export default fetch;

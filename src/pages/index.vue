@@ -27,7 +27,7 @@
         </el-menu-item-group>
       </el-menu>
       <div class="footer">
-        <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="邮箱：ask@iresearch.com.cn" placement="top-start">
           <img src="../../static/img/email.png">
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="电话：400-026-2099" placement="top-start">

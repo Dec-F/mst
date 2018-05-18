@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const api = {
   login(data) {
-    return fetch({url: '/irviews/validToken', method: 'POST', data: data});
+    return fetch({url: '/irviews/validToken', method: 'GET', data: data});
   },
   // 公共接口
   date(params) {

@@ -292,7 +292,7 @@ export default {
       let params = {
         // 发送请求
         date: this.dateVal,
-        dateType: 1,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

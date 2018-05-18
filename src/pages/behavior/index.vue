@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content">
       <div class="navname" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
-      <el-tooltip class="item" effect="light" :content="$route.meta.bread.content" placement="right">
+      <el-tooltip class="item"  v-if='!$route.params.storeName' effect="light" :content="$route.meta.bread.content" placement="right">
         <i class="el-icon-question"></i>
       </el-tooltip>
       <div class="navname" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
@@ -57,7 +57,6 @@ export default {
         };
       }
     },
-
     tabs: {
       type: Array
     },
@@ -268,7 +267,7 @@ export default {
       let params = {
         // 发送请求
         date: this.dateVal,
-        dateType: 1,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
@@ -297,11 +296,15 @@ export default {
           params.appId = parseInt(this.$route.params.storeId);
           params.channelId = '';
         } else {
+<<<<<<< HEAD
           params.appId = val.type == 1 ? val.payload.id : '';
           params.channelId = parseInt(this.$route.params.storeId) || '';
+=======
+          params.channelId = val.type == 1 ? val.payload.id : '';
+          params.appId = parseInt(this.$route.params.storeId) || '';
+>>>>>>> cxy
         }
       }
-
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
         params.trendType = 'download';
@@ -367,7 +370,6 @@ export default {
       if (!this.openLink) {
         return;
       }
-
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
           row.name
@@ -385,11 +387,17 @@ export default {
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
+<<<<<<< HEAD
 
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
 
+=======
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
+  color: #69c72b;
+}
+>>>>>>> cxy
 .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }

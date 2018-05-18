@@ -18,6 +18,7 @@ export default {
      name: 'index'
    });
     // if (this.$route.query.token) {
+    // localStorage.setItem('token', this.$route.query.token)
     //   const data = {
     //     token: this.$route.query.token
     //   }

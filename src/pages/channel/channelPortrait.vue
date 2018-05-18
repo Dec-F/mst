@@ -58,7 +58,7 @@
             </div>
           </div>
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市等级占比</h4>
             <div class="photo-section-con">
               <chart-xbar class="photo-chart" :data="cityData"></chart-xbar>
             </div>

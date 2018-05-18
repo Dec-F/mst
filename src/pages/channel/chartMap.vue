@@ -77,7 +77,7 @@ export default {
           backgroundColor: '#FFFFFF',
           borderColor: '#E5E5E5',
           borderRadius: 4,
-          formatter: params => `${params.name}${params.value ? '<br />' + params.value : ''}`
+          formatter: params => `${params.name}${params.value ? '<br />' + params.value : ''}%`
         },
         visualMap: {
           min: 0,
