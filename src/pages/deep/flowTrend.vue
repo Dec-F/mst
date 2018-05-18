@@ -3,7 +3,7 @@
     <div class="content">
       <div class="contentflow">
         <div class="navname" style="padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
-          <el-tooltip class="item" effect="light" content="APP与上月/周相比活性（时间）降低，流向同类别APP的占比。" placement="right">
+          <el-tooltip class="item" style="margin-left: 0;" effect="light" content="APP与上月/周相比活性（时间）降低，流向同类别APP的占比。" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </div>
@@ -562,6 +562,7 @@ export default {
         border: none;
         font-size: 14px;
         height: 25px;
+        border-radius: 0
       }
       .el-radio-button__inner:hover {
         color: #69C72B
@@ -585,6 +586,7 @@ export default {
       padding-top: 10px;
       background-color: #F9F9F9;
       border: 1px dashed #E3EAF4;
+      padding: 10px;
       .el-checkbox-button {
         min-width: 86px;
         text-align: center;
@@ -597,6 +599,7 @@ export default {
         background: none;
         font-size: 14px;
         padding: 7px 15px;
+        border-radius: 0
       }
       .el-checkbox-button__inner:hover {
         color: #69C72B
@@ -612,6 +615,15 @@ export default {
       .el-checkbox-group {
         display: inline-block;
         width: 810px !important;
+      }
+      .el-radio-button__inner {
+        border-radius: 0px;
+        border: none;
+        font-size: 14px;
+      }
+      .el-radio-button {
+        margin-right: 10px;
+        border: 1px solid #dcdfe6;
       }
     }
     .date-type {

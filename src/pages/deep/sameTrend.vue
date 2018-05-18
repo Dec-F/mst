@@ -3,7 +3,7 @@
     <div class="content">
       <div class="contentsame">
         <div class="navname" style="padding: 0px 10px 0px 10px;">{{ $route.meta.bread.name }}
-          <el-tooltip class="item" effect="light" content="同时用户安装app的占比" placement="right">
+          <el-tooltip class="item" style="margin-left: 0;" effect="light" content="同时用户安装app的占比" placement="right">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </div>
@@ -557,6 +557,7 @@ export default {
       padding-top: 10px;
       background-color: #F9F9F9;
       border: 1px dashed #E3EAF4;
+      padding: 10px;
       .el-checkbox-button {
         min-width: 86px;
         text-align: center;
@@ -584,6 +585,15 @@ export default {
       .el-checkbox-group {
         display: inline-block;
         width: 810px !important;
+      }
+      .el-radio-button__inner {
+        border-radius: 0px;
+        border: none;
+        font-size:14px;
+      }
+      .el-radio-button {
+        margin-right: 10px;
+        border: 1px solid #dcdfe6;
       }
     }
     .date-type {
@@ -652,12 +662,14 @@ export default {
     }
   }
 }
+
 .margintop {
   margin-top: 40px;
   .is-plain {
     bottom: 0
   }
 }
+
 .iconChart {
   width: 24px;
   height: 24px;

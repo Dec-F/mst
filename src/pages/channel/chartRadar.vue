@@ -11,13 +11,14 @@ import theme from '@/echarts/theme.json';
 ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/radar';
 import 'echarts/lib/component/tooltip';
+import option from '@/echarts/echartTooltip'
 
 export default {
   name: 'chartRadar',
   components: {
     ECharts
   },
-  data () {
+  data() {
     return {
       empty: false,
       options: {}
@@ -26,13 +27,13 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
       }
     },
   },
   watch: {
-    'data': function () {
+    'data': function() {
       if (this.data.length) {
         this.empty = false;
       } else {
@@ -47,7 +48,7 @@ export default {
         };
       });
       const options = {
-        tooltip : {
+        tooltip: {
           textStyle: {
             color: '#999999',
             decoration: 'none',
@@ -56,7 +57,7 @@ export default {
           },
           backgroundColor: '#FFFFFF',
           borderColor: '#E5E5E5',
-          borderRadius: 4,
+          borderRadius: 4
         },
         radar: {
           indicator: indicator.length ? indicator : [{}],
@@ -76,7 +77,7 @@ export default {
             {
               value: this.data.map(item => Math.round(item.attrRatio * 1000) / 1000),
               tooltip: {
-                formatter: this.data.map(item => `${item.attrValue}: ${Math.round(item.attrRatio * 1000) / 1000}`).join('<br>')
+                formatter: this.data.map(item => `${item.attrValue}: ${Math.round(item.attrRatio * 1000) / 1000}%`).join('<br>')
               }
             }
           ]

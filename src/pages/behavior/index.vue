@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content">
       <div class="navname" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
-      <el-tooltip class="item" effect="light" :content="$route.meta.bread.content" placement="right">
+      <el-tooltip class="item"  v-if='!$route.params.storeName' effect="light" :content="$route.meta.bread.content" placement="right">
         <i class="el-icon-question"></i>
       </el-tooltip>
       <div class="navname" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
@@ -57,7 +57,6 @@ export default {
         };
       }
     },
-
     tabs: {
       type: Array
     },
@@ -116,7 +115,7 @@ export default {
     };
   },
   created() {
-    this.fetchDate();
+    this.fetchDate(1, true);
   },
   computed: {
     filterData() {
@@ -157,6 +156,7 @@ export default {
     changeDateType(val) {
       this.dateTypeVal = val;
       this.dataLimitVal = 4;
+      this.fetchDate(val === 'week' ? 1 : 2);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -177,12 +177,21 @@ export default {
       this.fetchTableData();
     },
     // 获取日期数据
-    fetchDate() {
-      api.date().then(res => {
-        this.dateVal = moment(res.data.end).format('YYYYWW');
-        this.startDate = res.data.start;
-        this.endDate = res.data.end;
-        this.fetchTableData();
+   fetchDate(dateType = 1, isInit) {
+      api
+        .date({
+          dateType
+       })
+        .then(res => {
+          this.dateVal =
+           dateType === 1
+             ? moment(res.data.end).format('YYYYWW')
+             : moment(res.data.end).format('YYYYMM');
+         this.startDate = res.data.start;
+         this.endDate = res.data.end;
+         if (isInit) {
+           this.fetchTableData();
+        }
       });
     },
     // 获取表格数据
@@ -258,17 +267,18 @@ export default {
       let params = {
         // 发送请求
         date: this.dateVal,
-        dateType: 1,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime || (val.payload.children &&
-          val.payload.children[0] &&
-          val.payload.children[0].property.split('--')[0])
+        orderDate:
+          this.sortbyDateTime ||
+          (val.payload.children &&
+            val.payload.children[0] &&
+            val.payload.children[0].property.split('--')[0])
       };
-      console.log(this.$route.meta.rowId, this.$route.params.storeId, val.payload.id, 'ddd');
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
           (params.appId =
@@ -281,8 +291,15 @@ export default {
           params.appId = val.type == 1 ? val.payload.id : '';
           params.channelId = parseInt(this.$route.params.storeId) || '';
         }
+      } else {
+        if (this.$route.meta.storeId == 'appId') {
+          params.appId = parseInt(this.$route.params.storeId);
+          params.channelId = '';
+        } else {
+          params.channelId = val.type == 1 ? val.payload.id : '';
+          params.appId = parseInt(this.$route.params.storeId) || '';
+        }
       }
-
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
         params.trendType = 'download';
@@ -313,7 +330,7 @@ export default {
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => { });
+        this.searchData.filter(item => {});
       }
     },
     handleSizeChange(val) {
@@ -348,10 +365,9 @@ export default {
       if (!this.openLink) {
         return;
       }
-
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-        row.name
+          row.name
         }`,
         query: {
           icon: row.logo
@@ -363,15 +379,13 @@ export default {
 </script>
 
 <style lang="less">
-.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
-
-.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
-
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>

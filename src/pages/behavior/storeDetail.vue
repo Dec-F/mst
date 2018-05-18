@@ -136,7 +136,7 @@ export default {
   },
   created() {
     this.fetchAppType();
-    this.fetchDate();
+    this.fetchDate(1, true);
   },
   watch: {
     $route(val) {
@@ -176,6 +176,7 @@ export default {
     changeDateType(val) {
       this.dateTypeVal = val;
       this.dataLimitVal = 4;
+      this.fetchDate(val === 'week' ? 1 : 2);
     },
     changeDateLimit(val) {
       this.dataLimitVal = val;
@@ -191,13 +192,22 @@ export default {
     },
 
     //    获取时间数据
-    fetchDate() {
-      api.date().then(res => {
-        this.dateVal = moment(res.data.end).format('YYYYWW');
-        this.startDate = res.data.start;
-        this.endDate = res.data.end;
-        this.fetchTableData();
-      });
+    fetchDate(dateType = 1, isInit) {
+      api
+        .date({
+         dateType
+        })
+        .then(res => {
+         this.dateVal =
+           dateType === 1
+             ? moment(res.data.end).format('YYYYWW')
+              : moment(res.data.end).format('YYYYMM');
+         this.startDate = res.data.start;
+         this.endDate = res.data.end;
+          if (isInit) {
+           this.fetchTableData();
+          }
+        });
     },
     //    获取表格数据
     fetchTableData(id) {
@@ -282,7 +292,7 @@ export default {
       let params = {
         // 发送请求
         date: this.dateVal,
-        dateType: 1,
+        dateType: this.dateTypeVal === 'week' ? 1 : 2,
         limit: this.dataLimitVal,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

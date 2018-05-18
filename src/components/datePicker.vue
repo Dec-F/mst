@@ -86,6 +86,9 @@ export default {
   watch: {
     limit(val) {
       this.dataLimitVal = val;
+    },
+    endDate(val) {
+      this.dateValFormat = new Date(val);
     }
   },
   mounted() {
@@ -143,7 +146,6 @@ export default {
       const startTimeNum = new Date(this.startDate) - 3600 * 1000 * 24 * 1;
       const endTimeNum = new Date(this.endDate);
       const nowTimeNum = Date.now();
-
       this.monthOption = {
         disabledDate(time) {
           if (time.getTime() >= endTimeNum) {
@@ -174,18 +176,15 @@ export default {
   line-height: 5px;
   vertical-align: middle;
 }
-
 .el-radio-button__inner {
   border: 1px solid #c7d9bf;
 }
-
 .right {
   .el-radio-button__inner {
     margin-bottom: 0px;
     line-height: 6px;
   }
 }
-
 .el-date-editor.el-input {
   width: 180px;
   .el-icon-date {
