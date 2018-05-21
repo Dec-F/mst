@@ -37,7 +37,8 @@
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
-                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : '-') }}
+
+                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column]) * 100).toFixed(3) + '%' : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] == 1 ? tableupImg : tabledownImg">
                 </template>
               </el-table-column>
@@ -318,7 +319,12 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0
+  ); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -366,9 +372,9 @@ export default {
 }
 
 .table-left {
-  display: inline-block; 
+  display: inline-block;
   float: right;
-  margin-right:20px;
+  margin-right: 20px;
   img {
     display: inline-block;
     vertical-align: middle;
@@ -382,7 +388,7 @@ export default {
 }
 
 .el-table--border tr td:first-child {
-  border-right: #ebeef5
+  border-right: #ebeef5;
 }
 
 .el-table--border th {
@@ -393,7 +399,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-right: 20px;
   width: 7px;
@@ -402,7 +408,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -414,8 +420,8 @@ export default {
 .trend {
   position: relative;
   border: 1px solid #dcdfe6;
-  .el-tabs__item{
-height: 45px;
+  .el-tabs__item {
+    height: 45px;
   }
   .el-tabs--border-card {
     border: none;
@@ -425,14 +431,15 @@ height: 45px;
       height: 44px;
     }
   }
-  .el-table--border td:first-child .cell{
+  .el-table--border td:first-child .cell {
     padding-left: 0px;
   }
-  .el-table .cell, .el-table th div{
+  .el-table .cell,
+  .el-table th div {
     margin-left: 0px;
-    margin-right:0px;
+    margin-right: 0px;
     padding-left: 0px;
-    padding-right:0px
+    padding-right: 0px;
   }
   .searchSelect {
     position: absolute;
@@ -472,7 +479,7 @@ height: 45px;
   }
 }
 
-.el-table__body tr.hover-row>td {
-  background-color: transparent
+.el-table__body tr.hover-row > td {
+  background-color: transparent;
 }
 </style>
