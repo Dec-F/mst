@@ -177,22 +177,22 @@ export default {
       this.fetchTableData();
     },
     // 获取日期数据
-    fetchDate(dateType = 1, isInit) {
+   fetchDate(dateType = 1, isInit) {
       api
         .date({
           dateType
-        })
+       })
         .then(res => {
           this.dateVal =
-            dateType === 1
-              ? moment(res.data.end).format('YYYYWW')
-              : moment(res.data.end).format('YYYYMM');
-          this.startDate = res.data.start;
-          this.endDate = res.data.end;
-          if (isInit) {
-            this.fetchTableData();
-          }
-        });
+           dateType === 1
+             ? moment(res.data.end).format('YYYYWW')
+             : moment(res.data.end).format('YYYYMM');
+         this.startDate = res.data.start;
+         this.endDate = res.data.end;
+         if (isInit) {
+           this.fetchTableData();
+        }
+      });
     },
     // 获取表格数据
     fetchTableData() {
@@ -382,11 +382,9 @@ export default {
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
-
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
-
 .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }

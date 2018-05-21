@@ -270,7 +270,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        appId: id,
+        // appId: id,
         channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType

@@ -37,8 +37,9 @@
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
-                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '-') : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : '-') }}
-                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] == 1 ? tableupImg : tabledownImg">
+                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column])*100) .toFixed(3) + '%' : '0') : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : '-') }}
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 1" :src="tableupImg">
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 2" :src="tabledownImg">
                 </template>
               </el-table-column>
             </el-table-column>
@@ -354,6 +355,7 @@ export default {
   display: block;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .logo {
@@ -363,12 +365,15 @@ export default {
 .item-name {
   float: left;
   margin-left: 10px;
+  width:100px;
 }
 
 .table-left {
-  display: inline-block; 
-  float: right;
-  margin-right:20px;
+  display: inline-block;
+  margin-right: 20px;
+  z-index: 3;
+  position: absolute;
+  right:0px;
   img {
     display: inline-block;
     vertical-align: middle;
@@ -376,7 +381,11 @@ export default {
     height: 20px;
   }
 }
-
+@media screen and (min-width: 1367px) {
+    .table-left {
+        right:28px;
+    }
+}
 .el-table--border tr td:nth-child(n) {
   // border-right: none;
 }
@@ -414,8 +423,8 @@ export default {
 .trend {
   position: relative;
   border: 1px solid #dcdfe6;
-  .el-tabs__item{
-height: 45px;
+  .el-tabs__item {
+    height: 45px;
   }
   .el-tabs--border-card {
     border: none;
@@ -425,14 +434,15 @@ height: 45px;
       height: 44px;
     }
   }
-  .el-table--border td:first-child .cell{
+  .el-table--border td:first-child .cell {
     padding-left: 0px;
   }
-  .el-table .cell, .el-table th div{
+  .el-table .cell,
+  .el-table th div {
     margin-left: 0px;
-    margin-right:0px;
+    margin-right: 0px;
     padding-left: 0px;
-    padding-right:0px
+    padding-right: 0px
   }
   .searchSelect {
     position: absolute;

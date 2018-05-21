@@ -138,7 +138,9 @@ export default {
       }
     },
     keepFormatter(row, column, val, index) {
-      return Number(val).toFixed(2) + '%';
+            // console.log(Number(val))
+      return val ? Number(val).toFixed(2) + '%' : '-';
+
     },
     pageChange(curPage) {
       this.queryKeep(curPage);

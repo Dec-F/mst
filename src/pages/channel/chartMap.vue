@@ -85,11 +85,11 @@ export default {
           itemWidth: 10,
           itemHeight: 100,
           precision: 4,
-          text:['高','低'],
+          text:['高(%)','低(%)'],
           orient: 'horizontal',
           inRange: {
             color: ['#f2f2f2','#b5d337']
-          }
+          },
         },
         series: [
           {

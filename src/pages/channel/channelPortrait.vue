@@ -11,7 +11,7 @@
       <div class="photo-card">
         <h3 class="photo-card-title">画像洞察</h3>
         <div class="photo-card-con photo-sections photo-section1">
-          <div class="photo-section" style="flex: 2">
+          <div class="photo-section" style="flex: 2;posiation:relative">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="mars"/> 男女性别占比</h4>
             <div class="photo-section-con">
               <div class="gender-wrap">
@@ -31,7 +31,7 @@
                 </div>
               </div>
             </div>
-            <div class="photo-section-footer">男女性别占比</div>
+            <div class="photo-section-footer" style="position: absolute;left: 35%;bottom:-18px;">男女性别占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> 年代体系占比</h4>
@@ -58,7 +58,7 @@
             </div>
           </div>
           <div class="photo-section">
-            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/> Top6城市等级占比</h4>
+            <h4 class="photo-section-title"><font-awesome-icon class="photo-title-icon" icon="chart-bar"/>城市等级占比</h4>
             <div class="photo-section-con">
               <chart-xbar class="photo-chart" :data="cityData"></chart-xbar>
             </div>
