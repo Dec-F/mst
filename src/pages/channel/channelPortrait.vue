@@ -36,21 +36,21 @@
                 </div>
               </div>
             </div>
-            <div class="photo-section-footer photo-section-gender">男女性别占比</div>
+            <div class="photo-section-footer">男女性别占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年代体系占比</h4>
-            <div class="photo-section-con">
-              <chart-radar class="photo-chart" style="height: 70%; margin-top: 15%" :data="ageRangeData"></chart-radar>
+            <div class="photo-section-con" style="padding: 15% 0;">
+              <chart-radar class="photo-chart" :data="ageRangeData"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年龄段占比</h4>
-            <div class="photo-section-con">
-              <chart-radar class="photo-chart" style="height: 70%; margin-top: 15%" :data="ageGroupData"></chart-radar>
+            <div class="photo-section-con" style="padding: 15% 0;">
+              <chart-radar class="photo-chart" :data="ageGroupData"></chart-radar>
             </div>
             <div class="photo-section-footer">年龄段占比</div>
           </div>
@@ -336,17 +336,5 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
-}
-.photo-section-gender {
-    position: absolute;
-    left: 35%;
-    bottom: -16px;
-  }
-@media screen and (min-width: 1367px) {
-  .photo-section-gender {
-    position: absolute;
-    left: 30%;
-    bottom: 140px;
-  }
 }
 </style>
