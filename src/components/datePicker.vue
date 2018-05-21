@@ -193,6 +193,7 @@ export default {
 }
 .el-input--suffix .el-input__inner {
   height: 30px;
+  line-height: 0px
 }
 .el-date-editor .el-input__inner {
   height: 30px;

@@ -232,6 +232,7 @@ export default {
       } else {
         this.typeSubList = item.children
       }
+      this.subIdArr = ''
     },
 
     // 分页
@@ -589,7 +590,7 @@ export default {
       .el-radio-button__inner {
         border-radius: 0px;
         border: none;
-        font-size:14px;
+        font-size: 14px;
       }
       .el-radio-button {
         margin-right: 10px;

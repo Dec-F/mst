@@ -12,7 +12,6 @@ ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/map';
 import 'echarts/lib/component/tooltip';
 import 'echarts/map/js/china';
-
 export default {
   name: 'chartRadar',
   components: {
@@ -149,5 +148,4 @@ export default {
   methods: {
   }
 }
-
 </script>
