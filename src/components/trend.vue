@@ -319,7 +319,12 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0
+  ); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -402,7 +407,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-right: 20px;
   width: 7px;
@@ -411,7 +416,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -442,7 +447,7 @@ export default {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 0px;
-    padding-right: 0px
+    padding-right: 0px;
   }
   .searchSelect {
     position: absolute;
@@ -482,7 +487,7 @@ export default {
   }
 }
 
-.el-table__body tr.hover-row>td {
-  background-color: transparent
+.el-table__body tr.hover-row > td {
+  background-color: transparent;
 }
 </style>
