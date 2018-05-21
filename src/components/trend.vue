@@ -390,8 +390,8 @@ export default {
   // border-right: none;
 }
 
-.el-table--border tr td:first-child {
-  border-right: #ebeef5
+.el-table--border tr:nth-child(3n + 1) td:first-child {
+  border-right-width: 0;
 }
 
 .el-table--border th {
