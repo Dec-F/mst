@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content">
       <div class="navname" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
-      <el-tooltip class="item"  v-if='!$route.params.storeName' effect="light" :content="$route.meta.bread.content" placement="right">
+      <el-tooltip class="item" v-if='!$route.params.storeName' effect="light" :content="$route.meta.bread.content" placement="right">
         <i class="el-icon-question"></i>
       </el-tooltip>
       <div class="navname" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
@@ -273,11 +273,7 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate:
-          this.sortbyDateTime ||
-          (val.payload.children &&
-            val.payload.children[0] &&
-            val.payload.children[0].property.split('--')[0])
+        orderDate: this.sortbyDateTime
       };
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
@@ -292,6 +288,10 @@ export default {
           params.channelId = parseInt(this.$route.params.storeId) || '';
         }
       } else {
+        params.orderDate =
+          val.payload.children &&
+          val.payload.children[0] &&
+          val.payload.children[0].property.split('--')[0];
         if (this.$route.meta.storeId == 'appId') {
           params.appId = parseInt(this.$route.params.storeId);
           params.channelId = '';

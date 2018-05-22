@@ -298,11 +298,7 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate:
-          this.sortbyDateTime ||
-          (val.payload.children &&
-            val.payload.children[0] &&
-            val.payload.children[0].property.split('--')[0]),
+        orderDate: this.sortbyDateTime,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType
       };
@@ -312,6 +308,12 @@ export default {
         val.payload.id,
         'ddd'
       );
+      if (val.type == 2) {
+        params.orderDate =
+          val.payload.children &&
+          val.payload.children[0] &&
+          val.payload.children[0].property.split('--')[0];
+      }
       if (this.$route.meta.rowId == 'cid') {
         (params.appId =
           val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
