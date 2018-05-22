@@ -51,7 +51,7 @@
 
 <script>
 import axios from 'axios';
-const defaultLogo = '/static/logo.png';
+const defaultLogo = '/static/img/blank.png';
 
 function dateInRange(val, start, end) {
   const valDateStamp = new Date(val).getTime();

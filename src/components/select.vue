@@ -1,7 +1,7 @@
 <template>
   <div class="selectIndex">
-     <img class="select__icon-cur" :src="logo">
-    <el-autocomplete placeholder="请输入您所要查找的内容..." v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name"></el-autocomplete>
+    <img class="select__icon-cur" :src="logo">
+    <el-autocomplete :placeholder="defaultPh" v-model="searchKey" @select="handleSelect" :fetch-suggestions="querySearch" value-key="name"></el-autocomplete>
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
     return {
       id: '',
       logo: '',
-      searchKey: ''
+      searchKey: '',
+      defaultPh: ''
     };
   },
   props: {
@@ -29,12 +30,12 @@ export default {
       }
     }
   },
-  created () {
-     $bus.$on('clear-search',()=>{
-       this.id=''
-       this.logo=''
-       this.searchKey=''
-     })
+  created() {
+    $bus.$on('clear-search', () => {
+      this.id = ''
+      this.logo = ''
+      this.searchKey = ''
+    })
   },
   methods: {
     querySearch(queryString, cb) {
@@ -42,7 +43,7 @@ export default {
         { channels } = self;
       let results = queryString
         ? channels.filter(self.createFilter(queryString))
-        : [];
+        : channels.slice(0, 30);
       cb(results);
     },
     createFilter(queryString) {
@@ -56,15 +57,17 @@ export default {
   },
   beforeMount() {
     this.id = this.channels[0] && this.channels[0].id;
-    this.searchKey = this.channels[0] && this.channels[0].name;
+    this.defaultPh = this.channels[0] && this.channels[0].name;
   },
   watch: {
     id: function(cur) {
       try {
         this.logo = this.channels.find(item => item.id === cur).logo;
         this.$emit('change', this.id);
-      } catch (err) {}
-      console.log(this.logo)
+      } catch (err) { }
+    },
+    searchKey: function(cur) {
+      if (!cur) this.id = this.channels[0] && this.channels[0].id;
     }
   }
 };

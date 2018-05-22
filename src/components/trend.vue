@@ -38,7 +38,8 @@
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
                   {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column]) * 100).toFixed(3) + '%' : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}
-                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" :src="scope.row[sub.status] == 1 ? tableupImg : tabledownImg">
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 1" :src="tableupImg">
+                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 2" :src="tabledownImg">
                 </template>
               </el-table-column>
             </el-table-column>
@@ -318,12 +319,7 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0
-  ); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -359,6 +355,7 @@ export default {
   display: block;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .logo {
@@ -368,12 +365,15 @@ export default {
 .item-name {
   float: left;
   margin-left: 10px;
+  width: 100px;
 }
 
 .table-left {
   display: inline-block;
-  float: right;
   margin-right: 20px;
+  z-index: 3;
+  position: absolute;
+  right: 0px;
   img {
     display: inline-block;
     vertical-align: middle;
@@ -382,14 +382,28 @@ export default {
   }
 }
 
-.el-table--border tr td:nth-child(n) {
-  // border-right: none;
+@media screen and (min-width: 1367px) {
+  .table-left {
+    right: 28px;
+  }
 }
 
-.el-table--border tr td:first-child {
-  border-right: #ebeef5;
-}
+#pane-all .el-table--border tr:nth-child(3n-2) td:first-child{
+  border-right: none;
 
+}
+#pane-download .el-table--border tr td:first-child {
+  border-right: none;
+
+}
+#pane-xinzhuang .el-table--border tr td:first-child {
+  border-right: none;
+
+}
+#pane-huoyue .el-table--border tr td:first-child {
+  border-right: none;
+
+}
 .el-table--border th {
   border-right: none;
 }
@@ -398,7 +412,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>img {
   display: inline-block;
   margin-right: 20px;
   width: 7px;
@@ -407,7 +421,7 @@ export default {
   float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -438,7 +452,7 @@ export default {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 0px;
-    padding-right: 0px;
+    padding-right: 0px
   }
   .searchSelect {
     position: absolute;
@@ -478,7 +492,7 @@ export default {
   }
 }
 
-.el-table__body tr.hover-row > td {
-  background-color: transparent;
+.el-table__body tr.hover-row>td {
+  background-color: transparent
 }
 </style>

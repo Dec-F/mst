@@ -12,7 +12,6 @@ ECharts.registerTheme('irs', theme);
 import 'echarts/lib/chart/map';
 import 'echarts/lib/component/tooltip';
 import 'echarts/map/js/china';
-
 export default {
   name: 'chartRadar',
   components: {
@@ -40,30 +39,33 @@ export default {
         this.empty = true;
         return;
       }
-      const data = this.data.map((item, index) => {
-        return {
-          name: item.attrValue,
-          value: Math.round(item.attrRatio * 1000) / 1000,
-          itemStyle:{
-            normal: {
-              label: {
-                show: true
+      const data = this.data
+        .concat([])
+        .sort((a, b) => parseFloat(a.attrRatio) < parseFloat(b.attrRatio) ? 1 : -1)
+        .map((item, index) => {
+          return {
+            name: item.attrValue,
+            value: Math.round(item.attrRatio * 1000) / 1000,
+            itemStyle:{
+              normal: {
+                label: {
+                  show: true
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true
+                },
+                areaColor: '#b2d233'
               }
             },
-            emphasis: {
-              label: {
-                show: true
-              },
-              areaColor: '#b2d233'
+            label: {
+              normal: {
+                show: index < 6
+              }
             }
-          },
-          label: {
-            normal: {
-              show: index < 6
-            }
-          }
-        };
-      });
+          };
+        });
       const max = this.data.reduce((prev, item) => Math.max(prev, item.attrRatio), Number.MIN_SAFE_INTEGER);
       const options = {
         tooltip: {
@@ -85,11 +87,11 @@ export default {
           itemWidth: 10,
           itemHeight: 100,
           precision: 4,
-          text:['高','低'],
+          text:['高(%)','低(%)'],
           orient: 'horizontal',
           inRange: {
             color: ['#f2f2f2','#b5d337']
-          }
+          },
         },
         series: [
           {
@@ -146,5 +148,4 @@ export default {
   methods: {
   }
 }
-
 </script>

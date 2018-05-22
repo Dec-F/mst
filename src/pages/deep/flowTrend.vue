@@ -210,6 +210,7 @@ export default {
       this.queryForm.queryId = ''
       this.queryForm.appname = ''
       this.queryForm.pageNo = 1
+
       if (this.queryForm.dateType == 2) {
         let date = new Date(this.month)
 
@@ -238,6 +239,7 @@ export default {
       } else {
         this.typeSubList = item.children
       }
+      this.subIdArr=''
     },
 
     // 分页
