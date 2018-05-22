@@ -41,7 +41,7 @@
     <div class="content">
       <div class="breadcrumb">
       </div>
-      <router-view></router-view>
+      <router-view v-if="isActive"></router-view>
     </div>
   </div>
 </template>
@@ -56,6 +56,8 @@ export default {
   },
   data() {
     return {
+      isActive: true,
+
       initPath: this.$route.path,
 
       navs: [
@@ -163,6 +165,12 @@ export default {
   methods: {
     clickFn() {
       this.$router.push({ path: '/faq' });
+    }
+  },
+  watch: {
+    $route() {
+      this.isActive = false;
+      this.$nextTick(() => (this.isActive = true));
     }
   }
 };
@@ -307,7 +315,7 @@ export default {
 
 .item {
   margin: 4px;
-  margin-left:-5px;
+  margin-left: -5px;
 }
 
 .left .el-tooltip__popper,
