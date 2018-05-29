@@ -15,7 +15,7 @@
               </el-table-column>
             </el-table-column>
             <el-table-column fixed v-if="th.column === 'name'" :label="th.columnName" :key="index" min-width="180">
-              <el-table-column min-width="180" class-name='box-sd'>
+              <el-table-column min-width="180">
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" :class="scope.row.name!=='合计'?'link':''">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
@@ -37,7 +37,7 @@
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
-                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (Number(scope.row[sub.column]) * 100).toFixed(3) + '%' : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}
+                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (scope.row[sub.column]) : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 1" :src="tableupImg">
                   <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 2" :src="tabledownImg">
                 </template>
@@ -251,9 +251,20 @@ export default {
       this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
+      
       if (item.name == '合计') {
         return;
-      }
+      };
+       console.log(item)
+      if (item.typename == '人均次数') {
+        return;
+      };
+       if (item.typename == '人均时长') {
+        return;
+      };
+        if (item.typename == '质量分析') {
+        return;
+      };
       this.$emit('link-page', item);
     },
     handleSizeChange(val) {

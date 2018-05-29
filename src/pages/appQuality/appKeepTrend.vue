@@ -4,7 +4,7 @@
       <el-header>
         <h4 class="page__title">新装留存
           <el-tooltip class="item" effect="light" content="本月/周内新装APP在次日、三日、7日等活跃的设备用户" placement="right">
-            <i class="el-icon-question"></i>
+            <i class="el-icon-question" style="margin-left: 5px;"></i>
           </el-tooltip>
         </h4>
       </el-header>
@@ -44,7 +44,7 @@
                 <!-- 时间 -->
                 <el-table-column :prop="tableHeader[1].column" :label="tableHeader[1].columnName" width="150" align="center" fixed></el-table-column>
                 <!-- 留存数据 -->
-                <el-table-column v-for="col in tableHeader.slice(2)" :key="col.column" :formatter="keepFormatter" :prop="col.column" :label="col.columnName" align="center" width="200">
+                <el-table-column v-for="col in tableHeader.slice(2)" :key="col.column" :formatter="keepFormatter" :prop="col.column" :label="col.columnName" align="center">
                 </el-table-column>
               </el-table>
             </div>

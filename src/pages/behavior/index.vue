@@ -118,21 +118,21 @@ export default {
     this.fetchDate(1, true);
   },
   computed: {
-    filterData() {
-      const val = this.inputVal;
-      if (val) {
-        return this.mediaList.filter(function(data) {
-          return Object.keys(data).some(function(key) {
-            return (
-              String(data[key])
-                .toLowerCase()
-                .indexOf(val) > -1
-            );
-          });
-        });
-      }
-      return this.mediaList;
-    }
+    // filterData() {
+    //   const val = this.inputVal;
+    //   if (val) {
+    //     return this.mediaList.filter(function(data) {
+    //       return Object.keys(data).some(function(key) {
+    //         return (
+    //           String(data[key])
+    //             .toLowerCase()
+    //             .indexOf(val) > -1
+    //         );
+    //       });
+    //     });
+    //   }
+    //   return this.mediaList;
+    // }
   },
   watch: {
     $route() {
@@ -174,25 +174,26 @@ export default {
       this.tabType = name;
       this.tableData = [];
       this.orderBy = this.orderByMap[this.tabType];
+      this.orderType = 'desc';
       this.fetchTableData();
     },
     // 获取日期数据
-   fetchDate(dateType = 1, isInit) {
+    fetchDate(dateType = 1, isInit) {
       api
         .date({
           dateType
-       })
+        })
         .then(res => {
           this.dateVal =
-           dateType === 1
-             ? moment(res.data.end).format('YYYYWW')
-             : moment(res.data.end).format('YYYYMM');
-         this.startDate = res.data.start;
-         this.endDate = res.data.end;
-         if (isInit) {
-           this.fetchTableData();
-        }
-      });
+            dateType === 1
+              ? moment(res.data.end).format('YYYYWW')
+              : moment(res.data.end).format('YYYYMM');
+          this.startDate = res.data.start;
+          this.endDate = res.data.end;
+          if (isInit) {
+            this.fetchTableData();
+          }
+        });
     },
     // 获取表格数据
     fetchTableData() {
@@ -231,7 +232,11 @@ export default {
     submitData() {
       this.count = false;
       this.currentPage = 1;
+      this.orderType = 'desc';
+      this.orderDate = this.sortbyDateTime ='';
+      console.log(this.orderDate)
       this.fetchTableData();
+     
     },
     // 导出数据
     downloadData() {
@@ -273,7 +278,8 @@ export default {
         pageSize: this.pageSize,
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
-        orderDate: this.sortbyDateTime
+        orderDate: this.sortbyDateTime,
+        echartsDate: this.sortbyDateTime,
       };
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
@@ -288,7 +294,11 @@ export default {
           params.channelId = parseInt(this.$route.params.storeId) || '';
         }
       } else {
-        params.orderDate =
+        // params.orderDate =
+        //   val.payload.children &&
+        //   val.payload.children[0] &&
+        //   val.payload.children[0].property.split('--')[0];
+        params.echartsDate =
           val.payload.children &&
           val.payload.children[0] &&
           val.payload.children[0].property.split('--')[0];
@@ -330,7 +340,7 @@ export default {
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => {});
+        this.searchData.filter(item => { });
       }
     },
     handleSizeChange(val) {
@@ -353,6 +363,7 @@ export default {
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
+        console.log(this.sortbyDateTime)
         this.orderColumn = sortArr[1];
         this.orderBy =
           sortArr[1].indexOf('count') > -1
@@ -367,25 +378,28 @@ export default {
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-          row.name
+        row.name
         }`,
         query: {
           icon: row.logo
         }
       });
+      //console.log(row)
     }
   }
 };
 </script>
 
 <style lang="less">
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
   background: #69c72b;
 }
-.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
+
+.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
-.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>

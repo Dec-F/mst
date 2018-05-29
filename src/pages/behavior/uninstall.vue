@@ -273,12 +273,12 @@ export default {
       this.orderType = sort.order;
       this.fetchTableData();
     },
-    linkDetail(row) {
-      this.$router.push({
-        path: `/downloadTrend/appDetail/${this.$route.params.storeId}/${this
-          .$route.params.storeName}/${row.id}/${row.name}`
-      });
-    }
+    // linkDetail(row) {
+    //   this.$router.push({
+    //     path: `/downloadTrend/appDetail/${this.$route.params.storeId}/${this
+    //       .$route.params.storeName}/${row.id}/${row.name}`
+    //   });
+    // }
   }
 };
 </script>

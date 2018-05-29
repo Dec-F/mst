@@ -57,7 +57,7 @@ export default {
             type: 'shadow'
           },
           formatter: function(params) {
-            let tooltip = `<div> ${params[0].name} </div>`;
+            let tooltip = ``;
             for (let i = 0; i < params.length; i++) {
               tooltip += `<div>
               <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>

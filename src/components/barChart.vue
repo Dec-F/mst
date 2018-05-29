@@ -1,5 +1,5 @@
 <template>
-  <div class="chart" style="padding: 20px" >
+  <div class="chart" style="padding: 20px">
     <ECharts :options="option" theme="irs"></ECharts>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
                   value: 0
                 }
               ],
-              legend:[]
+              legend: []
             }
           ]
         };
@@ -84,12 +84,12 @@ export default {
           borderColor: '#E5E5E5',
           borderRadius: 4,
           formatter: function(params) {
-            let tooltip = `<div> ${params[0].name} </div>`;            
+            let tooltip = `<div> ${params[0].name} </div>`;
             for (let i = 0; i < params.length; i++) {
               tooltip += `<div>
               <i style="${option.tipBodyCircle}background: ${params[i].color}"></i>
                       ${params[i].seriesName}
-                      ${name}:&nbsp;&nbsp;${(params[i].value).toFixed(3)}
+                      ${name}:&nbsp;&nbsp;${!!(params[i].value)?(params[i].value).toFixed(3):'-'}
                     </div>`;
             }
             return tooltip
@@ -129,7 +129,7 @@ export default {
           data: data.xAxis,
           axisLabel: {
             interval: 0,
-            rotate:30
+            rotate: 30
           }
         },
         yAxis: {

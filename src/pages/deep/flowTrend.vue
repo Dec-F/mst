@@ -48,7 +48,7 @@
             <template>
               <el-table :data="tableData" size="small" style="width: 100%" stripe>
                 <el-table-column v-for="item,index of tableHeader" :key="index" :prop="item.column" :label="item.columnName" :fixed="index==0||index==1||index==2?true:false" align="center" :width="tableHeaderWidth[index]?tableHeaderWidth[index]:200">
-                  <el-table-column align="center" :width="tableHeaderWidth[index]?tableHeaderWidth[index]:200">
+                  <el-table-column align="center" :width="tableHeaderWidth[index]?tableHeaderWidth[index]:''">
                     <template slot-scope="scope">
                       <div v-if="index==0">
                         <div>{{scope.row[item.column]}}</div>
@@ -64,7 +64,7 @@
                         <div>{{scope.row[item.column]}}</div>
                       </div>
                       <div v-else>
-                        <div style="border-bottom:1px solid #ebeef5">{{scope.row[item.column]}}</div>
+                        <div style="border-bottom:1px solid #ebeef5">{{!!scope.row[item.column]?scope.row[item.column]:'-'}}</div>
                         <div class="table-con-line">
                           <span class="fl">{{scope.row[item.uninstall].toFixed(3)}}%</span>
                           <span class="fl">{{scope.row[item.activity].toFixed(3)}}%</span>

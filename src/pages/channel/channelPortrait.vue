@@ -42,7 +42,7 @@
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年代体系占比</h4>
             <div class="photo-section-con" style="padding: 15% 0;">
-              <chart-radar class="photo-chart" :data="ageRangeData"></chart-radar>
+              <chart-radar class="photo-chart" :data="ageRangeData" style="width:310px;"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>

@@ -146,6 +146,7 @@ export default {
   },
   methods: {
     searchChange(id) {
+      this.searchId=id;
       this.fetchTableData(id);
     },
     tabChange(name) {
@@ -153,6 +154,7 @@ export default {
       this.tableData = [];
       this.orderBy = this.orderByMap[this.tabType];
       $bus.$emit('clear-search');
+      this.orderType = 'desc';
       this.fetchTableData();
     },
     //    获取app类型
@@ -299,17 +301,24 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
+        echartsDate: this.sortbyDateTime,
         categoryId: this.bigType,
-        subCategoryIds: this.checkedType
+        subCategoryIds: this.checkedType,
+        searchId:this.searchId
       };
       console.log(
         this.$route.meta.rowId,
         this.$route.params.storeId,
         val.payload.id,
-        'ddd'
+        'ddd',
+        this.searchId
       );
       if (val.type == 2) {
-        params.orderDate =
+        // params.orderDate =
+        //   val.payload.children &&
+        //   val.payload.children[0] &&
+        //   val.payload.children[0].property.split('--')[0];
+        params.echartsDate =
           val.payload.children &&
           val.payload.children[0] &&
           val.payload.children[0].property.split('--')[0];
@@ -358,6 +367,8 @@ export default {
       this.count = false;
       this.currentPage = 1;
       $bus.$emit('clear-search');
+      this.orderType = 'desc';
+      this.orderDate = this.sortbyDateTime = '';
       this.fetchTableData();
     },
 
@@ -395,7 +406,7 @@ export default {
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-          row.name
+        row.name
         }`,
         query: {
           icon: row.logo
@@ -425,7 +436,7 @@ export default {
       .right {
         padding: 15px 15px;
         margin: 5px 0;
-        > span {
+        >span {
           margin-right: 15px;
         }
       }
@@ -441,7 +452,7 @@ export default {
         .el-checkbox {
           margin: 5px 15px 5px 0;
         }
-        .el-checkbox + .el-checkbox {
+        .el-checkbox+.el-checkbox {
           margin: 5px 15px 5px 0;
         }
         .el-checkbox-group {
@@ -451,7 +462,7 @@ export default {
         .el-radio {
           margin: 5px 15px 5px 0;
         }
-        .el-radio + .el-radio {
+        .el-radio+.el-radio {
           margin: 5px 15px 5px 0;
         }
       }
@@ -487,7 +498,7 @@ export default {
     height: 36px;
     background: #ffffff;
   }
-  .el-table th > .cell {
+  .el-table th>.cell {
     background: #ffffff;
     color: #64748a;
   }

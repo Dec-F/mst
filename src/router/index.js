@@ -120,7 +120,8 @@ const routes = [
           },
           rowId:'cid'
         }
-      }, {
+      }, 
+      {
         path: '/funnelTrend/storeDetail/:storeId/:storeName',
         name: 'funnelStoreDetail',
         component: qualityStore,
@@ -156,7 +157,8 @@ const routes = [
           },
           rowId:'cid'
         }
-      }, {
+      },
+       {
         path: '/frequencyTrend/storeDetail/:storeId/:storeName',
         name: 'frequencyStoreDetail',
         component: qualityStore,
@@ -232,7 +234,8 @@ const routes = [
           },
           rowId:'appId'
         }
-      }, {
+      },
+       {
         path: '/appfunnelTrend/storeDetail/:storeId/:storeName',
         name: 'appfunnelTrend',
         component: appQualityIndex,
@@ -280,7 +283,8 @@ const routes = [
           },
           rowId:'appId'
         }
-      }, {
+      },
+       {
         path: '/appdurationTrend/storeDetail/:storeId/:storeName',
         name: 'appdurationTrend',
         component: appQualityIndex,
@@ -296,7 +300,8 @@ const routes = [
           },
           rowId:'cid'
         }
-      }, {
+      }, 
+      {
         path: '/appKeepTrend',
         name: 'appKeepTrend',
         component: appKeepTrend,
