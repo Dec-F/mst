@@ -17,7 +17,7 @@
       </div>
       <div class="table-content">
         <div class="table-content-body" v-loading.table-content-body="loading">
-          <trend :openSearch='openSearch' :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData' @search-change='searchChange'></trend>
+          <trend :openSearch='openSearch' :resetOrder='resetOrder' :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData' @search-change='searchChange'></trend>
         </div>
         <div class="table-content-header">
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
@@ -131,7 +131,8 @@ export default {
       count: false,
       tabType: 'all',
       orderBy: '',
-      sortbyDateTime: ''
+      sortbyDateTime: '',
+      resetOrder: false
     };
   },
   created() {
@@ -364,11 +365,14 @@ export default {
       });
     },
     submitData() {
-      this.count = false;
+     this.count = false;
       this.currentPage = 1;
-      $bus.$emit('clear-search');
       this.orderType = 'desc';
-      this.orderDate = this.sortbyDateTime = '';
+      this.sortbyDateTime = '';
+      this.orderColumn = '';
+      this.orderBy = '';
+      this.resetOrder = !this.resetOrder;
+      $bus.$emit('clear-search');
       this.fetchTableData();
     },
 

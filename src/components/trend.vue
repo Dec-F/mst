@@ -5,7 +5,7 @@
     </div>
     <el-tabs type="border-card" @tab-click='tabClick' :value='actTab.name'>
       <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabs" :key="item.index">
-        <el-table :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" :row-class-name='rowClass' border @sort-change="changeSort">
+        <el-table ref="table" :data="tableData" style="width: 100%;border-left:none" :span-method="arraySpanMethod" :row-class-name='rowClass' border @sort-change="changeSort">
           <template v-for="(th, index) in tableHeader">
             <el-table-column width="80" fixed prop="index" v-if="th.column === 'index'" :label="th.columnName" :key="index">
               <el-table-column width="80">
@@ -127,6 +127,10 @@ export default {
     openSearch: {
       type: Boolean,
       default: false
+    },
+    resetOrder: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -178,6 +182,9 @@ export default {
       if (val.length > 0) {
         this.flag = true;
       }
+    },
+    resetOrder(val) {
+      this.$refs.table.forEach(v => v.clearSort());
     }
   },
   methods: {
@@ -251,20 +258,19 @@ export default {
       this.$emit('change-sort', { order, prop });
     },
     linkDetail(item) {
-      
       if (item.name == '合计') {
         return;
-      };
-       console.log(item)
+      }
+      console.log(item);
       if (item.typename == '人均次数') {
         return;
-      };
-       if (item.typename == '人均时长') {
+      }
+      if (item.typename == '人均时长') {
         return;
-      };
-        if (item.typename == '质量分析') {
+      }
+      if (item.typename == '质量分析') {
         return;
-      };
+      }
       this.$emit('link-page', item);
     },
     handleSizeChange(val) {
@@ -330,7 +336,12 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0
+  ); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -399,21 +410,17 @@ export default {
   }
 }
 
-#pane-all .el-table--border tr:nth-child(3n-2) td:first-child{
+#pane-all .el-table--border tr:nth-child(3n-2) td:first-child {
   border-right: none;
-
 }
 #pane-download .el-table--border tr td:first-child {
   border-right: none;
-
 }
 #pane-xinzhuang .el-table--border tr td:first-child {
   border-right: none;
-
 }
 #pane-huoyue .el-table--border tr td:first-child {
   border-right: none;
-
 }
 .el-table--border th {
   border-right: none;
@@ -423,7 +430,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell>img {
+.cell > img {
   display: inline-block;
   margin-right: 20px;
   width: 7px;
@@ -432,7 +439,7 @@ export default {
   float: right;
 }
 
-.cell>div>img {
+.cell > div > img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -463,7 +470,7 @@ export default {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 0px;
-    padding-right: 0px
+    padding-right: 0px;
   }
   .searchSelect {
     position: absolute;
@@ -503,7 +510,7 @@ export default {
   }
 }
 
-.el-table__body tr.hover-row>td {
-  background-color: transparent
+.el-table__body tr.hover-row > td {
+  background-color: transparent;
 }
 </style>

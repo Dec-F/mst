@@ -15,7 +15,7 @@
       </div>
       <div class="table-content">
         <div class="table-content-body" v-loading.body="loading">
-          <trend :chartData='chartData' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
+          <trend :chartData='chartData' :resetOrder='resetOrder' :tabs='tabs' :current="currentPage" :type="dateTypeVal" :tableData="tableData" :tableHeader="tableHeader" @link-page="linkDetail" @change-sort="changeSort" @change-size="handleSizeChange" @change-current="handleCurrentChange" :total="total" @tab-change="tabChange" @open-chart='fetchChartsData'></trend>
           <div class="table-content-header">
             <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
               <i class="iconfont icon-download"></i>数据导出
@@ -111,7 +111,8 @@ export default {
       tabType: 'all',
       orderBy: '',
       sortbyDateTime: '',
-      chartData: {}
+      chartData: {},
+      resetOrder: false
     };
   },
   created() {
@@ -233,10 +234,11 @@ export default {
       this.count = false;
       this.currentPage = 1;
       this.orderType = 'desc';
-      this.orderDate = this.sortbyDateTime ='';
-      console.log(this.orderDate)
+      this.sortbyDateTime = '';
+      this.orderColumn = '';
+      this.orderBy = '';
+      this.resetOrder = !this.resetOrder;
       this.fetchTableData();
-     
     },
     // 导出数据
     downloadData() {
@@ -279,7 +281,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        echartsDate: this.sortbyDateTime,
+        echartsDate: this.sortbyDateTime
       };
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
@@ -340,7 +342,7 @@ export default {
     },
     handleSearch(val) {
       if (val.length) {
-        this.searchData.filter(item => { });
+        this.searchData.filter(item => {});
       }
     },
     handleSizeChange(val) {
@@ -363,7 +365,7 @@ export default {
       if (sort.prop.indexOf('--') > -1) {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
-        console.log(this.sortbyDateTime)
+        console.log(this.sortbyDateTime, 111);
         this.orderColumn = sortArr[1];
         this.orderBy =
           sortArr[1].indexOf('count') > -1
@@ -378,7 +380,7 @@ export default {
       }
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-        row.name
+          row.name
         }`,
         query: {
           icon: row.logo
@@ -391,15 +393,15 @@ export default {
 </script>
 
 <style lang="less">
-.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
   background: #69c72b;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
   color: #69c72b;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #69c72b;
 }
 </style>
