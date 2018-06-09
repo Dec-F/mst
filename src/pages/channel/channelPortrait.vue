@@ -42,15 +42,15 @@
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年代体系占比</h4>
             <div class="photo-section-con" style="padding: 15% 0;">
-              <chart-radar class="photo-chart" :data="ageRangeData" style="width:310px;"></chart-radar>
+              <chart-radar class="photo-chart chartStyle" :data="ageRangeData" style="width:310px;"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年龄段占比</h4>
-            <div class="photo-section-con" style="padding: 15% 0;">
-              <chart-radar class="photo-chart" :data="ageGroupData"></chart-radar>
+            <div class="photo-section-con" style="padding: 15% 0;" >
+              <chart-radar class="photo-chart chartStyle" :data="ageGroupData"></chart-radar>
             </div>
             <div class="photo-section-footer">年龄段占比</div>
           </div>
@@ -281,6 +281,15 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 34px;
+}
+.chartStyle{
+  height: 105%;
+}
+
+@media screen and (min-width: 1367px) {
+  .chartStyle{
+      height: 116%;
+}
 }
 
 .photo-title-icon {

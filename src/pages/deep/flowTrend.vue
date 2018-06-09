@@ -28,10 +28,10 @@
                 <el-radio-button label="2">月</el-radio-button>
               </el-radio-group>
 
-              <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ disabledDate }" @change="dateHandle">
+              <el-date-picker v-model="week" v-show="queryForm.dateType==1" type="week" format="yyyy 第 WW 周" :picker-options="{ disabledDate }" @change="dateHandle">
               </el-date-picker>
 
-              <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy 第 MM 月" placeholder="选择月" :picker-options="{ disabledDate }" @change="dateHandle">
+              <el-date-picker v-show="queryForm.dateType==2" v-model="month" type="month" format="yyyy 第 MM 月" :picker-options="{ disabledDate }" @change="dateHandle">
               </el-date-picker>
               <el-button type="success" @click="queryHandle" class="" size="small">确定</el-button>
             </el-form-item>
@@ -55,8 +55,8 @@
                       </div>
                       <div v-else-if="index==1">
                         <div>
-                          <span class="logo"><img :src="scope.row.logo" alt="" style="width: 30px;height: 30px;"></span>
-                          <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;line-height: 35px;">{{scope.row[item.column]}}</span>
+                          <span class="logo" style="display:inline-block;"><img :src="scope.row.logo" alt="" style="width: 30px;height: 30px;"></span>
+                          <span style="display:inline-block; vertical-align:middle;width:80px;text-align:left;line-height: 35px;">{{scope.row[item.column]=(scope.row[item.column].split("-"))[0]}}</span>
                           <span style="margin-left:20px" @click="dialogHandle(scope.row)" class="iconChart"></span>
                         </div>
                       </div>
@@ -147,7 +147,7 @@ export default {
       tableHeader: [],
       tableHeaderWidth: {
         0: 80,
-        1: 160,
+        1: 200,
         2: 80
       },
       chartData1: [],
@@ -239,7 +239,7 @@ export default {
       } else {
         this.typeSubList = item.children
       }
-      this.subIdArr=''
+      this.subIdArr = ''
     },
 
     // 分页
@@ -432,11 +432,11 @@ export default {
 
     // 导出数据
     downloadData() {
-      var path = "http://113.200.91.62:8080/mst/depth/exportFlowTrend?";
+      var path = "http://113.200.91.82:8080/mst/depth/exportFlowTrend?";
       var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&" + "subCategoryId="
         + (this.queryForm.subCategoryId) + "&" + "dateType=" + (this.queryForm.dateType) + "&"
         + "date=" + (this.queryForm.date) + "&" + "pageNo=" + (this.queryForm.pageNo)
-        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)
+        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)+ "&" + "queryId=" + (this.queryForm.queryId)
       window.location.href = path + paras1;
 
     },
@@ -462,6 +462,9 @@ export default {
   .el-table--border th,
   .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
     border-right: none;
+  }
+  .el-table tr:nth-child(2) th {
+    border-bottom: none;
   }
   .is-group .cell {
     border-right: 1px solid #ebeef5;
@@ -519,7 +522,7 @@ export default {
   .el-table tr:nth-child(2) {
     th {
       background-color: #e1f4d6 !important; // border-bottom: 1px solid #bde6a2;
-      padding: 2px;
+      padding: 3px;
     }
   }
   .table-con .is-group.has-gutter tr:nth-of-type(2) th:nth-of-type(1) .cell:before,
@@ -625,6 +628,8 @@ export default {
       }
       .el-radio-button {
         margin-right: 10px;
+        margin-bottom: 5px;
+        margin-top: 5px;
         border: 1px solid #dcdfe6;
       }
     }

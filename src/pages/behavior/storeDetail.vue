@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     searchChange(id) {
-      this.searchId=id;
+      this.searchId = id;
       this.fetchTableData(id);
     },
     tabChange(name) {
@@ -156,6 +156,8 @@ export default {
       this.orderBy = this.orderByMap[this.tabType];
       $bus.$emit('clear-search');
       this.orderType = 'desc';
+      this.sortbyDateTime = '';
+      this.searchId = '';
       this.fetchTableData();
     },
     //    获取app类型
@@ -258,6 +260,7 @@ export default {
         .all(Object.assign(params, this.coverParams.all))
         .then(resHandler);
     },
+
     // 导出数据
     downloadData() {
       let url = '';
@@ -276,7 +279,8 @@ export default {
         // appId: id,
         channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
-        subCategoryIds: this.checkedType
+        subCategoryIds: this.checkedType,
+        // searchId: this.searchId
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -305,7 +309,7 @@ export default {
         echartsDate: this.sortbyDateTime,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
-        searchId:this.searchId
+        searchId: this.searchId
       };
       console.log(
         this.$route.meta.rowId,
@@ -365,14 +369,15 @@ export default {
       });
     },
     submitData() {
-     this.count = false;
+      this.count = false;
       this.currentPage = 1;
       this.orderType = 'desc';
       this.sortbyDateTime = '';
-      this.orderColumn = '';
-      this.orderBy = '';
+      // this.orderColumn = '';
+      // this.orderBy = '';
       this.resetOrder = !this.resetOrder;
       $bus.$emit('clear-search');
+      this.searchId = '';
       this.fetchTableData();
     },
 

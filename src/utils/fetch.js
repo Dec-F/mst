@@ -11,9 +11,10 @@ const fetch = axios.create({
 })
 
 fetch.interceptors.request.use(config => {
-  if (localStorage.getItem('token')) {
-    config.headers.Authorization = `${localStorage.getItem('token')}`;
+  if (sessionStorage.getItem('token')) {
+    config.headers.Authorization = `${sessionStorage.getItem('token')}`;
   }
+  console.log(config)
   return config
 }, error => {
   console.log(error); // for debug
@@ -30,6 +31,7 @@ fetch.interceptors.response.use(
         duration: 5 * 1000
       })
       if (res.resCode === 401) {
+        // 如果不拦截就注释掉
         // window.location.href = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46';
       } else {
         Message({

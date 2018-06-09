@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const api = {
   login(data) {
-    return fetch({url: '/irviews/validToken', method: 'GET', data: data});
+    return fetch({url: '/irviews/validToken', method: 'GET', params: data});
   },
   // 公共接口
   date(params) {
@@ -134,28 +134,28 @@ const api = {
 
   download: {
     // 渠道行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportChannelTrends: 'http://113.200.91.62:8080/mst/behavior/exportChannelTrends',
+    exportChannelTrends: 'http://113.200.91.82:8080/mst/behavior/exportChannelTrends',
 
     // 渠道行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportChannelTrendsSub: 'http://113.200.91.62:8080/mst/behavior/exportChannelTrendsSub',
+    exportChannelTrendsSub: 'http://113.200.91.82:8080/mst/behavior/exportChannelTrendsSub',
 
     // APP行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportAppTrends: 'http://113.200.91.62:8080/mst/appBehavior/exportAppTrends',
+    exportAppTrends: 'http://113.200.91.82:8080/mst/appBehavior/exportAppTrends',
 
     // APP行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportAppTrendsSub: 'http://113.200.91.62:8080/mst/appBehavior/exportAppTrendsSub',
+    exportAppTrendsSub: 'http://113.200.91.82:8080/mst/appBehavior/exportAppTrendsSub',
 
     // 质量分析----渠道--   一级页面导出
-    exportChannelUse: 'http://113.200.91.62:8080/mst/quality/exportChannelUse',
+    exportChannelUse: 'http://113.200.91.82:8080/mst/quality/exportChannelUse',
     // 质量分析----渠道--   二级页面导出
-    exportChannelAppUse: 'http://113.200.91.62:8080/mst/quality/exportChannelAppUse',
+    exportChannelAppUse: 'http://113.200.91.82:8080/mst/quality/exportChannelAppUse',
     // 质量分析-----APP --   一级页面导出
-    exportAppUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppUse',
+    exportAppUse: 'http://113.200.91.82:8080/mst/appQuality/exportAppUse',
     // 质量分析-----APP --   二级页面导出
-    exportAppChannelUse: 'http://113.200.91.62:8080/mst/appQuality/exportAppChannelUse',
+    exportAppChannelUse: 'http://113.200.91.82:8080/mst/appQuality/exportAppChannelUse',
 
     // 卸载   -----  导出接口
-    exportUninstall: 'http://113.200.91.62:8080/mst/appBehavior/exportUninstall'
+    exportUninstall: 'http://113.200.91.82:8080/mst/appBehavior/exportUninstall'
 
   }
 }

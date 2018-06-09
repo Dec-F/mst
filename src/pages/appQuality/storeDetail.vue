@@ -46,3 +46,10 @@ export default {
   }
 };
 </script>
+<style lang="less">
+#pane-all {
+  >.el-table--border tr td:first-child {
+    border-right: none !important;
+  }
+}
+</style>

@@ -22,7 +22,7 @@
                 <!-- 日期选择器 -->
                 <el-col :span="12">
                   <el-form-item label="时间选择">
-                    <el-date-picker size="small" v-model="queryForm.date" type="daterange" value-format="yyyyMMdd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :default-value="queryForm.date" :picker-options="{ disabledDate }" unlink-panels>
+                    <el-date-picker size="small" v-model="queryForm.date" type="daterange" value-format="yyyyMMdd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :default-value="defaultDate" :picker-options="{ disabledDate }" unlink-panels>
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -65,6 +65,7 @@
 
 <script>
 import selectIndex from '@/components/select';
+import { parseTime } from '@/utils';
 import { findAppChannelCount, findKeepDate, findChannelKeep } from '@/api';
 import { apiRequest } from '@/utils';
 export default {
@@ -79,6 +80,7 @@ export default {
         id: null,
         date: null
       },
+      defaultDate: null,
       tableHeader: null,
       keepData: null,
       pageData: null,
@@ -107,11 +109,16 @@ export default {
       self.validDateFetching = false;
       if (validDateRes.status) {
         let { start, end } = validDateRes.result[0];
-        start = start.replace(/[-]/g, '');
-        end = end.replace(/[-]/g, '');
+        // 设定可选日期范围
         self.validDate = { start, end };
         // 设定默认值
-        self.queryForm.date = [start, end];
+        let startDate = new Date(end), endDate = new Date(end);
+        startDate.setDate(startDate.getDate() - 30);
+        self.defaultDate = [startDate, endDate];
+        // 表单数据
+        let startDateStr = parseTime(startDate, '{y}-{m}-{d}');
+        let endDateStr = parseTime(endDate, '{y}-{m}-{d}');
+        self.queryForm.date = [startDateStr, endDateStr];
       } else {
         self.$message.error(validDateRes.result);
       }
@@ -120,7 +127,7 @@ export default {
     disabledDate(date) {
       let self = this, { start, end } = self.validDate;
       let startDate = new Date(start), endDate = new Date(end);
-      return date > new Date(end) || date < startDate.setDate(startDate.getDate() - 1);
+      return date > endDate || date < startDate.setDate(startDate.getDate() - 1);
     },
     async queryKeep(pageNo) {
       let self = this, { id, date } = self.queryForm;
