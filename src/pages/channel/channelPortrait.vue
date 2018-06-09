@@ -107,16 +107,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api/api';
 import picker from './picker';
 import chartGender from './chartGender';
 import chartRadar from './chartRadar';
 import chartMap from './chartMap';
 import chartXbar from './chartXbar';
 import chartBar from './chartBar';
-
-const channelApi = '/mst/portrait/getChannelPortrait';
-const appApi = '/mst/appPortrait/getAppPortrait';
 
 export default {
   name: 'trend-chart',
@@ -145,7 +142,7 @@ export default {
       return this.$route.meta.type;
     },
     api: function() {
-      return this.type === 'channel' ? channelApi : appApi;
+      return this.type === 'channel' ? api.getChannelPortrait : api.getAppPortrait;
     }
   },
   methods: {
@@ -162,14 +159,12 @@ export default {
       this.loadData(params);
     },
     load(params, attr) {
-      return axios.get(this.api, {
-        params: {
-          ...params,
-          attrKey: attr
-        }
+      return this.api({
+        ...params,
+        attrKey: attr
       }).then(res => {
-        if (!res.data || !res.data.data) return {};
-        return res.data.data;
+        if (!res.data) return {};
+        return res.data;
       });
     },
     loadData(params) {

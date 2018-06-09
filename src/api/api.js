@@ -16,6 +16,18 @@ const api = {
   getPortraitTime(params) {
     return fetch({url: '/dateTime/getPortraitTime', method: 'GET', params: params});
   },
+  // app|渠道
+  findAppChannelCount(params) {
+    return fetch({url: '/appchannel/findAppChannelCount', method: 'GET', params: params});
+  },
+  // 渠道图表
+  getChannelPortrait(params) {
+    return fetch({url: '/portrait/getChannelPortrait', method: 'GET', params: params});
+  },
+  // app图表
+  getAppPortrait(params) {
+    return fetch({url: '/appPortrait/getAppPortrait', method: 'GET', params: params});
+  },
   appType() {
     return fetch({url: 'category/getCategory', method: 'GET'});
   },
