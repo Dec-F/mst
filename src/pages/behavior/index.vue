@@ -244,7 +244,9 @@ export default {
     },
     // 导出数据
     downloadData() {
+      let url=''
       let params = {};
+      url=this.fetchApi.allDownload
       params = {
         // 发送请求
         date: this.dateVal,
@@ -256,6 +258,7 @@ export default {
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0,
+        token:sessionStorage.getItem('token')
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -265,7 +268,7 @@ export default {
         params.trendType = typeMap[this.tabType];
       }
       params = Object.assign(params, this.coverParams.all);
-      this.fetchApi.allDownload(params)
+      window.location.href = formatUrl(url, params);
     },
     //    获取图表数据
     fetchChartsData(val) {

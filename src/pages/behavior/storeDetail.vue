@@ -42,7 +42,7 @@ import $bus from 'utils/bus';
 const typeMap = {
   download: 'download',
   xinzhuang: 'install',
-  huoyue: 'active'
+  huoyue: 'active',
 };
 export default {
   name: 'detail',
@@ -50,7 +50,7 @@ export default {
     trend,
     selectType,
     datePicker,
-    trendChart
+    trendChart,
   },
   props: {
     fetchApi: {
@@ -59,29 +59,29 @@ export default {
         return {
           all: api.listChannelTrendsSub,
           allDownload: api.download.exportChannelTrendsSub,
-          allCharts: api.listChannelEchartsSub
+          allCharts: api.listChannelEchartsSub,
         };
-      }
+      },
     },
     tabs: {
-      type: Array
+      type: Array,
     },
     coverParams: {
       type: Object,
       default() {
         return {
           all: {},
-          classify: {}
+          classify: {},
         };
-      }
+      },
     },
     openLink: {
       type: Boolean,
-      default: false
+      default: false,
     },
     openSearch: {
       type: Boolean,
-      default: true
+      default: true,
     },
     orderByMap: {
       type: Object,
@@ -90,10 +90,10 @@ export default {
           all: 'download_volume',
           download: 'download_volume',
           xinzhuang: 'install_volume',
-          huoyue: 'active_volume'
+          huoyue: 'active_volume',
         };
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -132,7 +132,7 @@ export default {
       tabType: 'all',
       orderBy: '',
       sortbyDateTime: '',
-      resetOrder: false
+      resetOrder: false,
     };
   },
   created() {
@@ -143,7 +143,7 @@ export default {
     $route(val) {
       this.fetchAppType();
       this.fetchDate();
-    }
+    },
   },
   methods: {
     searchChange(id) {
@@ -200,13 +200,10 @@ export default {
     fetchDate(dateType = 1, isInit) {
       api
         .date({
-          dateType
+          dateType,
         })
         .then(res => {
-          this.dateVal =
-            dateType === 1
-              ? moment(res.data.end).format('YYYYWW')
-              : moment(res.data.end).format('YYYYMM');
+          this.dateVal = dateType === 1 ? moment(res.data.end).format('YYYYWW') : moment(res.data.end).format('YYYYMM');
           this.startDate = res.data.start;
           this.endDate = res.data.end;
           if (isInit) {
@@ -231,14 +228,13 @@ export default {
         appId: id,
         channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
-        subCategoryIds: this.checkedType
+        subCategoryIds: this.checkedType,
       };
       const resHandler = res => {
         this.loading = false;
         this.count = true;
         this.tableHeader = res.data.tableHeader || [];
-        this.tableData =
-          (res.data.tableSum || []).concat(res.data.tableData) || [];
+        this.tableData = (res.data.tableSum || []).concat(res.data.tableData) || [];
         if (res.data.dateTimes !== null) {
           this.dateList = res.data.dateTimes;
           this.dateListVal = res.data.dateTimes[0].id;
@@ -256,14 +252,14 @@ export default {
         params.trendType = typeMap[this.tabType];
       }
       //      请求
-      this.fetchApi
-        .all(Object.assign(params, this.coverParams.all))
-        .then(resHandler);
+      this.fetchApi.all(Object.assign(params, this.coverParams.all)).then(resHandler);
     },
 
     // 导出数据
     downloadData() {
+      let url = '';
       let params = {};
+      url = this.fetchApi.allDownload;
       params = {
         // 发送请求
         date: this.dateVal,
@@ -278,6 +274,7 @@ export default {
         channelId: parseInt(this.$route.params.storeId) || 0,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
+        token: sessionStorage.getItem('token'),
         // searchId: this.searchId
       };
       if (this.tabType === 'all') {
@@ -289,7 +286,7 @@ export default {
       }
       params = Object.assign(params, this.coverParams.all);
 
-      this.fetchApi.allDownload(params)
+      window.location.href = formatUrl(url, params);
     },
     fetchChartsData(val) {
       this.chartloading = true;
@@ -307,32 +304,19 @@ export default {
         echartsDate: this.sortbyDateTime,
         categoryId: this.bigType,
         subCategoryIds: this.checkedType,
-        searchId: this.searchId
+        searchId: this.searchId,
       };
-      console.log(
-        this.$route.meta.rowId,
-        this.$route.params.storeId,
-        val.payload.id,
-        'ddd',
-        this.searchId
-      );
+      console.log(this.$route.meta.rowId, this.$route.params.storeId, val.payload.id, 'ddd', this.searchId);
       if (val.type == 2) {
         // params.orderDate =
         //   val.payload.children &&
         //   val.payload.children[0] &&
         //   val.payload.children[0].property.split('--')[0];
-        params.echartsDate =
-          val.payload.children &&
-          val.payload.children[0] &&
-          val.payload.children[0].property.split('--')[0];
+        params.echartsDate = val.payload.children && val.payload.children[0] && val.payload.children[0].property.split('--')[0];
       }
       if (this.$route.meta.rowId == 'cid') {
-        (params.appId =
-          val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
-          (params.channelId =
-            val.type == 1
-              ? val.payload.id
-              : parseInt(this.$route.params.storeId) || '');
+        (params.appId = val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
+          (params.channelId = val.type == 1 ? val.payload.id : parseInt(this.$route.params.storeId) || '');
       } else {
         params.appId = val.type == 1 ? val.payload.id : '';
         params.channelId = parseInt(this.$route.params.storeId) || '';
@@ -362,7 +346,7 @@ export default {
           data: data.line,
           chartTitle: title,
           chartSubTitle: subTitle,
-          legend: data.legend
+          legend: data.legend,
         };
       });
     },
@@ -400,10 +384,7 @@ export default {
         let sortArr = sort.prop.split('--');
         this.sortbyDateTime = sortArr[0];
         this.orderColumn = sortArr[1];
-        this.orderBy =
-          sortArr[1].indexOf('count') > -1
-            ? this.orderByMap[this.tabType]
-            : 'ratio';
+        this.orderBy = sortArr[1].indexOf('count') > -1 ? this.orderByMap[this.tabType] : 'ratio';
       }
       this.fetchTableData();
     },
@@ -412,15 +393,13 @@ export default {
         return;
       }
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-        row.name
-        }`,
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
         query: {
-          icon: row.logo
-        }
+          icon: row.logo,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -443,7 +422,7 @@ export default {
       .right {
         padding: 15px 15px;
         margin: 5px 0;
-        >span {
+        > span {
           margin-right: 15px;
         }
       }
@@ -459,7 +438,7 @@ export default {
         .el-checkbox {
           margin: 5px 15px 5px 0;
         }
-        .el-checkbox+.el-checkbox {
+        .el-checkbox + .el-checkbox {
           margin: 5px 15px 5px 0;
         }
         .el-checkbox-group {
@@ -469,7 +448,7 @@ export default {
         .el-radio {
           margin: 5px 15px 5px 0;
         }
-        .el-radio+.el-radio {
+        .el-radio + .el-radio {
           margin: 5px 15px 5px 0;
         }
       }
@@ -505,7 +484,7 @@ export default {
     height: 36px;
     background: #ffffff;
   }
-  .el-table th>.cell {
+  .el-table th > .cell {
     background: #ffffff;
     color: #64748a;
   }

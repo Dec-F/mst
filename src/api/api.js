@@ -144,36 +144,31 @@ const api = {
     return fetch({ url: '/appBehavior/listUninstallEcharts', method: 'GET', params: params });
   },
 
-  downloadMap: {
+  download: {
     // 渠道行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportChannelTrends: '/behavior/exportChannelTrends',
+    exportChannelTrends: '/mst/behavior/exportChannelTrends',
 
     // 渠道行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportChannelTrendsSub: '/behavior/exportChannelTrendsSub',
+    exportChannelTrendsSub: '/mst/behavior/exportChannelTrendsSub',
 
     // APP行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportAppTrends: '/appBehavior/exportAppTrends',
+    exportAppTrends: '/mst/appBehavior/exportAppTrends',
 
     // APP行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportAppTrendsSub: '/appBehavior/exportAppTrendsSub',
+    exportAppTrendsSub: '/mst/appBehavior/exportAppTrendsSub',
 
     // 质量分析----渠道--   一级页面导出
-    exportChannelUse: '/quality/exportChannelUse',
+    exportChannelUse: '/mst/quality/exportChannelUse',
     // 质量分析----渠道--   二级页面导出
-    exportChannelAppUse: '/quality/exportChannelAppUse',
+    exportChannelAppUse: '/mst/quality/exportChannelAppUse',
     // 质量分析-----APP --   一级页面导出
-    exportAppUse: '/appQuality/exportAppUse',
+    exportAppUse: '/mst/appQuality/exportAppUse',
     // 质量分析-----APP --   二级页面导出
-    exportAppChannelUse: '/appQuality/exportAppChannelUse',
+    exportAppChannelUse: '/mst/appQuality/exportAppChannelUse',
 
     // 卸载   -----  导出接口
-    exportUninstall: '/appBehavior/exportUninstall',
+    exportUninstall: '/mst/appBehavior/exportUninstall',
   },
 };
-
-api.download = Object.keys(api.downloadMap).reduce((acc, v) => {
-  acc[v] = params => fetch({ url: api.downloadMap[v], ...params });
-  return acc;
-}, {});
 
 export default api;
