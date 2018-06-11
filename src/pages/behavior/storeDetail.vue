@@ -263,9 +263,7 @@ export default {
 
     // 导出数据
     downloadData() {
-      let url = '';
       let params = {};
-      url = this.fetchApi.allDownload;
       params = {
         // 发送请求
         date: this.dateVal,
@@ -291,7 +289,7 @@ export default {
       }
       params = Object.assign(params, this.coverParams.all);
 
-      window.location.href = formatUrl(url, params);
+      this.fetchApi.allDownload(params)
     },
     fetchChartsData(val) {
       this.chartloading = true;

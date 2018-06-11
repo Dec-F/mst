@@ -2,11 +2,7 @@ import fetch from '@/utils/fetch';
 
 const api = {
   login(data) {
-<<<<<<< HEAD
     return fetch({ url: '/irviews/validToken', method: 'GET', data: data });
-=======
-    return fetch({url: '/irviews/validToken', method: 'GET', params: data});
->>>>>>> 837e1d5300382e2f59d4f068e1c13c4d558d3425
   },
   // 公共接口
   date(params) {
@@ -22,15 +18,15 @@ const api = {
   },
   // app|渠道
   findAppChannelCount(params) {
-    return fetch({url: '/appchannel/findAppChannelCount', method: 'GET', params: params});
+    return fetch({ url: '/appchannel/findAppChannelCount', method: 'GET', params: params });
   },
   // 渠道图表
   getChannelPortrait(params) {
-    return fetch({url: '/portrait/getChannelPortrait', method: 'GET', params: params});
+    return fetch({ url: '/portrait/getChannelPortrait', method: 'GET', params: params });
   },
   // app图表
   getAppPortrait(params) {
-    return fetch({url: '/appPortrait/getAppPortrait', method: 'GET', params: params});
+    return fetch({ url: '/appPortrait/getAppPortrait', method: 'GET', params: params });
   },
   appType() {
     return fetch({ url: 'category/getCategory', method: 'GET' });
@@ -150,33 +146,33 @@ const api = {
 
   downloadMap: {
     // 渠道行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportChannelTrends: '/mst/behavior/exportChannelTrends',
+    exportChannelTrends: '/behavior/exportChannelTrends',
 
     // 渠道行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportChannelTrendsSub: '/mst/behavior/exportChannelTrendsSub',
+    exportChannelTrendsSub: '/behavior/exportChannelTrendsSub',
 
     // APP行为分析--下载趋势--一级页面--全部趋势和各个趋势
-    exportAppTrends: '/mst/appBehavior/exportAppTrends',
+    exportAppTrends: '/appBehavior/exportAppTrends',
 
     // APP行为分析--下载趋势--二级页面--全部趋势和各个趋势
-    exportAppTrendsSub: '/mst/appBehavior/exportAppTrendsSub',
+    exportAppTrendsSub: '/appBehavior/exportAppTrendsSub',
 
     // 质量分析----渠道--   一级页面导出
-    exportChannelUse: '/mst/quality/exportChannelUse',
+    exportChannelUse: '/quality/exportChannelUse',
     // 质量分析----渠道--   二级页面导出
-    exportChannelAppUse: '/mst/quality/exportChannelAppUse',
+    exportChannelAppUse: '/quality/exportChannelAppUse',
     // 质量分析-----APP --   一级页面导出
-    exportAppUse: '/mst/appQuality/exportAppUse',
+    exportAppUse: '/appQuality/exportAppUse',
     // 质量分析-----APP --   二级页面导出
-    exportAppChannelUse: '/mst/appQuality/exportAppChannelUse',
+    exportAppChannelUse: '/appQuality/exportAppChannelUse',
 
     // 卸载   -----  导出接口
-    exportUninstall: '/mst/appBehavior/exportUninstall',
+    exportUninstall: '/appBehavior/exportUninstall',
   },
 };
 
-api.download = api.downloadMap.keys().reduce((acc, v) => {
-  acc[v] = () => fetch({ url: api.downloadMap[v], ...params });
+api.download = Object.keys(api.downloadMap).reduce((acc, v) => {
+  acc[v] = params => fetch({ url: api.downloadMap[v], ...params });
   return acc;
 }, {});
 
