@@ -361,10 +361,19 @@ router.beforeEach((to, from, next) => {
   next();
 
   // 路由拦截
-  //  if (to.matched.some(r => r.meta.requireAuth)) {   if
-  // (localStorage.getItem('token')) {     next();   } else { window.location.href
-  // = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'   } }
-  // else {   next(); }
+  // if (to.matched.some(r => r.meta.requireAuth)) {
+  //   if(sessionStorage.getItem('token')) {
+  //      next(); 
+  //   }
+  //   else {
+  //     window.location.href
+  //       = 'http://irv.iresearch.com.cn/iResearchDataWeb/?m=user&a=jump&pro=46'
+  //   }
+  // }
+  // else {
+  //    next(); 
+  // }
+  // 不拦截就注释掉以上代码
 
 
 

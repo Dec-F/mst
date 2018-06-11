@@ -19,10 +19,10 @@
           <el-button :plain="true" type="primary" @click="downloadData" size="small" class='btn-download'>
             <i class="iconfont icon-download"></i>数据导出</el-button>
           <!--<span>
-            <span class="label">趋势图表：</span>
-            <el-switch v-model="switchVal" on-text="" off-text="" on-color="#67C72B" off-color="#ccc">
-            </el-switch>
-          </span>-->
+              <span class="label">趋势图表：</span>
+              <el-switch v-model="switchVal" on-text="" off-text="" on-color="#67C72B" off-color="#ccc">
+              </el-switch>
+            </span>-->
           <!-- <search @handle-search="handleSearch" :data="searchData" @search="startSearch"></search> -->
         </div>
         <div class="table-content-body appDetail" v-loading.table-content-body="loading">
@@ -285,6 +285,11 @@ export default {
 
 <style lang="less">
 .content {
+  #pane-all {
+    >.el-table--border tr td:first-child {
+      border-right: none !important;
+    }
+  }
   .detail-content-menu {
     border: 1px solid #ddd;
     background: #fff;
@@ -304,7 +309,6 @@ export default {
         >span {
           margin-right: 15px;
         }
-        
       }
       .left {
         width: 100px;

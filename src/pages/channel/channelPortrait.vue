@@ -42,15 +42,15 @@
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年代体系占比</h4>
             <div class="photo-section-con" style="padding: 15% 0;">
-              <chart-radar class="photo-chart" :data="ageRangeData" style="width:310px;"></chart-radar>
+              <chart-radar class="photo-chart chartStyle" :data="ageRangeData" style="width:310px;"></chart-radar>
             </div>
             <div class="photo-section-footer">年代体系占比</div>
           </div>
           <div class="photo-section">
             <h4 class="photo-section-title">
               <font-awesome-icon class="photo-title-icon" icon="chart-bar" /> 年龄段占比</h4>
-            <div class="photo-section-con" style="padding: 15% 0;">
-              <chart-radar class="photo-chart" :data="ageGroupData"></chart-radar>
+            <div class="photo-section-con" style="padding: 15% 0;" >
+              <chart-radar class="photo-chart chartStyle" :data="ageGroupData"></chart-radar>
             </div>
             <div class="photo-section-footer">年龄段占比</div>
           </div>
@@ -107,16 +107,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api/api';
 import picker from './picker';
 import chartGender from './chartGender';
 import chartRadar from './chartRadar';
 import chartMap from './chartMap';
 import chartXbar from './chartXbar';
 import chartBar from './chartBar';
-
-const channelApi = '/mst/portrait/getChannelPortrait';
-const appApi = '/mst/appPortrait/getAppPortrait';
 
 export default {
   name: 'trend-chart',
@@ -145,7 +142,7 @@ export default {
       return this.$route.meta.type;
     },
     api: function() {
-      return this.type === 'channel' ? channelApi : appApi;
+      return this.type === 'channel' ? api.getChannelPortrait : api.getAppPortrait;
     }
   },
   methods: {
@@ -162,14 +159,12 @@ export default {
       this.loadData(params);
     },
     load(params, attr) {
-      return axios.get(this.api, {
-        params: {
-          ...params,
-          attrKey: attr
-        }
+      return this.api({
+        ...params,
+        attrKey: attr
       }).then(res => {
-        if (!res.data || !res.data.data) return {};
-        return res.data.data;
+        if (!res.data) return {};
+        return res.data;
       });
     },
     loadData(params) {
@@ -281,6 +276,15 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 34px;
+}
+.chartStyle{
+  height: 105%;
+}
+
+@media screen and (min-width: 1367px) {
+  .chartStyle{
+      height: 116%;
+}
 }
 
 .photo-title-icon {

@@ -19,7 +19,7 @@
                 <template slot-scope="scope">
                   <div @click="linkDetail(scope.row)" :class="scope.row.name!=='合计'?'link':''">
                     <span class="logo"><img :src="scope.row.logo" alt=""></span>
-                    <span class="item-name">{{ scope.row.name }}</span>
+                    <span class="item-name">{{ scope.row.name =((scope.row.name).split("-com"))[0]}}</span>
                     <span v-if="(scope.row.name!=='合计')" @click.stop="dialog2Table({type:1,payload:scope.row})" class="table-left"><img src="../../static/img/tableleft.png"></span>
                   </div>
                 </template>
@@ -37,9 +37,9 @@
             <el-table-column :render-header="renderHeader" align="center" :sortable="false" v-if="th.column !== 'index' && th.column !== 'name'" :label="th.columnName" :key="index">
               <el-table-column sortable="custom" align="right" :prop="`${th.orderColumn}--${sub.column}`" :min-width="sub.columnName === '环比(%)' ? 100 : 150" :label="sub.columnName" v-for="(sub, index) in th.children" :key="sub.column">
                 <template slot-scope="scope">
-                  {{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (scope.row[sub.column]) : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}
-                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 1" :src="tableupImg">
-                  <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 2" :src="tabledownImg">
+                  <p style="width:85%;float:left">{{ sub.columnName === '环比(%)' ? (!!scope.row[sub.column] ? (scope.row[sub.column]) : (scope.row[sub.column]===0?'0':'-')) : (!!scope.row[sub.column] ? (scope.row[sub.column]).toFixed(3) : (scope.row[sub.column]===0?'0':'-'))}}</p>
+                  <p style="width:10%;float:left"><img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 1" :src="tableupImg">
+                    <img v-show="sub.columnName !== '环比(%)' && (scope.row[sub.column]) !== null && scope.row[sub.status] !== null" v-if="scope.row[sub.status] == 2" :src="tabledownImg"></p>
                 </template>
               </el-table-column>
             </el-table-column>
@@ -336,12 +336,10 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0
-  ); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba( 0,
+  0,
+  0,
+  0); // box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .el-tabs__content {
@@ -404,24 +402,28 @@ export default {
   }
 }
 
-@media screen and (min-width: 1367px) {
+@media screen and (min-width: 1400px) {
   .table-left {
-    right: 28px;
+    right: 0px;
   }
 }
 
 #pane-all .el-table--border tr:nth-child(3n-2) td:first-child {
   border-right: none;
 }
+
 #pane-download .el-table--border tr td:first-child {
   border-right: none;
 }
+
 #pane-xinzhuang .el-table--border tr td:first-child {
   border-right: none;
 }
+
 #pane-huoyue .el-table--border tr td:first-child {
   border-right: none;
 }
+
 .el-table--border th {
   border-right: none;
 }
@@ -430,7 +432,7 @@ export default {
   text-align: center; // padding-left: 40px;
 }
 
-.cell > img {
+.cell>p>img {
   display: inline-block;
   margin-right: 20px;
   width: 7px;
@@ -439,7 +441,7 @@ export default {
   float: right;
 }
 
-.cell > div > img {
+.cell>div>img {
   width: 14px;
   display: inline-block;
   margin-left: 10px;
@@ -510,7 +512,7 @@ export default {
   }
 }
 
-.el-table__body tr.hover-row > td {
+.el-table__body tr.hover-row>td {
   background-color: transparent;
 }
 </style>

@@ -2,7 +2,11 @@ import fetch from '@/utils/fetch';
 
 const api = {
   login(data) {
+<<<<<<< HEAD
     return fetch({ url: '/irviews/validToken', method: 'GET', data: data });
+=======
+    return fetch({url: '/irviews/validToken', method: 'GET', params: data});
+>>>>>>> 837e1d5300382e2f59d4f068e1c13c4d558d3425
   },
   // 公共接口
   date(params) {
@@ -15,6 +19,18 @@ const api = {
   //画像时间接口
   getPortraitTime(params) {
     return fetch({ url: '/dateTime/getPortraitTime', method: 'GET', params: params });
+  },
+  // app|渠道
+  findAppChannelCount(params) {
+    return fetch({url: '/appchannel/findAppChannelCount', method: 'GET', params: params});
+  },
+  // 渠道图表
+  getChannelPortrait(params) {
+    return fetch({url: '/portrait/getChannelPortrait', method: 'GET', params: params});
+  },
+  // app图表
+  getAppPortrait(params) {
+    return fetch({url: '/appPortrait/getAppPortrait', method: 'GET', params: params});
   },
   appType() {
     return fetch({ url: 'category/getCategory', method: 'GET' });

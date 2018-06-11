@@ -11,11 +11,11 @@
         </el-radio-group>
       </span>
       <span v-if="dateTypeVal === 'month'">
-        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="month" placeholder="选择月" @change="changeMonth" :picker-options="monthOption">
+        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="month"  @change="changeMonth" :picker-options="monthOption">
         </el-date-picker>
       </span>
       <span v-if="dateTypeVal === 'week'">
-        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="week" format="yyyy第WW周" placeholder="选择周" :picker-options="weekOption" @change="changeWeek">
+        <el-date-picker :clearable="false" :editable="false" v-model="dateValFormat" type="week" format="yyyy第WW周"  :picker-options="weekOption" @change="changeWeek">
         </el-date-picker>
       </span>
       <span v-if="showLimit">

@@ -176,6 +176,7 @@ export default {
       this.tableData = [];
       this.orderBy = this.orderByMap[this.tabType];
       this.orderType = 'desc';
+      this.sortbyDateTime = '';
       this.fetchTableData();
     },
     // 获取日期数据
@@ -229,14 +230,15 @@ export default {
             (res.data.tableSum || []).concat(res.data.tableData) || [];
           this.total = res.data.tablePage.total;
         });
+
     },
     submitData() {
       this.count = false;
       this.currentPage = 1;
       this.orderType = 'desc';
       this.sortbyDateTime = '';
-      this.orderColumn = '';
-      this.orderBy = '';
+      // this.orderColumn = '';
+      // this.orderBy = '';
       this.resetOrder = !this.resetOrder;
       this.fetchTableData();
     },
@@ -253,7 +255,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        appId: parseInt(this.$route.params.storeId) || 0
+        appId: parseInt(this.$route.params.storeId) || 0,
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;

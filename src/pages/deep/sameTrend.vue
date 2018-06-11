@@ -54,8 +54,8 @@
                     </div>
                     <div v-else-if="index==1">
                       <div>
-                        <span class="logo"><img :src="scope.row.logo" alt="" style="width: 30px;height: 30px;"></span>
-                        <span style="display:inline-block; vertical-align:middle;width:60px;text-align:left;">{{scope.row[item.column]}}</span>
+                        <span class="logo" style="display:inline-block;"><img :src="scope.row.logo" alt="" style="width: 30px;height: 30px;"></span>
+                        <span style="display:inline-block; vertical-align:middle;width:80px;text-align:left;">{{scope.row[item.column]=(scope.row[item.column].split("-"))[0]}}</span>
                         <span style="margin-left:20px" @click="dialogHandle(scope.row)" class="iconChart"></span>
                       </div>
                     </div>
@@ -142,7 +142,7 @@ export default {
       tableHeader: [],
       tableHeaderWidth: {
         0: 80,
-        1: 160,
+        1: 200,
         2: 80
       },
       chartData1: [],
@@ -420,11 +420,11 @@ export default {
     // },
     // 导出数据
     downloadData() {
-      var path = "http://113.200.91.62:8080/mst/depth/exportSimulTrend?";
+      var path = "http://113.200.91.82:8080/mst/depth/exportSimulTrend?";
       var paras1 = "categoryId=" + (this.queryForm.categoryId) + "&" + "subCategoryId="
         + (this.queryForm.subCategoryId) + "&" + "dateType=" + (this.queryForm.dateType) + "&"
         + "date=" + (this.queryForm.date) + "&" + "pageNo=" + (this.queryForm.pageNo)
-        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)
+        + "&" + "pageSize=" + (this.queryForm.pageSize) + "&" + "appId=" + (this.queryForm.appId)+ "&" + "queryId=" + (this.queryForm.queryId)
       window.location.href = path + paras1;
 
     },
@@ -594,6 +594,8 @@ export default {
       }
       .el-radio-button {
         margin-right: 10px;
+        margin-bottom: 5px;
+        margin-top: 5px;
         border: 1px solid #dcdfe6;
       }
     }

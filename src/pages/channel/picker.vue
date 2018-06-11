@@ -51,6 +51,7 @@
 
 <script>
 import axios from 'axios';
+import api from '@/api/api';
 const defaultLogo = '/static/img/blank.png';
 
 function dateInRange(val, start, end) {
@@ -105,10 +106,10 @@ export default {
   },
   methods: {
     updateData() {
-      const axiosGetDate = axios.get('/mst/dateTime/getPortraitTime').then(res => {
-        if (!res.data || !res.data.data) return;
-        const start = res.data.data.start.slice(0, 7);
-        const end = res.data.data.end.slice(0, 7);
+      const axiosGetDate = api.getPortraitTime().then(res => {
+        if (!res.data) return;
+        const start = res.data.start.slice(0, 7);
+        const end = res.data.end.slice(0, 7);
         this.dateRange = {
           start,
           end
@@ -116,10 +117,10 @@ export default {
         this.defDate = end;
         this.date = end;
       });
-      const axiosGetOption = axios.get('/mst/appchannel/findAppChannelCount').then(res => {
-        if (!res.data || !res.data.data) return;
+      const axiosGetOption = api.findAppChannelCount().then(res => {
+        if (!res.data) return;
         const type = this.type;
-        const filterList = res.data.data.filter(v => v.type === type);
+        const filterList = res.data.filter(v => v.type === type);
         if (type === 'channel') {
           this.options = filterList;
         } else if (type === 'app') {
