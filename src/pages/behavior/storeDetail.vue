@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content" style="margin-top:0">
       <div class="navname" style="margin-top: 25px;" v-if='!$route.params.storeName'>{{ $route.meta.bread.name }}</div>
-      <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="$route.query.icon" alt=""> {{ $route.params.storeName }}</div>
+      <div class="navname" style="margin-top: 25px;" v-if='$route.params.storeName'><img :src="logo" alt=""> {{ $route.params.storeName }}</div>
       <div class="detail-content-menu">
         <el-col :span="24">
           <selectType :data="typeList" v-model="bigType" @change-big-type="changeBigType" @change-small-type="changeSmallType"></selectType>
@@ -133,11 +133,13 @@ export default {
       orderBy: '',
       sortbyDateTime: '',
       resetOrder: false,
+      logo: '',
     };
   },
   created() {
     this.fetchAppType();
     this.fetchDate(1, true);
+    this.logo = $bus.logo;
   },
   watch: {
     $route(val) {
@@ -392,11 +394,9 @@ export default {
       if (!this.openLink) {
         return;
       }
+      $bus.$emit('icon-change', row.logo);
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
-        query: {
-          icon: row.logo,
-        },
       });
     },
   },

@@ -34,17 +34,18 @@ import datePicker from '@/components/datePicker';
 import search from '@/components/search';
 import moment from 'moment';
 import { formatUrl } from 'utils';
+import $bus from 'utils/bus';
 const typeMap = {
   download: 'download',
   xinzhuang: 'install',
-  huoyue: 'active'
+  huoyue: 'active',
 };
 export default {
   name: 'download',
   components: {
     trend,
     datePicker,
-    search
+    search,
   },
   props: {
     fetchApi: {
@@ -53,25 +54,25 @@ export default {
         return {
           all: api.listChannelTrends,
           allDownload: api.download.exportChannelTrends,
-          allCharts: api.listChannelEcharts
+          allCharts: api.listChannelEcharts,
         };
-      }
+      },
     },
     tabs: {
-      type: Array
+      type: Array,
     },
     coverParams: {
       type: Object,
       default() {
         return {
           all: {},
-          classify: {}
+          classify: {},
         };
-      }
+      },
     },
     openLink: {
       type: Boolean,
-      default: true
+      default: true,
     },
     orderByMap: {
       type: Object,
@@ -80,10 +81,10 @@ export default {
           all: 'download_volume',
           download: 'download_volume',
           xinzhuang: 'install_volume',
-          huoyue: 'active_volume'
+          huoyue: 'active_volume',
         };
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -112,7 +113,7 @@ export default {
       orderBy: '',
       sortbyDateTime: '',
       chartData: {},
-      resetOrder: false
+      resetOrder: false,
     };
   },
   created() {
@@ -138,7 +139,7 @@ export default {
   watch: {
     $route() {
       this.init();
-    }
+    },
   },
   methods: {
     // 初始化数据
@@ -183,13 +184,10 @@ export default {
     fetchDate(dateType = 1, isInit) {
       api
         .date({
-          dateType
+          dateType,
         })
         .then(res => {
-          this.dateVal =
-            dateType === 1
-              ? moment(res.data.end).format('YYYYWW')
-              : moment(res.data.end).format('YYYYMM');
+          this.dateVal = dateType === 1 ? moment(res.data.end).format('YYYYWW') : moment(res.data.end).format('YYYYMM');
           this.startDate = res.data.start;
           this.endDate = res.data.end;
           if (isInit) {
@@ -211,7 +209,7 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        appId: parseInt(this.$route.params.storeId) || 0
+        appId: parseInt(this.$route.params.storeId) || 0,
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -220,17 +218,13 @@ export default {
         params.totalOrEach = 0;
         params.trendType = typeMap[this.tabType];
       }
-      this.fetchApi
-        .all(Object.assign(params, this.coverParams.all))
-        .then(res => {
-          this.loading = false;
-          this.count = true;
-          this.tableHeader = res.data.tableHeader || [];
-          this.tableData =
-            (res.data.tableSum || []).concat(res.data.tableData) || [];
-          this.total = res.data.tablePage.total;
-        });
-
+      this.fetchApi.all(Object.assign(params, this.coverParams.all)).then(res => {
+        this.loading = false;
+        this.count = true;
+        this.tableHeader = res.data.tableHeader || [];
+        this.tableData = (res.data.tableSum || []).concat(res.data.tableData) || [];
+        this.total = res.data.tablePage.total;
+      });
     },
     submitData() {
       this.count = false;
@@ -244,9 +238,9 @@ export default {
     },
     // 导出数据
     downloadData() {
-      let url=''
+      let url = '';
       let params = {};
-      url=this.fetchApi.allDownload
+      url = this.fetchApi.allDownload;
       params = {
         // 发送请求
         date: this.dateVal,
@@ -258,7 +252,7 @@ export default {
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
         appId: parseInt(this.$route.params.storeId) || 0,
-        token:sessionStorage.getItem('token')
+        token: sessionStorage.getItem('token'),
       };
       if (this.tabType === 'all') {
         params.totalOrEach = 1;
@@ -284,16 +278,12 @@ export default {
         orderType: this.orderType,
         orderColumn: this.orderBy || this.orderByMap['all'],
         orderDate: this.sortbyDateTime,
-        echartsDate: this.sortbyDateTime
+        echartsDate: this.sortbyDateTime,
       };
       if (val.type == 1) {
         if (this.$route.meta.rowId == 'cid') {
-          (params.appId =
-            val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
-            (params.channelId =
-              val.type == 1
-                ? val.payload.id
-                : parseInt(this.$route.params.storeId) || '');
+          (params.appId = val.type == 1 ? parseInt(this.$route.params.storeId) || '' : ''),
+            (params.channelId = val.type == 1 ? val.payload.id : parseInt(this.$route.params.storeId) || '');
         } else {
           params.appId = val.type == 1 ? val.payload.id : '';
           params.channelId = parseInt(this.$route.params.storeId) || '';
@@ -303,10 +293,7 @@ export default {
         //   val.payload.children &&
         //   val.payload.children[0] &&
         //   val.payload.children[0].property.split('--')[0];
-        params.echartsDate =
-          val.payload.children &&
-          val.payload.children[0] &&
-          val.payload.children[0].property.split('--')[0];
+        params.echartsDate = val.payload.children && val.payload.children[0] && val.payload.children[0].property.split('--')[0];
         if (this.$route.meta.storeId == 'appId') {
           params.appId = parseInt(this.$route.params.storeId);
           params.channelId = '';
@@ -339,7 +326,7 @@ export default {
           data: data.line,
           chartTitle: title,
           chartSubTitle: subTitle,
-          legend: data.legend
+          legend: data.legend,
         };
       });
     },
@@ -370,10 +357,7 @@ export default {
         this.sortbyDateTime = sortArr[0];
         console.log(this.sortbyDateTime, 111);
         this.orderColumn = sortArr[1];
-        this.orderBy =
-          sortArr[1].indexOf('count') > -1
-            ? this.orderByMap[this.tabType]
-            : 'ratio';
+        this.orderBy = sortArr[1].indexOf('count') > -1 ? this.orderByMap[this.tabType] : 'ratio';
       }
       this.fetchTableData();
     },
@@ -381,17 +365,13 @@ export default {
       if (!this.openLink) {
         return;
       }
+      $bus.logo=row.logo
       this.$router.push({
-        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${
-          row.name
-        }`,
-        query: {
-          icon: row.logo
-        }
+        path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
       });
       //console.log(row)
-    }
-  }
+    },
+  },
 };
 </script>
 
