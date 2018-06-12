@@ -139,7 +139,7 @@ export default {
   created() {
     this.fetchAppType();
     this.fetchDate(1, true);
-    this.logo = $bus.logo;
+    this.logo = localStorage.getItem('app_logo');
   },
   watch: {
     $route(val) {

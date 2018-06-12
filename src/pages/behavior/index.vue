@@ -365,7 +365,7 @@ export default {
       if (!this.openLink) {
         return;
       }
-      $bus.logo=row.logo
+      localStorage.setItem('app_logo',row.logo)
       this.$router.push({
         path: `${this.$route.meta.bread.path}/storeDetail/${row.id}/${row.name}`,
       });
